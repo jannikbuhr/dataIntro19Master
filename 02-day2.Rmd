@@ -1,0 +1,485 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+# An die Daten {#day2}
+
+```{r include=FALSE}
+knitr::opts_chunk$set(eval = FALSE, echo = FALSE)
+```
+
+## Wiederholung Tag 1
+
+- Was ergibt `c("12", 13, 14)[2] + 1` und warum?
+- Erstelle einen Vektor `x` mit den ganzen Zahlen von 1 bis 10
+- Erstelle einen Vektor `y`, der `x` entspricht
+- Plotte die beiden Vektoren gegeneinander als Punkte
+- Lege eine lineare Regressionslinie durch die Daten und füge sie dem
+  Plot hinzu
+- Wie können wir mehr über das `linear model`-Objekt erfahren?
+
+```{r, eval=FALSE}
+# c("12", 13, 14)[2] + 1
+x <- 1:10
+y <- x
+plot(x, y)
+model <- lm(y ~ x)
+abline(model, col = "red")
+str(model)
+?lm
+```
+
+## Workflow einer Datenauswertung
+
+```{r,fig.align='center', fig.cap="Quelle: @wickhamDataScienceImport2017", echo=FALSE}
+knitr::include_graphics("img/workflow.png")
+```
+
+### Communication!
+
+Rmarkdown ermöglicht es uns, den Code zur Datenauswertung
+mitsamt den Ergebnissen, Plots und Gedanken dazu an einem Ort zu sammeln
+und zu dokumentieren. Im Kurs arbeiten wir ebenfalls mit Rmarkdown,
+da wir so wunderbar die zeigen können, was jede Zeile des Codes tut,
+da der Output direkt darunter angezeigt werden kann.
+In RStudio kannst du ein neues Rmarkdown Dokument oben links mit
+dem "new document" Button.
+
+```{r, echo=FALSE}
+knitr::include_graphics("img/newrmd.png")
+```
+
+Eine umfassende Anleitung zu Rmarkdown findest du im [Rmarkdown guide](https://bookdown.org/yihui/rmarkdown/), der natürlich selbst
+ebenfalls in Rmarkdown geschrieben ist (genau wie dieses Buch).
+
+Neue Code-Chunks fügst du mit Ctrl+Alt+I ein. Nutze sie reichlich um
+den Code in sinnvolle Teile zu strukturieren und nutze Text außerhalb der
+Chunks um die Gedankengänge bei der Datenauswertung festzuhalten,
+ähnlich wie dieses Dokument es tut.
+^[In diesem Dokument zeige ich der Übersicht halber nicht von allen
+Chunks den kompletten Output, aber der Code lässt sich leicht mittels
+des Buttons oben rechts an den Blöcken in die Zwischenablage kopieren
+und selbst in R/RStudio ausprobieren.]
+
+## Daten einlesen
+
+Innerhalb des Tidyverse ist dazu das `readr`-Package verantwortlich.
+Die meisten Funktionen diese Packages beginnen mit `read_` oder `write_`
+und die Autovervollständigung zeigt dir alle Optionen auf. Zunächst laden
+wir das `tidyverse`:
+
+```{r, message=FALSE}
+library(tidyverse)
+```
+
+Ich habe diesem Codeblock noch die Option "```{r, message=FALSE} ..."
+gegeben, damit die Begrüßungsnachricht des tidyverse nicht in unserem Bericht landet.
+
+In einem beliebigen Tabellen-Programm (Excel in unserem Fall)
+erstellen wir eine Liste mit den Kursteilnehmerinnen und Teilnehmern und halten
+zusätzlich fest, ob sie in lange (1) oder kurze (0) Haare habe und
+in welcher Reihe sie sitzen. Wir speichern die Datei im
+_data_ Ordner unseres RStudio-Projekt-Ordners als ".csv"-Datei.
+
+```{r}
+# Read data with read_csv
+students <- read_csv("data/students.csv")
+```
+
+Deutsche Excel Versionen nehmen statt Kommata (wie in _comma-separated values_)
+jedoch Semikolons (da "," im Deutschen zur Trennung von Nachkommastellen
+verwendet wird, im Englischen ist dafür "." zuständig). In diesem Fall
+funktioniert jedoch Folgendes:
+
+```{r, eval=FALSE}
+students <- read_csv2("data/students.csv")
+```
+
+`Read_csv` funktioniert auch mit Links!
+
+```{r, eval = FALSE}
+read_csv("https://raw.githubusercontent.com/jannikbuhr/dataIntro19/master/data/students.csv")
+```
+
+Wir können die Daten auch direkt aus einer Excel-Datei einlesen
+(auch, wenn csv zu bevorzugen ist).
+
+```{r, eval=FALSE}
+# <package>:: means we are not loading the whole package
+# but rather are just using one function from it
+readxl::read_excel("data/students.xlsx")
+```
+
+Schreiben von Daten funktioniert analog dazu.
+
+```{r, eval=FALSE}
+write_csv2(students, "data/students2.csv")
+```
+
+## The pipe and dplyr verbs
+
+The `dplyr` package and the pipe (`%>%`)
+
+- Einfügen mit Ctrl+Shift+M
+
+```{r, eval=FALSE}
+f(g(x))
+# entspricht
+x %>% g %>% f
+```
+
+Die wichtigsten `dplyr` Verben (unsere Werkzeuge zur Transformation
+von Daten aller Art):
+
+- `select`
+- `filter`
+- `arrange`
+- `mutate`
+- `summarise`
+
+Zusätzlich ist noch sehr hilfreich: `count`,
+sowie das Adverb `group_by`, das für sich alleine
+nichts tut aber das Verhalten der Verben verändert.
+
+### select
+
+```{r, eval=FALSE}
+# The following are equivalent
+students[ , c("name", "row")]
+select(students, name, row)
+
+students %>% 
+  select(name, row)
+
+students %>% 
+  select(-hairlength)
+```
+
+### filter
+
+```{r, eval=FALSE}
+# the following 2 are equivalent
+students[students$row == 1, ]
+
+students %>% 
+  filter(row == 1)
+
+# show only the students in the first row
+# students with short hair?
+students %>% 
+  filter(row == 2, hairlength == 1)
+
+students %>% 
+  filter(row == 1 | hairlength == 1)
+```
+
+### mutate
+
+```{r, eval=FALSE}
+# convert hairlength from 0 and 1 to "s" and "l"
+# Add the length of the name as a new column
+students %>% 
+  mutate(hairlength  = if_else(hairlength == 0, "s", "l"),
+         name_length = str_length(name) )
+```
+
+Wir benötigen diese neuen Spalten später,
+daher geben wir sie nicht nur aus, sondern überschreiben mit dem Ergebnis
+die Variable `students`:
+
+```{r}
+students <- students %>%
+  mutate(hairlength  = if_else(hairlength == 0, "s", "l"),
+         name_length = str_length(name) )
+```
+
+### arrange
+
+Wer hat den längsten Namen?
+
+```{r}
+students %>% 
+  arrange(desc(name_length)) %>% 
+  select(name, name_length)
+```
+
+### count
+
+```{r}
+students %>% count(hairlength, row) %>% arrange(desc(n))
+```
+
+### summarise
+
+Was ist die mittlere Namenslänge?
+
+```{r}
+students %>%
+  summarise(mean_name_length = mean(name_length))
+```
+
+### group_by und summarise
+
+Haben Teilnehmende mit langen Haaren auch im Mittel längere Namen?
+
+```{r}
+student_summary <- students %>% 
+  group_by(row) %>% 
+  summarise(mean_name_length = mean(name_length)) %>% 
+  ungroup()
+
+student_summary
+
+# ungroup is not always necessary but it can be surprising if
+# you forget that your data had groups
+```
+
+## Was ist Wahrscheinlichkeit?
+
+Es gibt zwei Konzepte von Wahrscheinlichkeit (Probability, $P$ ):
+
+- Probability inside your head: strength of belief; may vary among people
+- Probability „out there“: long-term frequency of an event;
+can be empirically measured or predicted from a model [@motulsky2017].
+
+### Beispiel:
+
+Kategorische / diskrete Daten: Blind aus einem "Hut" ziehen.
+
+```{r}
+students %>% count(hairlength)
+```
+
+```{r}
+students %>% count(row)
+```
+
+```{r}
+# create a "hat" of hairlengths
+# with the numbers observed in our course
+hat <- students$hairlength
+```
+
+
+```{r, eval=FALSE}
+# sample / draw from said hat
+# the same number of observed long haired in first row
+sample(hat, 6)
+
+# Look at the help for sample (default: replace = FALSE)
+
+# How many in this sample have short hair?
+draw <- sample(hat, 6)
+sum(draw == "s")
+
+# Explanation of for-loop for simulation
+for (i in 1:10) {
+  print(i)
+}
+```
+
+
+```{r}
+## Simulation
+# set N
+N <- 10000
+# create empty vector for the sum from each draw
+# assign the results in a loop
+results <- vector("integer", N)
+for (i in 1:N) {
+  draw <- sample(hat, 6)
+  results[i] <- sum(draw == "s")
+}
+
+# Histogram, Mean, Median
+# mean of results
+mean(results)
+
+# histogram of results
+hist(results, breaks = 0:8)
+# median
+median(results)
+# Difference between mean and median, their robustness to outliers!
+x <- c(1,1.3, 2.1, 1.1, 0, 400)
+mean(x)
+median(x)
+
+# How surprised should we be? -> Calculate probability for random event
+# sum of sum greater than or equal to observed frequency
+sum(results >= 6) / length(results)
+```
+
+### P-Values {#p-values}
+
+Eingeführt in den 1920-ern von Ronald Fisher:
+
+> _"The P value is defined as the probability, under the assumption of no effect or no difference (the null hypothesis), of obtaining a result equal to or more extreme than what was actually observed."_
+> $-$ (Original: [Statistical Methods for Research Workers](https://en.wikipedia.org/wiki/Statistical_Methods_for_Research_Workers)) [@fisher1990]
+
+Nach Konvention: p ≤ 0.05 wird "significant" genannt.
+
+In other words, a p-Value is...
+
+> _"... a measure of how surprised you should be if there is no actual difference […], but you got data suggesting there is"_
+>  $-$ Alex Reinhart [@reinhart2015]
+
+Wir berechne den exakten P-Value:
+
+```{r}
+# hypergeometric distribution
+# note that it calculates cumulative probabilities!
+# default: P(X <= x)
+1 - phyper(5, m = 9, n = 4, k = 6)
+```
+
+So sieht die hypergeometrische Verteilung für unser Beispiel aus:
+
+```{r}
+barplot(dhyper(x = 0:6, m = 9, n =  4, k =  6), names.arg = 0:6)
+```
+
+## Transfer auf neue Daten
+
+Starwars, ein Datenset enthalten im tidyverse.
+
+### Übung
+
+```{r, eval=FALSE}
+?starwars
+```
+
+Aufgaben
+
+- In a new Rmarkdown document:
+- Preview the dataset
+- Select the columns name, heigth, mass, gender
+- Who is the heaviest?
+- Convert height from cm to m
+- Which gender is taller on average in StarWars?
+  - _Hint:_ use group_by and summarise
+  - You might need the argument "na.rm = TRUE" in `mean()`
+- Simulate drawing 81 characters (or rather genders) from a hat.
+  Repeat this 1000 times.
+- How often do you obtain 62 or more male characters?
+- How surprised should we be about the data?
+- Calculate an exact p-value for the observed frequency
+  - note: use pbinom instead of phyper to sample WHITH replacement
+- Bonus: Create a plot! (any variables that seem interesting)
+- Knit the document into a report
+
+
+### Lösungen
+
+```{r, eval=FALSE}
+starwars
+```
+
+```{r}
+# the last step is optional but reduces
+# clutter in this document output
+starwars %>%
+  select(name, height, mass, gender) %>% 
+  arrange(desc(mass)) %>% 
+  head(5)
+```
+
+```{r, fig.cap="Jabba the Hut, Quelle: Wikipedia", echo=FALSE}
+knitr::include_graphics("img/jabba.png")
+```
+
+```{r}
+starwars <- starwars %>% 
+  mutate(height = height / 100)
+```
+
+```{r}
+starwars %>% 
+  filter(!is.na(gender)) %>%  # ! means "not"
+  group_by(gender) %>% 
+  summarise(height =  mean(height, na.rm = TRUE))
+```
+
+
+```{r}
+starwars %>% count(gender)
+```
+
+Wie wahrscheinlich ist es, bei gleicher Verteilung von Geschlechtern im Universum,
+allein durch Zufall diesen oder einen höheren Männerüberschuss im starwars
+Datenset zu erhalten? Die allein zufällige Verteilung ist unsere Nullhypothese $H_0$.
+
+```{r}
+hat <- c("male", "female")
+
+total_genders <- starwars %>%
+  filter(!is.na(gender)) %>% nrow()
+
+n_males <- starwars %>% 
+  filter(gender == "male") %>% 
+  nrow()
+
+# This part is an alternative to for loops.
+# Instead of the loop, we create a function
+# And then apply (map) that function over all
+# elements of our vector 1:N
+draw_from_hat <- function(hat, n) {
+  draw <- sample(hat, n, replace = TRUE)
+  sum(draw == "male")
+}
+
+N <- 100000
+results <- map_int(1:N, ~ draw_from_hat(hat, total_genders) )
+hist(results)
+sum(results >= n_males)
+```
+
+Der exakte P-Value wird hier mit `pbinom`
+(also der Wahrscheinlichkeit für binomialverteilte Daten) statt
+`phyper` (Wahrscheinlichkeit für hypergeometrisch verteilte Daten)
+ausgerechnet, da wir das Verhältnis der Gender im Universum
+für konstant annehmen, selbst wenn wir eines daraus für unser
+Datenset gezogen haben. Wir samplen daher mit `replace = TRUE`
+und verwenden die Binomialverteilung.
+
+
+```{r}
+pbinom(q = n_males - 1,
+       size = total_genders,
+       prob = 0.5,
+       lower.tail = FALSE)
+```
+
+Das Ergebnis ist statistisch signifikant bei einem typischen Signifikanzlevel von
+$p \leq 0.05$ ($5~\%$). Merke an dieser Stelle, dass wir nicht sagen
+können, etwas bewiesen zu haben, wir können jedoch sagen, dass wir die
+Nullhypothese ("es gibt keinen Effekt von Gender auf die
+Auswahl ins Datenset") ablehnen.
+
+> _Thus, we reject the null hypothesis._
+
+Für mehr Informationen siehe:
+
+```{r, eval=FALSE}
+?phyper
+?pbinom
+```
+
+Sowie die unglaublich guten Visualisierungen von [Seeing Theory](https://seeing-theory.brown.edu/index.html)!
+
+### Bonus
+
+```{r}
+starwars %>%
+  filter(!is.na(homeworld)) %>% 
+  group_by(homeworld) %>%
+  summarise(height = mean(height, na.rm = TRUE),
+            mass   = mean(mass, na.rm = TRUE)) %>% 
+  mutate(homeworld = fct_reorder(homeworld, height)) %>% 
+  ggplot(aes(homeworld, height, fill = mass)) +
+    geom_col() +
+    coord_flip()
+```
+
+

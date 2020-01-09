@@ -1,0 +1,360 @@
+# And Go! {#day1}
+
+```{r include=FALSE}
+knitr::opts_chunk$set(eval = FALSE, warning = FALSE, message = FALSE)
+```
+
+<!-- Slides! -->
+
+## Basic Datastructures in R
+
+Because R is a programming language, we first look into
+some basic concepts and data structures before diving
+into the fun part.
+
+<!-- Open a new R-Script. -->
+
+<!-- R and RStudio -->
+
+<!-- Explanation, shortcut, mac vs pc -->
+
+<!-- Inspired by [learnXinYminutes](https://learnxinyminutes.com/docs/r/). -->
+
+Explain relevance of this section, 
+
+```{r googling, echo=FALSE, fig.cap="The most important programming advice."}
+knitr::include_graphics("img/errors.jpg")
+```
+
+### Math with R
+
+```{r}
+# comments start in the "#" symbol
+# they do nothing
+```
+
+<!-- datatypes -->
+
+<!-- executing code -->
+
+```{r, eval=FALSE}
+# Integer
+# Numeric
+# Complex 
+# Character
+# logical
+# factor
+# The factor class is for categorical data
+# Factors can be ordered (like grade levels) or unordered (like gender)
+# NULL
+```
+
+<!-- variables -->
+
+<!-- intuition -->
+
+```{r}
+# allowed names, capitalization
+
+# other ways to assign: =, ->
+```
+
+<!-- getting the content of a variable -->
+
+```{r}
+# implicitly a shortcut for print(main_character)
+main_character
+```
+
+<!-- basic math -->
+
+```{r, eval=FALSE}
+# + - * / %/% %% 
+# NaN
+```
+
+### Functions and Vectors
+
+<!-- importance of functions -->
+
+<!-- functions and mathematical functions -->
+
+```{r}
+# e.g. sin
+sin(1/2 * pi)
+
+```
+
+<!-- `?funktion`, F1 -->
+
+```{r}
+
+```
+
+<!-- everything in R is a vector -->
+
+```{r}
+# c for combine or concatenate
+
+```
+
+<!-- vectorisation of operations -->
+
+```{r}
+
+```
+
+The `:` operator and `seq`
+
+```{r}
+
+```
+
+<!-- logical comparisons -->
+
+<!-- also elementwise -->
+
+```{r, eval = FALSE}
+
+
+```
+
+
+<!-- periodic reminder: error messages are your friends and completely normal -->
+
+```{r}
+# e.g. c(1,2,)
+
+```
+
+<!-- combination of different datatypes -->
+
+```{r}
+# implicit
+
+# explicit
+
+```
+
+<!-- write your own first function -->
+
+```{r}
+## Everything that does something is a function, everything that exists is an object
+
+# greet
+```
+
+### Datastructures
+
+1D, same datatype: **vector**
+
+```{r}
+# make vector
+
+# We ask for specific elements by subsetting with square brackets []
+# (Note that R starts counting from 1)
+
+# subsetting with logical vector
+
+# or with indices
+# which
+
+```
+
+usefull functions for vectors
+
+```{r}
+# grab just the first or last few entries in the vector,
+
+
+# or figure out if a certain value is in the vector
+
+
+# If an index "goes over" you'll get NA:
+
+
+# You can find the length of your vector with length()
+
+
+# You can perform operations on entire vectors or subsets of vectors
+
+
+# and R has many built-in functions to summarize vectors
+# mean, min, max, sum
+
+
+```
+
+1D, different datatypes: **list**
+
+```{r}
+# create list
+
+# single [] subsetting
+
+# double [[]] subsetting
+
+# lists and vectors can have names
+
+# using the names for subsetting
+```
+
+2D, same Datentyp: **matrix**
+
+```{r}
+# matrix
+
+# Ask for the first row
+
+# Perform operation on the first column
+
+# Ask for a specific cell
+
+# Transpose the whole matrix
+
+# Matrix multiplication
+
+# cbind() sticks vectors together column-wise to make a matrix
+
+# rbind() sticks vectors together row-wise to make a matrix
+
+```
+
+2D, different datatypes: **data.frame**
+
+```{r}
+students <- data.frame(c("Cedric","Fred","George","Cho","Draco","Ginny"),
+                       c(3, 2, 2, 1, 0, -1),
+                       c("H", "G", "G", "R", "S", "G"),
+                       stringsAsFactors = FALSE)
+names(students) <- c("name", "year", "house") # name the columns
+```
+
+usefull functions for dataframes
+
+```{r}
+# nrow, ncol, dim
+
+# parameter stringsAsFactors
+
+# There are many ways to subset data frames
+# See if you can find out what each of these lines does
+# dollar
+
+# vector
+
+# character
+
+```
+
+Almost as usefula as `?`: the function `str` for _structure_
+
+```{r}
+# str
+```
+
+### Die ersten Plots
+
+Scatterplots
+
+```{r}
+x <- 1:20
+y <- x + rnorm(n = length(x) )
+plot(x = x, y = y, main = "fake data")
+```
+
+Mit linearer Regression
+
+```{r}
+model <- lm(y ~ x)
+plot(x = x, y = y, main = "Linear Fit")
+abline(model , col = 'red' )
+```
+
+Kurven von Funktionen
+
+```{r}
+curve(sin, from = -5, to = 5)
+```
+
+Histogramme
+
+```{r}
+hist(y)
+```
+
+Balkendiagramme
+
+```{r}
+barplot(students$year + 2, names.arg = students$name)
+```
+
+Mach es bunt!
+
+```{r}
+barplot(students$year + 2,
+        names.arg = students$name,
+        col = factor(students$house) )
+```
+
+Die Funktion `par` erlaubt das setzen von _graphical parameters_
+wie der Hintergrundfarbe oder den plot margins. Es wirkt sich
+auf alle Plots danach aus, bis die R session neu gestartet wird.
+
+Dies ist das einzige Kuchendiagramm, dass du jemals brauchen wirst.
+
+```{r}
+par(bg = "pink")
+cols <- c('#0292D8', '#F7EA39', '#C4B632')
+pie(
+  c(280, 60, 20),
+  init.angle = -50,
+  col = cols,
+  border = NA, labels = NA
+)
+
+legend(1, 1,
+       xjust = 0.5,
+       yjust = 1,
+       fill = cols,
+       border = NA,
+       legend = c('Sky', 'Sunny side of pyramid', 'Shady side of pyramid')
+)
+```
+
+Speichere deinen Plot indem du zunächst
+ein Graphic-Device öffnest (`png` in diesem Beispiel),
+dann den Plot erstellst und zum Schluss das Graphic-Device wieder
+ausschaltest um das "Drucken" abzuschließen.
+
+```{r, eval=FALSE}
+png('my_plot.png', width = 500, height = 400)
+# ... Plot code (siehe oben) hier
+dev.off()
+```
+
+## Project-based Workflow
+
+Wichtige RStudio-Einstellungen:
+
+```{r, echo=FALSE, fig.show='hold', out.width='50%', fig.cap="RStudio Einstellungen"}
+knitr::include_graphics(c("img/RS_settings.png", "img/RS_settings2.png"))
+```
+
+## Packages: Das Tidyverse
+
+Packages sind Sammlungen von R-Funktionen anderer Nutzer,
+die dir unglaublich viel Arbeit abnehmen oder erleichtern.
+
+```{r, eval = FALSE}
+# Installation
+install.packages("tidyverse")
+# Paket laden
+library(tidyverse)
+```
+
+Das tidyverse ist eine Gruppe von Packages, die gemeinsam installiert und geladen werden
+und sehr gut zusammespielen. Wir werden ausgiebig damit arbeiten.
+
+
+
