@@ -1,7 +1,7 @@
 # Korrelation und Regression {#day5}
 
 ```{r include=FALSE}
-knitr::opts_chunk$set(eval = FALSE, echo = FALSE)
+knitr::opts_chunk$set(eval = FALSE, echo = FALSE, include = FALSE)
 ```
 
 ## Korrelation und Regression

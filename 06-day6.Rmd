@@ -1,7 +1,7 @@
 # Folgt {#day6}
 
 ```{r include=FALSE}
-knitr::opts_chunk$set(eval = FALSE, echo = FALSE)
+knitr::opts_chunk$set(eval = FALSE, echo = FALSE, include = FALSE)
 ```
 
 ## Exkurs: Tricks für viele Daten / Dateien

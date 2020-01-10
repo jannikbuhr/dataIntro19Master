@@ -27,48 +27,13 @@ options(
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
-# Prolog {-}
+# Prologue {-}
 
-## Vorbereitung auf den Kurs
+## Preparation
 
-Der Kurs wird zwar auf Deutsch stattfinden, aber ich kann nicht garantieren, dass
-nicht einige Konzepte in diesem Buch dennoch auf Englisch erklärt werden,
-da die verwendeten Fachbegriffe es ohnehin schon bereits sind. Eine Übersetzung würde
-daher nur mehr Verwirrung stiften. Zudem findet sich auf Englisch die meiste Lektüre und das Googeln von Fehlermeldungen wird erheblich erleichtert, da mehr Leute im
-Internet auf Englisch unterwegs sind als auf Deutsch.
 
-Hier findet ihr Links zu R und RStudio, damit ihr
-beides bereits auf euren Laptops oder Computern installieren könnt.
-Persönlich empfehle ich das Arbeiten am eigenen Gerät, aber
-für alle, die keine Laptops besitzen oder mitbringen
-möchten, werden Computer (Mac) zur Verfügung stehen.
 
-- [R: https://cran.r-project.org/](https://cran.r-project.org/)
-- [RStudio: https://www.rstudio.com/products/rstudio/download/#download](https://www.rstudio.com/products/rstudio/download/#download)
-
-Für die Verwendung der vorhandenen statt eigener Computer würde ich
-euch bitten, euch unter folgendem Link bei _RStudio Cloud_ anzumelden.
-Dabei handelt es sich um eine Version von RStudio, die auf einem Server läuft
-und von euch über jeden beliebigen Browser aufgerufen werden kann. Auf diese
-Weise sind wir nicht von der IT-Abteilung des ZMBHs abhängig, die neuste Version
-von R und RStudio zu installieren. Zusätzlich könnt ihr auch von zu Hause auf
-eure Dateien zugreifen.
-
-- [RStudio Cloud](https://rstudio.cloud/)
-
-Dort müsst ihr euch dann nur anmelden und weiter nichts tun,
-die neusten Versionen von R und RStudio
-sind dort bereits installiert.
-
-Bei Installationsschwierigkeiten meldet euch möglichst bereits vor Kursbeginn.
-
-## Aufbau des Kurses
-
-- Vom 18. Oktober bis 29. November (6 Freitage)
-- Morgen-Session (mehr Theorie) 10 Uhr (ct) bis 12 Uhr
-- Nachmittags-Session (mehr Praxis) 13 Uhr bis ... (maximal 17 Uhr)
-
-## Inhalt des Kurses
+## Content
 
 - Einleitung
   - Was ist dieses R?
@@ -118,11 +83,8 @@ Bei Installationsschwierigkeiten meldet euch möglichst bereits vor Kursbeginn.
   - nested datframes, list colums
   - map Funktionen
 
-Diese Inhaltsangabe ist thematisch, nicht chronologisch sortiert
-und erhebt keinen Anspruch auf Vollständigkeit. Alle Angaben ohne Gewähr.
-Bei Risiken und Nebenwirkungen fragen Sie Ihren Arzt oder Apotheker.
 
-## Resourcen
+## Resources
 
 ### Tidyverse
 
@@ -132,7 +94,7 @@ Bei Risiken und Nebenwirkungen fragen Sie Ihren Arzt oder Apotheker.
 - [The Modern Dive](https://moderndive.com/) [@kim2019]
 - [RStudio Education](https://education.rstudio.com/)
 
-### Allgemein R
+### R in general
 
 - [Advanced R](https://adv-r.hadley.nz/) [@wickham2019]
 - [Hands on Programming with R](https://rstudio-education.github.io/hopr/) [@grolemund2014]
@@ -140,7 +102,7 @@ Bei Risiken und Nebenwirkungen fragen Sie Ihren Arzt oder Apotheker.
 - [Data Visualization: A Practical Introduction](https://socviz.co/index.html) [@healy2018]
 - [Graph Cookbook](http://www.cookbook-r.com/Graphs/) [@chang2013]
 
-### Statistic
+### Statistics
 
 - [Intuitive Biostatistics](http://www.intuitivebiostatistics.com/) [@motulsky2017]
 - [Statistics Done Wrong](https://www.statisticsdonewrong.com/) [@reinhart2015]
@@ -154,7 +116,7 @@ Bei Risiken und Nebenwirkungen fragen Sie Ihren Arzt oder Apotheker.
 - [Unglaublich niedliche Illustrationen](https://github.com/allisonhorst/stats-illustrations) [@horst2019]
 - [Happy Git with R](https://happygitwithr.com/)
 
-## Sonstige Quellen
+## Misc
 
 - [Tidytuesday](https://github.com/rfordatascience/tidytuesday)
 - [Tips for Working with Images in Rmarkdown](http://zevross.com/blog/2017/06/19/tips-and-tricks-for-working-with-images-and-figures-in-r-markdown-documents/)
@@ -162,3 +124,4 @@ Bei Risiken und Nebenwirkungen fragen Sie Ihren Arzt oder Apotheker.
 Made with the help of these amazing packages (plus documentation):
 @R-base; @R-bookdown; @R-knitr; @R-rmarkdown; @xie2015
 
+ü

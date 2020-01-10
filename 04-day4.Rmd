@@ -1,7 +1,7 @@
 # Statistische Tests und Power {#day4}
 
 ```{r include=FALSE}
-knitr::opts_chunk$set(eval = FALSE, echo = FALSE)
+knitr::opts_chunk$set(eval = FALSE, echo = FALSE, include = FALSE)
 ```
 
 ## Lösung für Tag 3

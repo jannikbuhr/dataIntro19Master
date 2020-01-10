@@ -1,7 +1,7 @@
 # And Go! {#day1}
 
 ```{r include=FALSE}
-knitr::opts_chunk$set(eval = FALSE, warning = FALSE, message = FALSE)
+knitr::opts_chunk$set(eval = FALSE, echo = FALSE, warning = FALSE, message = FALSE)
 ```
 
 <!-- Slides! -->
@@ -223,11 +223,10 @@ usefull functions for vectors
 2D, different datatypes: **data.frame**
 
 ```{r}
-students <- data.frame(c("Cedric","Fred","George","Cho","Draco","Ginny"),
-                       c(3, 2, 2, 1, 0, -1),
-                       c("H", "G", "G", "R", "S", "G"),
-                       stringsAsFactors = FALSE)
-names(students) <- c("name", "year", "house") # name the columns
+# data.frame
+
+# assign names
+
 ```
 
 usefull functions for dataframes
@@ -258,50 +257,56 @@ Almost as usefula as `?`: the function `str` for _structure_
 Scatterplots
 
 ```{r}
-x <- 1:20
-y <- x + rnorm(n = length(x) )
-plot(x = x, y = y, main = "fake data")
+# def x 1:20
+
+# add noise, call it y
+
+# plot x y
+
 ```
 
-Mit linearer Regression
+With linear regression
 
 ```{r}
-model <- lm(y ~ x)
-plot(x = x, y = y, main = "Linear Fit")
-abline(model , col = 'red' )
+# model lm
+
+# plot
+
+# abline
+
 ```
 
-Kurven von Funktionen
+Curves
 
 ```{r}
-curve(sin, from = -5, to = 5)
+# curve of sine wave
+
 ```
 
-Histogramme
+Histogram
 
 ```{r}
-hist(y)
+# e.g. of y
+
 ```
 
-Balkendiagramme
+Barchart
 
 ```{r}
-barplot(students$year + 2, names.arg = students$name)
+# barchart HP students
+
 ```
 
-Mach es bunt!
+Add some colors
 
 ```{r}
-barplot(students$year + 2,
-        names.arg = students$name,
-        col = factor(students$house) )
+# barplot, df, names.arg, col
+
 ```
 
-Die Funktion `par` erlaubt das setzen von _graphical parameters_
-wie der Hintergrundfarbe oder den plot margins. Es wirkt sich
-auf alle Plots danach aus, bis die R session neu gestartet wird.
+`par`: _graphical parameters_
 
-Dies ist das einzige Kuchendiagramm, dass du jemals brauchen wirst.
+The last piechart you will ever need.
 
 ```{r}
 par(bg = "pink")
@@ -322,29 +327,27 @@ legend(1, 1,
 )
 ```
 
-Speichere deinen Plot indem du zunächst
-ein Graphic-Device öffnest (`png` in diesem Beispiel),
-dann den Plot erstellst und zum Schluss das Graphic-Device wieder
-ausschaltest um das "Drucken" abzuschließen.
+<!-- Saving plots and graphic devices -->
 
-```{r, eval=FALSE}
-png('my_plot.png', width = 500, height = 400)
-# ... Plot code (siehe oben) hier
-dev.off()
+```{r}
+# e.g. png
+# ... Plot code
+
 ```
 
 ## Project-based Workflow
 
-Wichtige RStudio-Einstellungen:
+Important RStudio-Settings
 
 ```{r, echo=FALSE, fig.show='hold', out.width='50%', fig.cap="RStudio Einstellungen"}
 knitr::include_graphics(c("img/RS_settings.png", "img/RS_settings2.png"))
 ```
 
-## Packages: Das Tidyverse
+## Packages: The Tidyverse
 
-Packages sind Sammlungen von R-Funktionen anderer Nutzer,
-die dir unglaublich viel Arbeit abnehmen oder erleichtern.
+Packages are...
+
+Installing packages
 
 ```{r, eval = FALSE}
 # Installation
@@ -353,8 +356,4 @@ install.packages("tidyverse")
 library(tidyverse)
 ```
 
-Das tidyverse ist eine Gruppe von Packages, die gemeinsam installiert und geladen werden
-und sehr gut zusammespielen. Wir werden ausgiebig damit arbeiten.
-
-
-
+The tidyverse is

@@ -7,10 +7,10 @@ editor_options:
 # An die Daten {#day2}
 
 ```{r include=FALSE}
-knitr::opts_chunk$set(eval = FALSE, echo = FALSE)
+knitr::opts_chunk$set(eval = FALSE, echo = FALSE, include = FALSE)
 ```
 
-## Wiederholung Tag 1
+## Exercise for day 1
 
 - Was ergibt `c("12", 13, 14)[2] + 1` und warum?
 - Erstelle einen Vektor `x` mit den ganzen Zahlen von 1 bis 10
@@ -20,18 +20,11 @@ knitr::opts_chunk$set(eval = FALSE, echo = FALSE)
   Plot hinzu
 - Wie können wir mehr über das `linear model`-Objekt erfahren?
 
-```{r, eval=FALSE}
-# c("12", 13, 14)[2] + 1
-x <- 1:10
-y <- x
-plot(x, y)
-model <- lm(y ~ x)
-abline(model, col = "red")
-str(model)
-?lm
+```{r}
+
 ```
 
-## Workflow einer Datenauswertung
+## Workflow of data analysis
 
 ```{r,fig.align='center', fig.cap="Quelle: @wickhamDataScienceImport2017", echo=FALSE}
 knitr::include_graphics("img/workflow.png")
@@ -39,38 +32,26 @@ knitr::include_graphics("img/workflow.png")
 
 ### Communication!
 
-Rmarkdown ermöglicht es uns, den Code zur Datenauswertung
-mitsamt den Ergebnissen, Plots und Gedanken dazu an einem Ort zu sammeln
-und zu dokumentieren. Im Kurs arbeiten wir ebenfalls mit Rmarkdown,
-da wir so wunderbar die zeigen können, was jede Zeile des Codes tut,
-da der Output direkt darunter angezeigt werden kann.
-In RStudio kannst du ein neues Rmarkdown Dokument oben links mit
-dem "new document" Button.
+Rmarkdown!
 
 ```{r, echo=FALSE}
 knitr::include_graphics("img/newrmd.png")
 ```
 
-Eine umfassende Anleitung zu Rmarkdown findest du im [Rmarkdown guide](https://bookdown.org/yihui/rmarkdown/), der natürlich selbst
-ebenfalls in Rmarkdown geschrieben ist (genau wie dieses Buch).
+[Rmarkdown guide](https://bookdown.org/yihui/rmarkdown/)
 
-Neue Code-Chunks fügst du mit Ctrl+Alt+I ein. Nutze sie reichlich um
-den Code in sinnvolle Teile zu strukturieren und nutze Text außerhalb der
-Chunks um die Gedankengänge bei der Datenauswertung festzuhalten,
-ähnlich wie dieses Dokument es tut.
-^[In diesem Dokument zeige ich der Übersicht halber nicht von allen
-Chunks den kompletten Output, aber der Code lässt sich leicht mittels
-des Buttons oben rechts an den Blöcken in die Zwischenablage kopieren
-und selbst in R/RStudio ausprobieren.]
+Ctrl+Alt+I
 
-## Daten einlesen
+## Reading data
 
-Innerhalb des Tidyverse ist dazu das `readr`-Package verantwortlich.
-Die meisten Funktionen diese Packages beginnen mit `read_` oder `write_`
-und die Autovervollständigung zeigt dir alle Optionen auf. Zunächst laden
-wir das `tidyverse`:
+`readr`
 
-```{r, message=FALSE}
+`read_` 
+`write_`
+
+`tidyverse`
+
+```{r}
 library(tidyverse)
 ```
 
