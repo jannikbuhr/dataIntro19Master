@@ -612,13 +612,20 @@ hist(y)
 ```
 
 
-
 ```{r}
-png(filename = "my-first-plot.png", 500, 500)
-curve(sin, -5, 5)
-dev.off()
+# barchart HP students
+
 ```
 
+Add some colors
+
+```{r}
+# barplot, df, names.arg, col
+
+```
+
+
+The last piechart you will ever need.
 
 ```{r}
 par(bg = "pink")
