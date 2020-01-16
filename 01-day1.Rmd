@@ -1,7 +1,13 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: inline
+---
+
 # And Go! {#day1}
 
 ```{r include=FALSE}
-knitr::opts_chunk$set(eval = FALSE, echo = FALSE, warning = FALSE, message = FALSE)
+knitr::opts_chunk$set(eval = TRUE, warning = FALSE, message = FALSE)
 ```
 
 <!-- Slides! -->
@@ -20,7 +26,7 @@ into the fun part.
 
 <!-- Inspired by [learnXinYminutes](https://learnxinyminutes.com/docs/r/). -->
 
-Explain relevance of this section, 
+Explain relevance of this section,
 
 ```{r googling, echo=FALSE, fig.cap="The most important programming advice."}
 knitr::include_graphics("img/errors.jpg")
@@ -31,46 +37,118 @@ knitr::include_graphics("img/errors.jpg")
 ```{r}
 # comments start in the "#" symbol
 # they do nothing
+1 + 1
 ```
 
 <!-- datatypes -->
 
 <!-- executing code -->
 
-```{r, eval=FALSE}
+```{r}
 # Integer
+1L # denoted by L
+
 # Numeric
+12
+12.5
+
 # Complex 
+1 + 3i
+
 # Character
+"Harry Potter"
+
 # logical
+TRUE
+FALSE
+
 # factor
 # The factor class is for categorical data
 # Factors can be ordered (like grade levels) or unordered (like gender)
+
+
 # NULL
+NULL
+
+# NA
+NA + 1
 ```
 
-<!-- variables -->
+variables
 
-<!-- intuition -->
+alt+- for assignment operator
+
+```{r}
+# assigning variables
+name <- "Harry Potter"
+x <- 12
+y <- 14
+```
+
+ctrl+shift+enter
+
+```{r}
+name
+x + y
+```
+
+Careful about the order of execution
+
+```{r}
+x <- 20000
+```
+
+
 
 ```{r}
 # allowed names, capitalization
+# can not start with a number
+name
+Name <- "Ron"
+# use _ instead of space
+# snake_case
+main_character_name <- "Harry"
+# or camaleCase
+mainCharacterName <- "Also Harry"
+# you can have numbers in the name
+x1 <- 12
+x2 <- 13
 
 # other ways to assign: =, ->
+# but be mindful with those!
+x3 = 12
+13 -> x4
 ```
 
 <!-- getting the content of a variable -->
 
+Just type (and execute) the name of the variable
+
 ```{r}
-# implicitly a shortcut for print(main_character)
-main_character
+mainCharacterName
 ```
 
-<!-- basic math -->
+```{r}
+# implicitly a shortcut for print(main_character)
+print(mainCharacterName)
+```
 
-```{r, eval=FALSE}
+```{r}
 # + - * / %/% %% 
+x1 + x2
+12 - 13
+13 * 12
+10 / 5
+
+12 %/% 5 # integer division
+12 %% 5 # modulo
+
 # NaN
+0 / 0
+
+10 / 0
+Inf
+-Inf
 ```
 
 ### Functions and Vectors
@@ -79,178 +157,412 @@ main_character
 
 <!-- functions and mathematical functions -->
 
+
+```{r}
+# eg. mathematical functions
+sin(1/2 * pi)
+abs(-13)
+```
+
+```{r}
+print(mainCharacterName)
+```
+
+
 ```{r}
 # e.g. sin
-sin(1/2 * pi)
 
 ```
 
-<!-- `?funktion`, F1 -->
+`?funktion`, or press F1
 
 ```{r}
-
+?sin
 ```
 
-<!-- everything in R is a vector -->
+
+```{r}
+# pass arguments by name or by order of appearance
+sin(x = 12)
+sin(12)
+```
+
+everything in R is a vector
 
 ```{r}
 # c for combine or concatenate
-
+?c
 ```
-
-<!-- vectorisation of operations -->
 
 ```{r}
-
+x <- c(1,2,3,4,5,6)
+x
 ```
+
+vectorisation of operations
+
+multiplies every element by 2!
+
+```{r}
+x * 2
+```
+
+
 
 The `:` operator and `seq`
 
 ```{r}
-
+x <- 1:100
+x
 ```
 
-<!-- logical comparisons -->
-
-<!-- also elementwise -->
-
-```{r, eval = FALSE}
-
-
+```{r}
+evenNumbers <- seq(from = 0, to = 100, by = 2)
+seq(0, 100, by = 2)
 ```
 
+```{r}
+evenNumbers
+```
 
-<!-- periodic reminder: error messages are your friends and completely normal -->
+logical comparisons
+
+```{r}
+12 < 13
+answer <- 12 > 13
+answer
+main_character_name == mainCharacterName
+main_character_name != mainCharacterName
+20 >= 20
+
+# and -> both need to be TRUE to get TRUE
+TRUE & FALSE
+# or -> only one needs to be TRUE
+TRUE | FALSE | FALSE
+TRUE | TRUE
+```
+
+also elementwise
+
+```{r}
+a <- c(TRUE, FALSE, TRUE)
+b <- c(FALSE, FALSE, TRUE)
+a | b
+
+# if you use double && or ||
+# they only compare the first elements
+a || b
+```
+
+periodic reminder: error messages are your friends and completely normal
 
 ```{r}
 # e.g. c(1,2,)
-
 ```
 
-<!-- combination of different datatypes -->
+There are errors, messages and warnings
+
+```{r}
+# stop("ello")
+warning("Warning!")
+message("I am a message")
+```
+
+combination of different datatypes
 
 ```{r}
 # implicit
+paste("hello", "world", 13)
 
 # explicit
-
+as.character(13)
 ```
 
-<!-- write your own first function -->
+write your own first function
+
+for curly braces on windows german keyboard:
+
+ctrl+alt+7 (or 0) or altGr+7
+
+on mac: alt+8
 
 ```{r}
 ## Everything that does something is a function, everything that exists is an object
 
-# greet
+greet <- function(name) {
+  text <- paste("Hello ", name, "!", sep = "")
+  return(text)
+}
+```
+
+```{r}
+addOne <- function(x) x + 1
+
+addOne <- function(x) {
+  return(x + 1)
+}
+
+harry <- "potter"
+
+addOneHarry <- function(x) {
+  text <- paste("my number plus one and harry is", x + 1, harry)
+  # some other code
+}
+```
+
+```{r}
+result <- addOneHarry(1)
+
+a <- b <- c <- 1
+```
+
+
+
+```{r}
+printPlusOne <- function(x) {
+  print("This function is adding one to", x)
+  return(x + 1)
+}
+```
+
+
+```{r}
+x2 <- printPlusOne(1)
+x2
+```
+
+
+
+```{r}
+addOne(1)
+```
+
+```{r}
+result <- greet("Jannik")
+```
+
+```{r}
+result
 ```
 
 ### Datastructures
 
 1D, same datatype: **vector**
 
-```{r}
+```{r my-chunk}
 # make vector
+x <- c("harry", "ron", "hermione")
+x
 
 # We ask for specific elements by subsetting with square brackets []
 # (Note that R starts counting from 1)
+x[3]
+x[1:2]
 
 # subsetting with logical vector
+logicalVector <- c(TRUE, FALSE, TRUE)
+
+## the next 3 statements do the same thing
+x[logicalVector]
 
 # or with indices
-# which
+x[c(1,3)]
 
+# which
+x[which(logicalVector)]
 ```
 
 usefull functions for vectors
 
 ```{r}
+# comment
+x <- 1:100
 # grab just the first or last few entries in the vector,
-
+head(x)
+tail(x)
 
 # or figure out if a certain value is in the vector
-
+any(x == 2)
+which(x == 2)
+x[which(x == 2)]
 
 # If an index "goes over" you'll get NA:
-
+x[101]
 
 # You can find the length of your vector with length()
-
+length(x)
 
 # You can perform operations on entire vectors or subsets of vectors
+# [] for subsetting, get a piece of a vector (or list, or anything else)
+# () for order of application and more importantly
+# for calling functions
 
+result <- greet("jannik")
+
+x[x %% 2 == 0]
 
 # and R has many built-in functions to summarize vectors
 # mean, min, max, sum
+mean(x)
+min(x)
+max(x)
+sum(x)
+```
 
+```{r}
+c(1,2,3, "harry", TRUE)
 
+c(1, 2, 3, TRUE)
+
+mean(x %% 2 == 0)
 ```
 
 1D, different datatypes: **list**
 
 ```{r}
 # create list
+l1 <- list(1, "harry", TRUE, c(1,2,3) )
 
 # single [] subsetting
+l1[1]
+l1[1:2]
 
 # double [[]] subsetting
+l1[[1]]
 
 # lists and vectors can have names
+names(l1) <- c("number", "potter", "bool", "vec")
+l1
 
 # using the names for subsetting
+l1$number # same as l1[[1]]
+l1[["number"]]
+l1["number"]
+
 ```
 
 2D, same Datentyp: **matrix**
 
 ```{r}
 # matrix
+# matrix(1:9)
+# matrix(1:9, nrow = 3, byrow = TRUE)
+m <- matrix(1:9, nrow = 3)
 
 # Ask for the first row
+m[1, ]
+
+# the first colum
+m[, 1]
+
+# the element in the top right corner
+m[1,3]
 
 # Perform operation on the first column
+m[,1] * 2
 
-# Ask for a specific cell
+m[,1] <- m[,1] * 2 
 
+m
 # Transpose the whole matrix
+t(m)
 
 # Matrix multiplication
+m %*% m
+
+m <- m * 2
 
 # cbind() sticks vectors together column-wise to make a matrix
+cbind(
+  1:3,
+  c(1,2,42)
+)
+
+m
 
 # rbind() sticks vectors together row-wise to make a matrix
-
+rbind(
+  1:3,
+  c(1,2,42)
+)
 ```
 
 2D, different datatypes: **data.frame**
 
 ```{r}
 # data.frame
+students <- data.frame(
+  name = c("harry", "ron", "cedric"),
+  year = c(2, 2, 3),
+  alive = c(TRUE, TRUE, FALSE), stringsAsFactors = FALSE
+)
 
-# assign names
-
+students
 ```
 
 usefull functions for dataframes
 
 ```{r}
 # nrow, ncol, dim
+nrow(students)
+ncol(students)
+dim(students)
 
 # parameter stringsAsFactors
 
 # There are many ways to subset data frames
 # See if you can find out what each of these lines does
+
 # dollar
+students$name
+students$year
 
 # vector
+students[1:2]
+students[1, 1]
 
 # character
+students["name"]
 
+students$year <- students$year + 3
+students
+
+name <- students$name
+year <- students$year
+name
+year
+
+name <- 12
+
+students$name
+
+students <- cbind(students, stuff = c(1,2,3))
+
+students[students$name == "cedric", "year"] <- 8
+students[students$alive, ]
 ```
 
 Almost as usefula as `?`: the function `str` for _structure_
 
 ```{r}
-# str
+str(students)
 ```
+
+Subsetting example
+
+```{r}
+m <- matrix(1:4, nrow = 2)
+m
+```
+
+```{r}
+students[c()]
+students[2, 3]
+
+students$name[2]
+
+```
+
 
 ### Die ersten Plots
 
@@ -258,55 +570,55 @@ Scatterplots
 
 ```{r}
 # def x 1:20
-
-# add noise, call it y
-
+x <- 1:20
+y <- x^2
 # plot x y
+plot(x, y)
+```
 
+```{r}
+x <- 1:20
+y <- x + rnorm(length(x))
+plot(x,y)
 ```
 
 With linear regression
 
 ```{r}
 # model lm
+model <- lm(y ~ x)
 
 # plot
+?par
+plot(x,y, xlab = "This is x", main ="Hello", col = "darkgreen")
 
 # abline
-
+abline(model, col = "red")
 ```
 
 Curves
 
 ```{r}
 # curve of sine wave
-
+curve(sin, -5, 5)
 ```
 
 Histogram
 
 ```{r}
 # e.g. of y
-
+y <- rnorm(1000)
+hist(y)
 ```
 
-Barchart
+
 
 ```{r}
-# barchart HP students
-
+png(filename = "my-first-plot.png", 500, 500)
+curve(sin, -5, 5)
+dev.off()
 ```
 
-Add some colors
-
-```{r}
-# barplot, df, names.arg, col
-
-```
-
-`par`: _graphical parameters_
-
-The last piechart you will ever need.
 
 ```{r}
 par(bg = "pink")
@@ -334,26 +646,3 @@ legend(1, 1,
 # ... Plot code
 
 ```
-
-## Project-based Workflow
-
-Important RStudio-Settings
-
-```{r, echo=FALSE, fig.show='hold', out.width='50%', fig.cap="RStudio Einstellungen"}
-knitr::include_graphics(c("img/RS_settings.png", "img/RS_settings2.png"))
-```
-
-## Packages: The Tidyverse
-
-Packages are...
-
-Installing packages
-
-```{r, eval = FALSE}
-# Installation
-install.packages("tidyverse")
-# Paket laden
-library(tidyverse)
-```
-
-The tidyverse is
