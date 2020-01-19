@@ -1,15 +1,15 @@
 --- 
-title: "Einführung in die Datenauswertung mit R"
+title: "Introduction to Data Science with R for Biochemists"
 author: "Jannik Buhr"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 documentclass: book
 colorlinks: yes
-github-repo: jannikbuhr/dataIntro19
+github-repo: jannikbuhr/dataIntro19Master
 bibliography: ["references.bib", "book.bib", "packages.bib"]
 csl: chicago-author-date-de.csl
 link-citations: true
-description: "Datenauswertung für Biochemiker, eine Einführung mit R"
+description: "Introduction to Data Science with R for Biochemists"
 editor_options: 
   chunk_output_type: console
 ---
@@ -27,9 +27,33 @@ options(
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
-# Prologue {-}
+# Prolog {-}
 
-## Preparation
+## Preparation for the Course
+
+The course for master students will be held in English,
+as the concepts covered will directly transfer to the
+research you do and the papers you will most likely write
+with the working language in this domain being English.
+
+Before the course starts, please install both R and RStudio
+from the following links and bring your laptops to class:
+
+- [R: https://cran.r-project.org/](https://cran.r-project.org/)
+- [RStudio: https://www.rstudio.com/products/rstudio/download/#download](https://www.rstudio.com/products/rstudio/download/#download)
+
+Alternatively, if you can not install anything on your machine
+or would like to use the computers (Mac) provided in our
+classroom, sign up for [RStudio Cloud](https://rstudio.cloud/).
+This way we are not dependent on the IT department
+for the correct installation of R, RStudio and additional packages.
+
+## Structure of the Course
+
+- From January 10, 2020 to February 14 (6 fridays)
+- Morning session from 10 ct to about 12:00.
+- Afternoon session from 13:00 to about 15:00,
+  but I will be there for further questions until max 17:00.
 
 ## Content
 
@@ -81,6 +105,7 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
   - nested datframes, list colums
   - map Funktionen
 
+This table of content is structured thematically, not chronologically.
 
 ## Resources
 
@@ -114,7 +139,7 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 - [Unglaublich niedliche Illustrationen](https://github.com/allisonhorst/stats-illustrations) [@horst2019]
 - [Happy Git with R](https://happygitwithr.com/)
 
-## Misc
+## Other Resources
 
 - [Tidytuesday](https://github.com/rfordatascience/tidytuesday)
 - [Tips for Working with Images in Rmarkdown](http://zevross.com/blog/2017/06/19/tips-and-tricks-for-working-with-images-and-figures-in-r-markdown-documents/)
@@ -122,4 +147,3 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 Made with the help of these amazing packages (plus documentation):
 @R-base; @R-bookdown; @R-knitr; @R-rmarkdown; @xie2015
 
-ü

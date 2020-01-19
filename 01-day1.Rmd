@@ -7,7 +7,7 @@ editor_options:
 # And Go! {#day1}
 
 ```{r include=FALSE}
-knitr::opts_chunk$set(eval = TRUE, warning = FALSE, message = FALSE)
+knitr::opts_chunk$set(eval = TRUE)
 ```
 
 <!-- Slides! -->
@@ -18,132 +18,213 @@ Because R is a programming language, we first look into
 some basic concepts and data structures before diving
 into the fun part.
 
-<!-- Open a new R-Script. -->
+To test out everything we will learn today yourself, open RStudio,
+find the top left corner and click the little document with a plus
+icon. From the menu select "R Script"^[For power users: the shortcut
+is Ctrl+Shift+N].
 
-<!-- R and RStudio -->
+This chapter will jump into the basic concepts of the R
+programming language and is inspired by
+[learnXinYminutes](https://learnxinyminutes.com/docs/r/).
+It is completely normal that some of the concepts covered
+in this section will not appear obvious at first. Programming
+languages are not onlike human languages and the computer
+will not always understand what you want it to do unless you
+use exactly the right grammar and vocabulary. However, R will
+sometimes tell you, that it didn't understand you through
+`error messages` and it is quite the norm to see them a lot.
+Even experienced programmers are very fond of this advice:
 
-<!-- Explanation, shortcut, mac vs pc -->
-
-<!-- Inspired by [learnXinYminutes](https://learnxinyminutes.com/docs/r/). -->
-
-Explain relevance of this section,
-
-```{r googling, echo=FALSE, fig.cap="The most important programming advice."}
+```{r googling, echo=FALSE, fig.cap="Maybe the most important programming advice."}
 knitr::include_graphics("img/errors.jpg")
 ```
 
-### Math with R
+### Executing Code in R
+
+The simplest usecase for any programming language is probably just
+to use it as a calculator (because that's what computers are,
+big calculators). Type the following line in
+your R script and then hit Ctrl+Enter to send it to the R console.
+This is where your code gets executed.
 
 ```{r}
-# comments start in the "#" symbol
-# they do nothing
 1 + 1
 ```
 
-<!-- datatypes -->
+You can also type directly in the console and then hit enter to execute,
+but in order to keep everything reproducible, we write everything
+in the R script file so that we can come back later and execute
+the same code to proof that it still works and that for example
+our data analysis for an experiment is valid.
 
-<!-- executing code -->
+Your code can have comments to tell your future self why you wrote
+a piece of code the way you did. Any line starting with
+the number symbol `#` will be ignored by R.
 
 ```{r}
-# Integer
-1L # denoted by L
-
-# Numeric
-12
-12.5
-
-# Complex 
-1 + 3i
-
-# Character
-"Harry Potter"
-
-# logical
-TRUE
-FALSE
-
-# factor
-# The factor class is for categorical data
-# Factors can be ordered (like grade levels) or unordered (like gender)
-
-
-# NULL
-NULL
-
-# NA
-NA + 1
+# This line will be ignored
+43 - 1 # as will be the part after this #, but not before it
 ```
 
-variables
+### Basic Datatypes
 
-alt+- for assignment operator
+Whole numbers (integer)
+
+```{r, eval=FALSE}
+1L # denoted by L
+```
+
+Numbers (numeric, double)
+
+```{r, eval=FALSE}
+12
+12.5
+```
+
+Complex numbers
+
+```{r, eval=FALSE}
+1 + 3i # denoted by the small i for the imaginary part
+```
+
+Text (character, string)
+
+```{r, eval=FALSE}
+"Harry Potter"
+```
+
+Logical values (boolean, logical)
+
+```{r, eval=FALSE}
+TRUE
+FALSE
+```
+
+Special types that mix with any other type:
 
 ```{r}
-# assigning variables
+# NULL for no value
+NULL
+
+# NA for Not Assigned
+NA
+```
+
+`NA` is contagious. Any computation invloving `NA` will return `NA`
+(because R has no way of knowing the answer):
+
+```{r}
+NA + 1
+max(NA, 12, 1)
+```
+
+Factors (factor) for categorical data.
+
+
+```{r}
+# Factors can be ordered (like grade levels) or unordered (like gender)
+factor(c("m", "f", "f", "d", "m"))
+```
+
+### Variables
+
+Variables store data. You can think of them as a box with a name in which
+you can put stuff. Putting stuff in boxes works via "assignment" and the
+operator in R for that looks like this: `<-`. You can either type it
+directly or use the handy RStudio shortcut Alt+Minus to insert one into
+your code.
+
+```{r}
 name <- "Harry Potter"
 x <- 12
 y <- 14
 ```
 
-ctrl+shift+enter
+Executing the above code will not give you any output, but when you
+use the name of the variable, you can see its content:
+
+```{r}
+x
+```
 
 ```{r}
 name
+```
+
+And you can do operations with those variables:
+
+```{r}
 x + y
 ```
 
-Careful about the order of execution
+
+***
+
+> **NOTE**
+> Be careful about the order of execution!
+> R enables you to work interactively and to execute the code you
+> write in your script in any order with Ctrl+Enter, but
+> when you execute (source) the whole script, it will
+> be executed from top to bottom.
+
+Furthermore, code is not executed again automatically, if you
+change some dependency of the expression later on. So the second
+assignment to x doesn't change y.
 
 ```{r}
-x <- 20000
+x <- 1
+y <- x + 1
+x <- 1000
+y
 ```
 
+***
 
+Variable names can contain letters (capitalization matters),
+numbers (but not as the first character) and underscores `_`.
+^[They can also contain dots (`.`), but it is considerd bad practice
+because it can lead to some confusing edge cases.]
 
 ```{r}
-# allowed names, capitalization
-# can not start with a number
-name
-Name <- "Ron"
-# use _ instead of space
 # snake_case
 main_character_name <- "Harry"
+
 # or camaleCase
 mainCharacterName <- "Also Harry"
+
 # you can have numbers in the name
 x1 <- 12
 x2 <- 13
 
-# other ways to assign: =, ->
-# but be mindful with those!
-x3 = 12
+# There are other ways to assign variables
+x3 = 12 # this can be confused with setting parameters in function calls
 13 -> x4
 ```
 
-<!-- getting the content of a variable -->
-
-Just type (and execute) the name of the variable
+Typing and executing the name of a variable will implicitly
+call the `print`  function on it, which displays its
+content in the console.
 
 ```{r}
 mainCharacterName
-```
-
-```{r}
-# implicitly a shortcut for print(main_character)
 print(mainCharacterName)
 ```
 
-```{r}
-# + - * / %/% %% 
+### Math Operators
+
+An operator is a function that is called inline, so it stands
+between its arguments, like `+`. R can do standard math and much more.
+
+```{r, eval=TRUE}
 x1 + x2
 12 - 13
 13 * 12
 10 / 5
 
 12 %/% 5 # integer division
-12 %% 5 # modulo
+12 %% 5  # modulo (the rest of integer division)
 
-# NaN
+# NaN, Not a Number
 0 / 0
 
 10 / 0
@@ -153,30 +234,31 @@ Inf
 
 ### Functions and Vectors
 
-<!-- importance of functions -->
-
-<!-- functions and mathematical functions -->
-
+Functions are the main workhorses of our data analysis.
+There are mathematical functions, like `sin`, `cos` etc.
 
 ```{r}
-# eg. mathematical functions
-sin(1/2 * pi)
-abs(-13)
+sin(x = 0)
 ```
 
+The `sin` function takes just one argument `x` and returns its sine.
+
+Note, that the `=` inside the function parethesis
+gives `x = 0` to the function and has nothing to do with
+any `x` defined outside of the function, it doesn't do any assignment
+and the parameter `x` used in the function is separate from
+any `x` you might have defined outside of the function. E.g.
+
 ```{r}
-print(mainCharacterName)
+x <- 10
+sin(x = 0)
+x
 ```
 
+If you want to know more about a function in R, execute `?` with the function
+name or press F1 with your mouse over the function.
 
-```{r}
-# e.g. sin
-
-```
-
-`?funktion`, or press F1
-
-```{r}
+```{r, eval = FALSE}
 ?sin
 ```
 
@@ -187,88 +269,128 @@ sin(x = 12)
 sin(12)
 ```
 
-everything in R is a vector
-
-```{r}
-# c for combine or concatenate
-?c
-```
+The basic datatypes in R are all vectors, which means they can
+contain more than one entry. You can create a vector
+by combining things of the same datatype with the function `c`
+for combine.
 
 ```{r}
 x <- c(1,2,3,4,5,6)
 x
 ```
 
-vectorisation of operations
-
-multiplies every element by 2!
+The basic mathematical operations in R are vectorized by default
+i.e. they are performed on every element of the vector.
+Here, every element is multiplied by 2 and the result printed
+to the console.
 
 ```{r}
 x * 2
 ```
 
-
-
-The `:` operator and `seq`
+The original vector `x` was not changed in doing so.
 
 ```{r}
-x <- 1:100
+x
+```
+
+But we could have by assigning the result back to `x`, thos overwriting
+its previous content. The right hand side (RHS) is executed first:
+
+```{r}
+x <- x * 2
+```
+
+Now `x` changed:
+
+```{r}
+x
+```
+
+This line performs vector addition:
+
+```{r}
+c(1,2,3) + c(4,5,6)
+```
+
+
+The `:` operator and `seq` allow us to create vectors
+of numbers quite easily:
+
+```{r}
+x <- 1:10
 x
 ```
 
 ```{r}
-evenNumbers <- seq(from = 0, to = 100, by = 2)
-seq(0, 100, by = 2)
-```
-
-```{r}
+evenNumbers <- seq(from = 0, to = 10, by = 2)
 evenNumbers
 ```
 
-logical comparisons
+logical comparisons are vectorized as well return logical (boolean) vectors
 
 ```{r}
 12 < 13
 answer <- 12 > 13
 answer
-main_character_name == mainCharacterName
-main_character_name != mainCharacterName
-20 >= 20
+```
 
-# and -> both need to be TRUE to get TRUE
+Most things can be compared
+
+```{r}
+main_character_name == mainCharacterName
+```
+
+`!` means **not**.
+
+```{r}
+1 != 2
+```
+
+There is logical and and or:
+
+```{r}
+# "and" => both need to be TRUE to get TRUE
 TRUE & FALSE
-# or -> only one needs to be TRUE
+```
+
+
+```{r}
+# "or"  => only one needs to be TRUE
 TRUE | FALSE | FALSE
 TRUE | TRUE
 ```
 
-also elementwise
+They also work elementwise.
 
 ```{r}
 a <- c(TRUE, FALSE, TRUE)
 b <- c(FALSE, FALSE, TRUE)
 a | b
-
-# if you use double && or ||
-# they only compare the first elements
-a || b
 ```
 
-periodic reminder: error messages are your friends and completely normal
+Periodic reminder: error messages are your friends and completely normal.
+This error for example tells you that R expected another argument
+to the `c` function because you added another comma:
 
-```{r}
-# e.g. c(1,2,)
+```{r, error=TRUE}
+c(1,2,)
 ```
 
-There are errors, messages and warnings
+There are errors, messages and warnings. Your code will not
+run to the end if R finds errors, but warnings and messages
+are Rs way of telling you, that your code ran but
+you might want to doublecheck if it is doing what you expected it to be doing.
 
 ```{r}
-# stop("ello")
-warning("Warning!")
+warning("Warnings are often fine!")
 message("I am a message")
 ```
 
-combination of different datatypes
+Combining different datatyped into a vector with the `c` function
+will coerce them into the same type, choosing the
+one that allows the most operations. It can also be done
+explicitly.
 
 ```{r}
 # implicit
@@ -278,64 +400,26 @@ paste("hello", "world", 13)
 as.character(13)
 ```
 
-write your own first function
+#### Writing Functions
 
-for curly braces on windows german keyboard:
+Everything that does something is a function,
+everything that exists is an object.
 
-ctrl+alt+7 (or 0) or altGr+7
-
-on mac: alt+8
+We can write our own functions (like `sin`)
 
 ```{r}
-## Everything that does something is a function, everything that exists is an object
-
 greet <- function(name) {
+  # The variable "text" only exists
+  # in the context of this function.
+  # It is not visible to the outside world.
   text <- paste("Hello ", name, "!", sep = "")
   return(text)
 }
 ```
 
-```{r}
-addOne <- function(x) x + 1
-
-addOne <- function(x) {
-  return(x + 1)
-}
-
-harry <- "potter"
-
-addOneHarry <- function(x) {
-  text <- paste("my number plus one and harry is", x + 1, harry)
-  # some other code
-}
-```
-
-```{r}
-result <- addOneHarry(1)
-
-a <- b <- c <- 1
-```
-
-
-
-```{r}
-printPlusOne <- function(x) {
-  print("This function is adding one to", x)
-  return(x + 1)
-}
-```
-
-
-```{r}
-x2 <- printPlusOne(1)
-x2
-```
-
-
-
-```{r}
-addOne(1)
-```
+Here, I am assigning return value of the function
+to the variable `result` and then look at the
+content of `result`
 
 ```{r}
 result <- greet("Jannik")
@@ -345,15 +429,51 @@ result <- greet("Jannik")
 result
 ```
 
+```{r}
+addOne <- function(x) {
+  return(x + 1)
+}
+```
+
+If your function fits on one line, you can leave out the curly braces `{}`.
+
+```{r}
+addOne <- function(x) x + 1
+```
+
+If you don't explicitely use the `return()` statement inside
+of the function definition, the function
+will return the last evaluated line, which is why
+both versions of `addOne` above are valid R code and do the same thing.
+
+We use a function by calling it with the required
+arguments / parameters:
+
+```{r}
+addOne(x = 1)
+```
+
+Instead of explicitely stating the parameters with their
+names when calling the funcion, we can also rely on the order
+in which a function is expecting the arguments:
+
+```{r}
+addOne(1) # the same as addOne(x = 1)
+```
+
 ### Datastructures
 
-1D, same datatype: **vector**
+#### 1D, same datatype: **vector**
 
-```{r my-chunk}
-# make vector
+```{r}
 x <- c("harry", "ron", "hermione")
 x
+```
 
+Getting specific elements of a vector (or other datastructure) is
+called subsetting:
+
+```{r}
 # We ask for specific elements by subsetting with square brackets []
 # (Note that R starts counting from 1)
 x[3]
@@ -372,11 +492,11 @@ x[c(1,3)]
 x[which(logicalVector)]
 ```
 
-usefull functions for vectors
+There is a number of usefull functions for vectors like:
 
 ```{r}
-# comment
 x <- 1:100
+
 # grab just the first or last few entries in the vector,
 head(x)
 tail(x)
@@ -417,7 +537,9 @@ c(1, 2, 3, TRUE)
 mean(x %% 2 == 0)
 ```
 
-1D, different datatypes: **list**
+#### 1D, different datatypes: **list**
+
+Lists
 
 ```{r}
 # create list
@@ -441,7 +563,7 @@ l1["number"]
 
 ```
 
-2D, same Datentyp: **matrix**
+#### 2D, same Datentyp: **matrix**
 
 ```{r}
 # matrix
@@ -487,7 +609,7 @@ rbind(
 )
 ```
 
-2D, different datatypes: **data.frame**
+#### 2D, different datatypes: **data.frame**
 
 ```{r}
 # data.frame
@@ -500,7 +622,7 @@ students <- data.frame(
 students
 ```
 
-usefull functions for dataframes
+Usefull functions for dataframes
 
 ```{r}
 # nrow, ncol, dim
@@ -515,7 +637,6 @@ dim(students)
 
 # dollar
 students$name
-students$year
 
 # vector
 students[1:2]
@@ -527,52 +648,25 @@ students["name"]
 students$year <- students$year + 3
 students
 
-name <- students$name
-year <- students$year
-name
-year
-
-name <- 12
-
-students$name
-
 students <- cbind(students, stuff = c(1,2,3))
 
 students[students$name == "cedric", "year"] <- 8
 students[students$alive, ]
 ```
 
-Almost as usefula as `?`: the function `str` for _structure_
+Almost as useful as `?`: the function `str` for _structure_.
 
 ```{r}
 str(students)
 ```
 
-Subsetting example
+## The first Plots
+
+### Scatterplot
 
 ```{r}
-m <- matrix(1:4, nrow = 2)
-m
-```
-
-```{r}
-students[c()]
-students[2, 3]
-
-students$name[2]
-
-```
-
-
-### Die ersten Plots
-
-Scatterplots
-
-```{r}
-# def x 1:20
 x <- 1:20
 y <- x^2
-# plot x y
 plot(x, y)
 ```
 
@@ -582,53 +676,36 @@ y <- x + rnorm(length(x))
 plot(x,y)
 ```
 
-With linear regression
+With a linear regression
 
 ```{r}
 # model lm
 model <- lm(y ~ x)
 
 # plot
-?par
 plot(x,y, xlab = "This is x", main ="Hello", col = "darkgreen")
 
 # abline
 abline(model, col = "red")
 ```
 
-Curves
+### Curve
 
 ```{r}
-# curve of sine wave
 curve(sin, -5, 5)
 ```
 
-Histogram
+### Histogram
 
 ```{r}
-# e.g. of y
 y <- rnorm(1000)
 hist(y)
 ```
 
 
-```{r}
-# barchart HP students
-
-```
-
-Add some colors
+### The last piechart you will ever need.
 
 ```{r}
-# barplot, df, names.arg, col
-
-```
-
-
-The last piechart you will ever need.
-
-```{r}
-par(bg = "pink")
 cols <- c('#0292D8', '#F7EA39', '#C4B632')
 pie(
   c(280, 60, 20),
@@ -646,10 +723,19 @@ legend(1, 1,
 )
 ```
 
-<!-- Saving plots and graphic devices -->
+### Saving Plots
 
-```{r}
-# e.g. png
-# ... Plot code
+By executing a piece of code that contains a plot,
+the plot is send to a so called `graphics device`.
+Think of it as a printer for your plots. By default
+this is the plot pane of RStudio (lower right).
+If you want to save your base-R plot to a file,
+you first open a different graphics device that redirects
+your plot for example to a png-file, then run the plot code
+and then close the device to finalize the printing step.
 
+```{r, eval=FALSE}
+png(filename = "myFirstPlot.png")
+curve(sin, -5, 5, main = "So much sin!")
+dev.off()
 ```

@@ -19,7 +19,14 @@ for this in the top right corner of RStudio.
 Projects automatically set your so-called `working directory`
 to this project folder. This is where R will search for
 files and save files to. Every file path should be relative
-to this working directory (The RStudio autocompletion helps you).
+to this working directory. This also enables the RStudio autocompletion
+to help you find your files. Inserting a pair of quotations marks (`"`)
+into your code and pressing Tab or Ctrl+Space shows you the files
+and folders in your working directory:
+
+```{r, eval=FALSE}
+""
+```
 
 ### Workflow of a Data Analysis
 
@@ -32,22 +39,40 @@ knitr::include_graphics("img/workflow.png")
 
 ### Communication!
 
-Your thoughts during analysis matter!
-(To future-you and others)
+Your thoughts during data analysis matter (To future-you and others)! 
 
-This is one of the main reasons I use Rmarkdown for
-teaching as well as regular data analysis
+This is one of the main reasons I use Rmarkdown
+instead of R scripts for teaching as well
+as regular data analysis. This `.rmd` format mixes
+text with code "chunks". You can create one in the top left corner
+as well. Choose "R markdown" and press OK.
 
 ```{r, echo=FALSE}
 knitr::include_graphics("img/newrmd.png")
 ```
 
-[Rmarkdown guide](https://bookdown.org/yihui/rmarkdown/)
-see @R-rmarkdown.
+This will present you with an example document showcasing
+some of the possibilites. A plethora of information can be found
+in the official
+[Rmarkdown guide](https://bookdown.org/yihui/rmarkdown/) [@R-rmarkdown].
 
-Ctrl+Alt+I
+Text is interpreted as markdown, with special characters to mark
+text as bold, italics, a heading etc. and text in so called
+code chunks is interpreted as (R) code. You can insert R code chunks
+with the shortcut Ctrl+Alt+I or the button in the upper right corner
+of the code editor window.
+
+Hitting the "knit" button will run the whole document and produce
+a report in the specified format (html, docx, pdf and many others).
+
+```{r, echo=FALSE}
+knitr::include_graphics("img/knit.png")
+```
 
 ### Important RStudio-Settings
+
+For the sake of reproducibility, please set these settings
+(Tools -> Global Options) in your RStudio.
 
 ```{r, echo=FALSE, fig.show='hold', out.width='50%', fig.cap="RStudio Einstellungen"}
 knitr::include_graphics(c("img/RS_settings.png", "img/RS_settings2.png"))
@@ -63,12 +88,14 @@ Installing packages
 
 ```{r, eval = FALSE}
 # install tidyverse
+install.packages("tidyverse")
 ```
 
 Load packages:
 
-```{r, eval = FALSE}
+```{r}
 # load tidyverse
+library(tidyverse)
 ```
 
 The tidyverse is
@@ -80,16 +107,31 @@ The tidyverse is
 - What do we get when we execute `c("12", 13, 14)[2] + 1`?
   - Try do predict what will happen before executing the code.
   - Why does it happen that way?
-- Make a vector with the numbers from 1 to 10
+- Make a vector x with the numbers from 1 to 10
 - Make a vector y with the same content as x
 - Plot both vectors as points (y ~ x)
+  - hint: use the `plot` function
 - Do a linear regression and add it as a line to the plot
 - How can we find out more about the linear regression object?
 
 ### Answers
 
-```{r}
+```{r, eval = FALSE}
+c("12", 13, 14)[2] + 1
+vec <- c("12", 13, 14)
+vec[2]
+vec[2] + 1
+```
 
+Ctrl+Shift+Enter to run the whole chunk
+
+```{r}
+x <- 1:10
+y <- x
+# plot(x, y)
+plot(y ~ x)
+linearModel <- lm(y ~ x)
+abline(linearModel)
 ```
 
 ## Reading data
@@ -113,8 +155,10 @@ with any text editor. As a destination we
 create a folder in our project called `data`,
 to keep everything organized.
 
+Ctrl+Space for cool autocomplete (or tab)
+
 ```{r}
-# Read data with read_csv
+read_csv("data/students.csv")
 ```
 
 You might have a german Excel version... 
@@ -122,7 +166,14 @@ You might have a german Excel version...
 Enter: The semicolon ";"
 
 ```{r}
-# show read_csv2 and what happens if things go wrong
+read_csv2("data/students.csv")
+```
+
+```{r}
+# read_csv
+read_delim("data/students.csv", delim = ",")
+# read_csv2
+read_delim("data/students.csv", delim = ";")
 ```
 
 `Read_csv` also works with data from the internet!
@@ -136,14 +187,24 @@ E.g. my github repository
 You can also read straight from excel files.
 
 ```{r}
-# explain  :: notation
-# readxl data
+readxl::read_excel("data/students.xlsx")
+```
+
+```{r}
+students <- read_csv("data/students.csv")
+```
+
+View your data in a new tab in RStudio
+
+```{r, eval = FALSE}
+View(students)
 ```
 
 Writing data works analogous to that.
 
-```{r}
+```{r, eval=FALSE}
 # write data with write_
+write_csv(students, path = "data/students2.csv")
 ```
 
 Now what do we do with the data?
@@ -164,13 +225,42 @@ looks about like this:
 
 ```{r}
 # define add_one
+addOne <- function(x) x + 1
+
 # define standardize to max
+standardize <- function(x) x / max(x)
 
+callOutResult <- function(x) paste("Your result is", x)
 # sequentially change x
+```
 
+
+```{r}
+data <- 1:5
+newData <- addOne(data)
+evenNewerData <- standardize(newData)
+callOutResult(evenNewerData)
+```
+
+This is not fun to write! We might want to
+overwrite our original data instead of 
+creating a new varible for every step
+
+```{r}
+data <- 1:5
+data <- addOne(data)
+data <- standardize(data)
+callOutResult(data)
 ```
 
 This is a lot of repetition!
+
+Maybe turn to math notation?
+
+```{r}
+data <- 1:5
+callOutResult(standardize(addOne(data)))
+```
 
 Who wants to type `x` that often?
 
@@ -179,12 +269,35 @@ Enter: The pipe `%>%`
 - Insert a pipe with Ctrl+Shift+M
   (Or manually type it out)
 
-```{r, eval=FALSE}
-# explain the pipe: %>% 
+With a function g and a function f
+f(g(x)) = x %>% g() %>% f()
+
+```{r}
+data <- 1:5
+data %>% addOne() %>% standardize() %>% callOutResult()
 ```
 
-Of course, the above functions are not that big
-of a deal for working with data.
+We can also write each step on a new line
+(because R doesn't care about new lines)
+
+```{r}
+data %>% 
+  addOne() %>% 
+  standardize() %>% 
+  callOutResult()
+```
+
+For functions with more than one argument,
+the pipe inserts the stuff from the left side
+as the first agrument!
+
+```{r}
+addNumber <- function(data, number) data + number
+```
+
+```{r}
+data %>% addNumber(3)
+```
 
 Enter: The `dplyr` verbs
 
@@ -205,6 +318,12 @@ Select columns of a data.frame.
 # with the students data
 # remember the "base-R" way to select columns?
 # Now we only need to remember one word:
+select(students, name, row)
+
+# or
+students %>% select(name, row)
+# this is equivalent to:
+students[, c("name", "row")]
 ```
 
 ### filter
@@ -213,31 +332,66 @@ Filter a data.frame based on a condition in a column.
 
 ```{r, eval=FALSE}
 # remember the old way to subset?
+students[students$row == 1, ]
 # the new syntax is more straightforward:
+students %>% 
+  filter(row == 1)
 ```
+
+Combine those:
+
+```{r}
+students[students$row == 1, 1]
+
+# equivalent but nicer to read in your head
+students %>% 
+  filter(row == 1) %>% 
+  select(name)
+```
+
+> One thing to note: As of now, we have not changed the students data!
+> because we only looked at the output of the functions in the console
+> and did not assign anything (with <- )
 
 ### mutate
 
 Change a column or add a new one.
 Like the length of your names.
 
-```{r, eval=FALSE}
+```{r}
 # calculate string lengths
+# last week in base R
+students$nameLength <- str_length(students$name)
+
+students %>% 
+  mutate(nameLength = str_length(name))
 ```
 
 We might need this modified/enhanced data later,
 so let's  overwrite the variable `students`:
 
 ```{r}
-# assign
+students <- students %>%  
+  mutate(nameLength = str_length(name))
 ```
+
+```{r}
+students
+```
+
 
 ### arrange
 
 Who has the longest name?
 
 ```{r}
-# arrange
+students %>% 
+  arrange(desc(nameLength))
+```
+
+```{r}
+students %>% 
+  filter(nameLength == max(nameLength))
 ```
 
 ### count
@@ -247,8 +401,13 @@ How many are in the first row?
 How many based on hairlength?
 
 ```{r}
-# count
+students %>% count(row)
 ```
+
+```{r}
+students %>% count(row, hairlength)
+```
+
 
 ### summarise
 
@@ -256,6 +415,12 @@ What is the mean name-length?
 
 ```{r}
 # summarise
+# in base-R:
+mean(students$nameLength)
+
+# in the tidyverse
+students %>% 
+  summarise(nameLength = mean(nameLength))
 ```
 
 ### group_by und summarise
@@ -263,10 +428,56 @@ What is the mean name-length?
 Do participants in the first row have longer names?
 
 ```{r}
-# group by, count, ungroup
+# group by, summarise, ungroup
 # ungroup is not always necessary but it can be surprising if
 # you forget that your data had groups
+students %>% 
+  group_by(row) %>% 
+  summarise(nameLengh = mean(nameLength))
 ```
+
+```{r}
+students %>% 
+  group_by(row, hairlength) %>% 
+  summarise(nameLength = mean(nameLength)) %>% 
+  arrange(desc(nameLength))
+```
+
+Do people with long hair tend to sit in the first row?
+
+```{r}
+students %>% 
+  filter(row != 0) %>% 
+  count(row, hairlength)
+```
+
+#### Sidenote
+
+```{r}
+# pull pulls out a column as a vector from a dataframe
+# the conditions in filter stack
+students %>% 
+  filter(row == 2, hairlength == "l") %>% 
+  # select(name) %>%
+  pull(name)
+```
+
+```{r}
+# we can also combine conditions with or ( | )
+students %>%
+  filter(row == 2 | hairlength == "l")
+```
+
+
+
+### Moving on the probability
+
+The question we might ask now is:
+
+> If every person was randomly seated,
+> What would be the probability to find
+> that many (or more) with long hair in
+> the first row?
 
 ## But what is Probability?
 
@@ -281,31 +492,43 @@ can be empirically measured or predicted from a model [@motulsky2017].
 Categorical / discrete data: _Drawing (blindly) from a hat._
 
 ```{r}
-# count long hair
+students %>% 
+  count(row, hairlength)
 ```
 
 ```{r}
-# count row
+students %>%
+  filter(row != 0) %>% 
+  count(hairlength)
 ```
+
 
 ```{r}
 # create a "hat" of hairlengths
 # with the numbers observed in our course
-
+hat <- c( rep("l", 6), rep("s", 3) )
+hat
 ```
 
-```{r, eval=FALSE}
+```{r}
 # sample / draw from said hat
 # the same number of observed long haired in first row
-
+sample(hat, 1)
 
 # Look at the help for sample (default: replace = FALSE)
+sample(hat)
 
-# How many in this sample have short hair?
+firstRow <- sample(hat, 5)
 
+# How many in this sample have long hair?
+mean(firstRow == "l")
+sum(firstRow == "l")
 
 # Explanation of for-loop for simulation
 # with just print
+for (i in 1:10) {
+  print(i)
+}
 
 
 ```
@@ -314,33 +537,31 @@ Categorical / discrete data: _Drawing (blindly) from a hat._
 ```{r}
 ## Simulation
 # set N
+N <- 1000
 
 # create vector for the sum from each draw
+results <- 1:N
+
 # assign the results in a loop
+for (i in 1:N) {
+  draw <- sample(hat, 5)
+  results[i] <- sum(draw == "l")
+}
 
-# Histogram, Mean, Median
 # mean of results
+mean(results)
 ```
 
 
 ```{r}
-# histogram of results
-```
-
-
-```{r}
-# median
-```
-
-
-```{r}
-# Difference between mean and median, their robustness to outliers!
+hist(results)
 ```
 
 
 ```{r}
 # How surprised should we be? -> Calculate probability for random event
 # sum greater than or equal to observed frequency / length
+mean(results >= 4)
 ```
 
 ### P-Values {#p-values}
@@ -365,16 +586,23 @@ In other words, a p-Value is...
 We calculate the exact p-value:
 
 ```{r}
+students %>% 
+  count(hairlength)
+```
+
+
+```{r}
 # hypergeometric distribution
 # note that it calculates cumulative probabilities!
 # default: P(X <= x)
-1 - phyper(5, m = 9, n = 4, k = 6)
+# default: P(X >= x)
+1 - phyper(q = 3, m = 6, n = 3, k = 5)
 ```
 
 Hypergeometric distribution for our example
 
 ```{r}
-barplot(dhyper(x = 0:6, m = 9, n =  4, k =  6), names.arg = 0:6)
+barplot(dhyper(x = 0:6, m = 6, n = 3, k =  5), names.arg = 0:6)
 ```
 
 ## Exercise: Transfer to new Data
@@ -393,6 +621,8 @@ Starwars, a datenset included with the tidyverse.
 - Which gender is taller on average in StarWars?
   - _Hint:_ use group_by and summarise
   - You might need the argument "na.rm = TRUE" in `mean()`
+
+
 - Simulate drawing 81 characters (or rather genders) from a hat.
   Repeat this 1000 times.
 - How often do you obtain 62 or more male characters?
@@ -404,12 +634,59 @@ Starwars, a datenset included with the tidyverse.
 
 ### Solutions
 
+
+```{r}
+knitr::opts_chunk$set(eval=FALSE, include=FALSE)
+```
+
+
+```{r}
+# this way is more similar to the experiments
+# with long and short hair, but a bit dissimilar to
+# the star wars data because it ignores other genders
+# but I do not know the proportion of non-binary genders
+# in the whole starwars universe
+hat <- c("male", "female")
+sample(hat, 81, replace = TRUE)
+```
+
+0 as a result is expected, you did not make mistake.
+It is just that unlikely!
+
+```{r}
+1 - pbinom(q = 61, size = 81, prob = 0.5)
+```
+
+
+
+```{r, eval = FALSE}
+View(starwars)
+```
+
+
+```{r}
+greatestMass <-  starwars %>% 
+  filter(mass == max(mass, na.rm = TRUE))
+
+greatestMass$name
+```
+
+```{r}
+starwars %>% 
+  filter(mass == max(mass, na.rm = TRUE)) %>% 
+  pull(name)
+```
+
+
+
+
+
 Spoilers ahead
 
 
-```{r, include=FALSE}
-knitr::opts_chunk$set(eval=FALSE, include=FALSE)
-```
+
+
+
 
 ```{r, eval=FALSE}
 starwars
@@ -446,7 +723,7 @@ starwars %>% count(gender)
 ```
 
 
-```{text}
+```
 Wie wahrscheinlich ist es, bei gleicher Verteilung von Geschlechtern im Universum,
 allein durch Zufall diesen oder einen höheren Männerüberschuss im starwars
 Datenset zu erhalten? Die allein zufällige Verteilung ist unsere Nullhypothese $H_0$.
@@ -477,7 +754,9 @@ hist(results)
 sum(results >= n_males)
 ```
 
-```{text}
+
+
+```
 Der exakte P-Value wird hier mit `pbinom`
 (also der Wahrscheinlichkeit für binomialverteilte Daten) statt
 `phyper` (Wahrscheinlichkeit für hypergeometrisch verteilte Daten)
@@ -495,7 +774,7 @@ pbinom(q = n_males - 1,
        lower.tail = FALSE)
 ```
 
-```{text}
+```
 Das Ergebnis ist statistisch signifikant bei einem typischen Signifikanzlevel von
 $p \leq 0.05$ ($5~\%$). Merke an dieser Stelle, dass wir nicht sagen
 können, etwas bewiesen zu haben, wir können jedoch sagen, dass wir die
@@ -503,7 +782,7 @@ Nullhypothese ("es gibt keinen Effekt von Gender auf die
 Auswahl ins Datenset") ablehnen.
 ```
 
-```{text}
+```
 > _Thus, we reject the null hypothesis._
 Für mehr Informationen siehe:
 ```
@@ -514,7 +793,7 @@ Für mehr Informationen siehe:
 ?pbinom
 ```
 
-```{text}
+```
 Sowie die unglaublich guten Visualisierungen von [Seeing Theory](https://seeing-theory.brown.edu/index.html)!
 ```
 
