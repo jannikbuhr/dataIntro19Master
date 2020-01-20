@@ -1,4 +1,5 @@
 bookdown::gitbook:
+  df_print: kable
   dev: svglite
   css: style.css
   config:

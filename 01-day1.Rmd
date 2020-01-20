@@ -1,16 +1,4 @@
----
-output: html_document
-editor_options: 
-  chunk_output_type: inline
----
-
 # And Go! {#day1}
-
-```{r include=FALSE}
-knitr::opts_chunk$set(eval = TRUE)
-```
-
-<!-- Slides! -->
 
 ## Basic Datastructures in R
 
