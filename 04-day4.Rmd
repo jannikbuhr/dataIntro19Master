@@ -116,7 +116,7 @@ always called `.x` inside of the function.
 So the lambda funcion `~ getMeanOfSubset(wt, 30)`
 takes the numbers from 1 to N (`1:N`) but completely
 ignores them (there is no mention of `.x`). 
-The result is thus `getMeanOfSubset` beeing called
+The result is `getMeanOfSubset` beeing called
 1000 times with the same arguments (`wt` and `30`).
 
 ```{r}
@@ -160,17 +160,17 @@ normal distribution.
 For 3 degrees of freedom (DF):
 
 ```{r tdist, fig.cap="t-distribution in red, normal distribution in black."}
-tdist <- function(x) dt(x, df = 3)
-curve(dnorm, -3, 3)
-curve(tdist, -3, 3, add = TRUE, col = "red")
+# define tdist as dt of x for df = 3
+# curve dnorm from -3 to 3
+# add tdist curve in red
 ```
 
 For 30 DF:
 
 ```{r tdist2, fig.cap="t-distribution in red, normal distribution in black."}
-tdist <- function(x) dt(x, df = 30)
-curve(dnorm, -3, 3)
-curve(tdist, -3, 3, add = TRUE, col = "red")
+# define tdist as dt of x for df = 30
+# curve dnorm from -3 to 3
+# add tdist curve in red
 ```
 
 ### Confidence Intervalls (CIs)
@@ -216,61 +216,52 @@ Significance tests answer the question:
 For normally distributed data,
 we would use students t-test.
 
-```{r, eval=FALSE}
-t.test(wt, ko)
-```
-
-
-```{r, echo = FALSE}
-read_csv("data/03_inclusion_bodies.csv") %>% 
-  pivot_longer(1:2) %>% 
-  ggplot(aes(value, fill = name)) +
-  geom_histogram(position = "identity") +
-  theme(legend.position = "bottom")
+```{r}
+# show t.test on wt and ko
 ```
 
 ```{r}
-
+# show t.test on samples of data
 ```
 
+But our data is not normally distributed!
+
 ```{r}
-subset_wt <- sample(wt, 3)
-subset_ko <- sample(ko, 3)
-t.test(subset_wt, subset_ko)
+# take inclusion bodies, pivot longer, plot histograms
 ```
 
 ### Wilcoxon Rank Sum Test
 
-Sind unsere Daten nicht normalverteilt,
-wie es hier der Fall ist, ist ein sogenannter
-nicht-parametrischer Test angebracht. Diese Tests
-machen nicht die Annahme der Normalität.
+With non-normal data, we need a so called
+non-parametric test. Thoses tests do not
+make the assumption of normality.
 
-Der Wilcoxon Rank Sum Test (Auch Mann-Whitney U Test genannt)
-wandelt die eigentlichen Werte der Datenpunkte zunächst
-in Ränge um. Also:
+The Wilcoxon Rank Sum test (also called Mann-Whitney U test)
+takes the values and converts them into "ranks"
+before comparing them.
 
-> "Der wievieltniedrigste Punkt ist es?"
+The rank of a value in our dataset answers the question:
 
-Beispiel:
+> "When sorting the values from lowest to highest,
+  what is the index of that value?"
 
-```{r}
-x <- c(1, 2, 20, 1239132, 3, 5)
-rank(x)
-```
-
-Und an unseren Daten:
-
-```{r, echo = FALSE}
-data %>%
-  pivot_longer(c(1,2)) %>% 
-  ggplot(aes(name, value)) +
-  geom_jitter() +
-  labs(x = "")
-```
+Example:
 
 ```{r}
-wilcox.test(wt, ko)
+# define x
+
+# call rank on x
+
+```
+
+With our data
+
+```{r}
+# pivot_longer, plot jitter, demonstrate ranks
+```
+
+```{r}
+# run wilcox.test on wt and ko
 ```
 
 ## Type I und Type II Errors
@@ -280,23 +271,22 @@ wilcox.test(wt, ko)
 
 ### Type I: False Positives
 
-Ein Typ I Fehler würde bedeuten, dass wir sagen, ein Unterschied
-zwischen den Gruppen existiere,
-obwohl alle Werte aus der gleichen Verteilung stammen und daher kein
-Unterschied besteht.
+A type I error means we find a difference between
+samples even though there is none (they are from
+the same population)
 
-Bei einem P-Value von $\leq$ 0.05 (= 5\ %) wird typischerweise
-gesagt, dass ein "statistisch signifikanter" Unterschied besteht.
-Mit diesem typischen Cutoff von 0.05 akzeptieren
-wir also, allein durch unsere Definition, bereits (mindestens)
-5\ % falsch Positive.
-
-Dieser Cutoff, das Signifikanzlevel, wird auch $\alpha$ genannt.
+We often define a p-value $\leq$ 0.05 (= 5\ %) as
+a "statistically significant" result. Keep in mind,
+that this cutoff is arbitrary and has no physical
+meaning. This cutoff also means that by definition
+we are accepting a minimum of 5% false positives!
+This cutoff, the significancelevel is also called
+$\alpha$.
 
 $$\alpha=\text{Type I error rate}$$
 
 ```{r}
-curve(dnorm, -3 , 3)
+# show normal distribution
 ```
 
 ```{r}
@@ -304,60 +294,55 @@ curve(dnorm, -3 , 3)
 n <- 3
 
 # draw twice from the same normal distributions
-draw1 <- rnorm(n)
-draw2 <- rnorm(n)
 
 # do the t.test
-t.test(draw1, draw2)
+
 
 # do the rank sum test
-wilcox.test(draw1,  draw2)
+
 ```
  
-Teste diesen Code mit unterschiedlichen Werten für `n`.
+Test this code with different values of `n`.
 
-### Type II errors
+### Type II: False Negatives
 
-Wenn zwischen zwei Gruppen ein tatsächlicher Unterschied besteht,
-wir aber bei unserem Test ein nicht signifikantes Ergebnis erhalten,
-begehen wir einen Fehler vom Typ II.
+If there exists a true difference between samples
+(i.e. they come from a different population), but
+we do not detect that difference ("not statistically significant"),
+we commit a type II error.
 
-Ein Typ II Fehler ist also ein falsch negatives Ergebnis.
+A type II error is thus a false negative result.
+the type II error rate is called  $\beta$
+(analogous to $\alpha$).
 
 $$\beta=\text{Type II error rate}$$
 
 ```{r}
 # define n
-n <- 15
 
 # draw from different normal distributions
-draw1 <- rnorm(n, 0, 1)
-draw2 <- rnorm(n, 1, 1)
 
-# convert to tibble, pivot_longer, plot points
-tibble(draw1, draw2) %>% 
-  pivot_longer(c(1,2)) %>% 
-  ggplot(aes(name, value, group = 1)) +
-  geom_jitter(width = 0.2) +
-  stat_summary(geom = "line", fun.y = mean, lwd = 1, lty = 2) +
-  stat_summary(geom = "point", fun.y = mean, color = "red", size = 2)
+
+# convert to tibble, pivot_longer, plot points, add stat_summary for means
 
 # do the t.test
-t.test(draw1, draw2)
 
 # do the rank sum test
-wilcox.test(draw1,  draw2)
 ```
 
+Repeat with different values of `n`.
 
 ### Statistical Power
 
-Als statistische Power bezeichnen wir die Wahrscheinlichkeit eines Tests,
-einen wahren Unterschied zwischen Gruppen bei dem gewählten $\alpha$ auch
-tatsächlich als statistisch signifikant zu kennzeichnen
-und damit ein wahr positives Ergebnis zu produzieren.
+The power of a statistical test is the probability
+to classify a real difference as statistically
+significant (with the chosen $\alpha$).
+So it represents true positives.
 
 $$Power = 1-\beta$$
+
+In R, we have the funtion `power.t.test`, which
+can tell us the power
 
 Für den T-Test können wir in R die folgende Funktion verwenden, die uns hier beispielsweise
 die Frage beantwortet: "Wie viele Proben muss ich pro Gruppe (mindestens) nehmen,
@@ -366,10 +351,10 @@ in 80% der Fälle auch tatsächlich als solchen zu erkennen?"
 
 ```{r}
 # show power.t.test
-power.t.test(delta = 1, sd = 1, power = 0.8)
+
 ```
 
-## Probleme
+## Problems
 
 ### The Jelly Bean Problem (Multiple Testing)
 
@@ -377,33 +362,34 @@ power.t.test(delta = 1, sd = 1, power = 0.8)
 knitr::include_graphics("img/significant.png")
 ```
 
-Die False Discovery Rate (FDA) kontrollieren:
+Controlling the False Discovery Rate (FDA):
 
-- Bonferroni Korrektur
+#### Bonferroni correction
 
 ```{r}
 # show p.adjust
-p.adjust(c(0.05, 0.0001, 0.003323, 0.7), method = "bonferroni")
+# with bonferroni
 ```
 
 Jeder P-Value wird mutipliziert mit der Zahl der Tests
 
-- Benjamini-Hochberg Prozedur
-  - Ordne alle p-values in aufsteigender Reihenfolge
-  - Wähle eine FDR ($q$) und nenne die Anzahl deiner Tests $m$
-  - Finde den größten p-value für den gilt:
-    $p \leq iq/m$ mit dem Index des p-values $i$.
+#### Benjamini-Hochberg procedure
+
+- Sort all p-values in ascending order
+- Choose a FDR $q$ and call the number of tests done $m$
+- Find the largest p-value with:
+  $p \leq iq/m$ with its index $i$.
+- This is your new threshold for significance
 
 ```{r}
 # show p.adjust for BH
-p.adjust(c(0.05, 0.0001, 0.003323, 0.7), method = "BH")
 ```
 
 ### The Base Rate Fallacy
 
-Beispiel: Mammogramm
+Example: mammogram
 
-- Sensitivity = Power =  true positive rate
+- Sensitivity = Power = true positive rate
 - Specificity = true negative rate = $1-\alpha$
 
 ```{r}
@@ -416,38 +402,42 @@ specificity <- 1 - 0.08
 true_positives  <- sensitivity * positives
 false_positives <- (1 - specificity) * negatives
 p_positive <- true_positives / (true_positives + false_positives)
-p_positive
 ```
 
 
 ```{r, echo = FALSE}
+library(waffle)
 theme_set(theme_void())
 
-data.frame(
+tibble(
   parts = c("positives", "negatives"),
   vals = c(positives, negatives)
 ) %>% 
   ggplot(aes(fill = parts, values = vals)) +
-  waffle::geom_waffle(n_rows = 20) +
+  geom_waffle(n_rows = 20) +
   coord_equal() +
-  scale_fill_manual(values = c("white", "red"))
+  scale_fill_manual(values = c("white", "red")) +
+  theme(legend.position = "bottom") +
+  guides(fill = guide_legend(title = "", override.aes = list(color = "black")))
 ```
 
 ```{r, echo = FALSE}
-data.frame(
+tibble(
   parts = c("detected positives",
             "not detected positives (false negatives)",
             "negatives"),
   vals = c(true_positives, positives - true_positives, negatives)
 ) %>% 
-ggplot(aes(fill = parts, values = vals)) +
-  waffle::geom_waffle(n_rows = 20) +
+  ggplot(aes(fill = parts, values = vals)) +
+  geom_waffle(n_rows = 20) +
   coord_equal() +
-  scale_fill_manual(values = c("darkred", "white", "red"))
+  scale_fill_manual(values = c("darkred", "white", "red"))  +
+  theme(legend.position = "bottom") +
+  guides(fill = guide_legend(title = "", override.aes = list(color = "black")))
 ```
 
 ```{r, echo = FALSE}
-data.frame(
+tibble(
   parts = c("detected positives",
             "not detected positives (false negatives)",
             "false positives",
@@ -458,62 +448,63 @@ data.frame(
            negatives)
 ) %>% 
   ggplot(aes(fill = parts, values = vals)) +
-  waffle::geom_waffle(n_rows = 20) +
+  geom_waffle(n_rows = 20) +
   coord_equal() +
-  scale_fill_manual(values = c("darkred", "palevioletred1", "red", "white"))
+  scale_fill_manual(values = c("darkred", "palevioletred1", "red", "white")) +
+  theme(legend.position = "bottom") +
+  guides(fill = guide_legend(title = "", override.aes = list(color = "black")))
 ```
 
-### Resourcen 
+### Resources
 
 - Statistics Done Wrong: https://www.statisticsdonewrong.com/
-- Intuitive Biostatistics, auch in der Uni-Bib: https://katalog.ub.uni-heidelberg.de/cgi-bin/titel.cgi?katkey=68260114&sess=050a1316767b181982c9bce94283e9ae&query=Intuitive%20Biostatistics
+- Intuitive Biostatistics, also in the Uni-Bib: https://katalog.ub.uni-heidelberg.de/cgi-bin/titel.cgi?katkey=68260114&sess=050a1316767b181982c9bce94283e9ae&query=Intuitive%20Biostatistics
 - https://www.graphpad.com/guides/prism/8/statistics/index.htm
 
 ## Exercises
 
-### Show the following Statements with Simulations in R
+### Show the following statements with simulations in R
 
 #### Increasing the sample size n reduces the standard error of the mean with the square root of n.
 
-- Ziehe 10 Zellen aus dem wt (oder ko) Vektor
-- Berechne den Mittelwert
-- Wiederhole das Ganze 1000 mal
-- Berechne die SD der 1000 Mittelwerte
-- Ziehe nun 40 statt 10 Zellen und wiederhole die Schritte
-- Schreibe eine Funktion, die n Zellen zieht, die Schritte ausführt
-  und die SD ausgibt
-- Füttere die Zahlen von 1 bis 100 in die Funktion
-  (mit map_dbl) und plotte das Ergebnis
+- Draw 10 cells from the wt (or ko) vector
+- calculate the mean
+- write a function that does that
+- run it 1000 times and save the result in a vector
+- calculate the SD of the means
+- now, draw 40 instead of 10 cells and repeat. How does the SD change?
+- Write a function of n that does obove steps
+- Feed the numbers from 1 to 100 to the function and
+  plot the resulting SDs
 
-#### Ein 95% Konfidenzintervall eines Samples enthält den Populationsmittelwert mit einer Wahrscheinlichkeit von 95%.
+#### A 95% confifence interval of a sample contains the true mean (of the population) with a probability of 95%
 
-- Ziehe 30 Zellen aus dem wt (oder ko) Vektor
-- Berechne die Limits des CI (Confidence Interval)
-- Schreibe eine Funktion, oben genanntes tut und
-  führe sie 1000 mal aus.
-- Schreibe eine Funktion, die testet, ob ein Set an Limits den
-  wahren Mittelwert einschließt
-- Wende sie auf die 1000 Sets der Limits an
-- Wie oft (prozentual) erhältst du TRUE?
+- draw 30 cells from the wt (or ko) vector
+- Calculate the limits of the CI
+- write a function that does that
+- use `map` or `replicate` to get 1000 sets of limits
+- Write a function that tests, if a set
+  of limits contains the true mean
+- Map this function over the list of limits
+- How often to you optain `TRUE`?
 
-###  Veranschauliche die folgenden Konzepte anhand von Simulationen auf den vorliegenden Daten
+### Show the following concepts with simulations in R
 
-#### Sensitivity: Wie groß ist die Wahrscheinlichkeit abhängig von der Sample Size n mit einem Wilcoxon Rank Sum Test tatsächlich einen p-value <= 0.05 zu erhalten, wenn ein Unterschied existiert?
+#### Sensitivity: With a true difference existing, how large is the probability to detect it (i.e. get a p-value <= 0.05) with a wilcoxon rank sum test?
 
-- Ziehe 1000 mal ein Sample von 30 je aus wt und ko und teste
-  auf Signifikanz
-- Wie viele der 1000 Versuche sind statistisch signifikant?
-- Wie verändert sich diese Zahl, wenn 10 statt 30 gezogen werden?
+- Draw a sample of 30 from the wt and the ko vector and test
+  for a statistically significant difference
+- Do this 1000 times. How many are statistically significant?
+- What changes when you draw 10 instead of 30? Or 5?
 
+#### Specificity: With **no** difference existing, what is the probabilty to detect one nonetheless?
 
-#### Specificity: Unter der Voraussetzung, dass **kein** Unterschied zwischen den Bedingungen vorliegt, wie groß ist die Wahrscheinlichkeit, dennoch ein statistisch signifikantes Ergebnis zu erhalten?
-
-- Stell dir vor, alle Zellen seien wie wt-Zellen
-- Ziehe zwei mal 30 aus den wt-Zellen und lasse einen
-  Wilcoxon Rank Sum Test laufen
-- Widerhole das das Prozedere 1000 mal
-- Wie oft ist das Ergebnis statistisch signifikant?
-
+- Imagine all cells are wt-cells
+- Draw two samples of n = 30 from the wt-cells (i.e. the same population)
+  and run a wilcoxon rank sum test
+- Repeat 1000 times
+- How are the p-values distributed?
+- How often is the result statistically significant?
 
 #### Resource for p-value Histograms
 
@@ -525,7 +516,7 @@ knitr::opts_chunk$set(include = FALSE, eval=FALSE)
 ```
 
 #### Solutions
-
+  
 
 ```{r}
 library(tidyverse)
@@ -585,7 +576,7 @@ curve(sd(wt)/sqrt(x), add = TRUE, col = "red")
 ```
 
 
-#### Lösung
+#### Solutions
 
 ```{r}
 test_samle_wilcox <- function(n) {
@@ -629,7 +620,7 @@ mean(many_p_values <= alpha)
 ```
 
 
-#### Lösung
+#### Solutions
 
 ```{r}
 test_same_wilcox <- function(n) {
@@ -749,7 +740,7 @@ mean(results)
 # source("test.R")
 ```
 
-#### Weitere Hinweise
+#### Further notes
 
 ```{r}
 # check out

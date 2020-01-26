@@ -616,7 +616,7 @@ qqline(x, col = "red")
 
 ## The Datasaurus Dozen
 
-The Datasaurus Dozen is a greate dataset
+The Datasaurus Dozen is a greate dataset,
 showcasing similar properties
 to anscombes quartet (but in a more
 impressive way).
@@ -778,6 +778,8 @@ the explanation and context are changed.
 
 
 ### Solutions
+
+From the last course:
 
 - [Rmarkdown document](/misc/dataIntro19_day03/analysis.rmd)
 - [Result as html document](/misc/dataIntro19_day03/analysis.html)
