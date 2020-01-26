@@ -724,109 +724,103 @@ Starwars, a datenset that comes with the tidyverse.
 
 **Live on Friday**
 
-```{r, echo=FALSE}
-knitr::opts_chunk$set(eval=FALSE, include=FALSE)
+#### First, we load packages and Data
+
+```{r}
+library(tidyverse)
 ```
 
 ```{r}
-starwars %>%
-  select(name, height, mass, gender) %>% 
-  arrange(desc(mass)) %>% 
-  head()
+starwars %>% select(name, mass, height, gender)
 ```
 
-```{r, fig.cap="Jabba the Hut, Quelle: Wikipedia", echo=FALSE}
-knitr::include_graphics("img/jabba.png")
+Sidenote: to put a column in the front:
+
+```{r}
+starwars %>% select(gender, everything() )
 ```
+
+Height is not in SI units! But we love SI units!
+So we convert height from cm to meter.
 
 ```{r}
 starwars <- starwars %>% 
   mutate(height = height / 100)
 ```
 
+  
+```{r, eval=FALSE}
+View(starwars)
+```
+
 ```{r}
 starwars %>% 
-  filter(!is.na(gender)) %>%  # ! means "not"
+  arrange(desc(mass))
+```
+
+```{r}
+starwars %>% 
+  filter(mass == max(mass, na.rm = TRUE))
+```
+
+```{r}
+starwars %>% 
+  filter(mass == max(mass, na.rm = TRUE)) %>% 
+  pull(name)
+```
+
+
+- Who is the heaviest?
+- Convert height from cm to m
+- Which gender is taller on average in StarWars?
+  - _Hint:_ use `group_by` and `summarise`
+  - You will need the argument `na.rm = TRUE` in `mean()`
+  
+  
+```{r}
+starwars %>% 
   group_by(gender) %>% 
-  summarise(height =  mean(height, na.rm = TRUE))
+  summarise(height = mean(height, na.rm = TRUE),
+            N = n() )
 ```
+  
+
+- Simulate drawing 81 characters (or rather genders) from a hat.
+- Repeat this 1000 times (with a for-loop).
+- How often do you obtain 62 or more male characters?
+- How surprised should we be about the data?
+- Calculate an exact p-value for the observed frequency
+  - note: use pbinom instead of phyper to sample WITH replacement
+- Knit the document into a report
 
 
 ```{r}
-starwars %>% count(gender)
+hat <- c("male", "others")
+sample(hat, 84, replace = TRUE, prob = c(0.49, 0.51))
 ```
 
-<!-- Wie wahrscheinlich ist es, bei gleicher Verteilung von Geschlechtern im Universum, -->
-<!-- allein durch Zufall diesen oder einen höheren Männerüberschuss im starwars -->
-<!-- Datenset zu erhalten? Die allein zufällige Verteilung ist unsere Nullhypothese $H_0$. -->
-
 ```{r}
-sample(x = c("male", "other"),
-       size = 84,
-       replace = TRUE,
-       prob = c(0.49, 0.51))
-```
+hat <- c("male", "others")
 
-
-```{r}
-1 - pbinom(q = 61, size = 84, prob = 0.49)
-```
-
-
-
-```{r}
-hat <- c("male", "other")
-
-total_n <- starwars %>%
-  filter(!is.na(gender)) %>%
-  nrow()
-
-n_males <- starwars %>% 
-  filter(gender == "male") %>% 
-  nrow()
-```
-
-
-```{r}
-draw_from_hat <- function(hat, n) {
-  draw <- sample(hat, n, replace = TRUE)
-  sum(draw == "male")
+results <- 1:1000
+for (i in 1:1000) {
+  draw <- sample(hat, 84, replace = TRUE, prob = c(0.49, 0.51))
+  results[i] <- sum(draw == "male")
 }
-
-N <- 10000
-results <- map_int(1:N, ~ draw_from_hat(hat, total_n) )
-hist(results)
-sum(results >= n_males)
+hist(results, breaks = 40)
 ```
-
-
 
 ```{r}
-pbinom(q = n_males - 1,
-       size = total_n,
-       prob = 0.5,
-       lower.tail = FALSE)
+sum(results >= 62)
+mean(results >= 62)
+```
+
+```{r}
+pbinom(q = 62 - 1, size = 84, prob = 0.49, lower.tail = FALSE)
 ```
 
 
-<!-- Das Ergebnis ist statistisch signifikant bei einem typischen Signifikanzlevel von -->
-<!-- $p \leq 0.05$ ($5~\%$). Merke an dieser Stelle, dass wir nicht sagen -->
-<!-- können, etwas bewiesen zu haben, wir können jedoch sagen, dass wir die -->
-<!-- Nullhypothese ("es gibt keinen Effekt von Gender auf die -->
-<!-- Auswahl ins Datenset") ablehnen. -->
-
-<!-- > _Thus, we reject the null hypothesis._ -->
-<!-- Für mehr Informationen siehe: -->
-
-
-
-```{r, eval=FALSE}
-?phyper
-?pbinom
-```
-
-
-<!-- [Seeing Theory](https://seeing-theory.brown.edu/index.html) -->
+[Seeing Theory](https://seeing-theory.brown.edu/index.html)
 
 
 

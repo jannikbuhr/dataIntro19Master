@@ -1,9 +1,10 @@
 # Tidy Data, Visualization and Distributions {#day3}
 
 We will be using functions and data from the
-tidyverse today, so lets load it.
+`tidyverse` today, so lets load it.
 It is good practice to have all library loading
 and data import steps at the beginning of your
+document.
 
 ```{r}
 library(tidyverse)
@@ -20,7 +21,8 @@ library(tidyverse)
 ```{r, eval=FALSE}
 starwars %>%
   group_by(homeworld) %>% 
-  mutate(mass = mass / max(mass, na.rm = TRUE))
+  mutate(mass = mass / max(mass, na.rm = TRUE)) %>% 
+  filter(homeworld == "Tatooine")
 ```
 
 - What is a p-value?
@@ -29,68 +31,101 @@ starwars %>%
 
 ### Answers
 
+#### dplyr
+
 We use the `starwars` dataset to demonstrate the answers.
 
-```{r}
-# starwars
-```
-
-`select` 
-
-```{r}
-# demonstrate select and selct helpers
-```
-
-`filter` 
-
-```{r}
-# demonstrate filter
-```
-
-`mutate`
-
-```{r}
-# demonstrate mutate
-```
-
-`arrange`
-
-```{r}
-# demonstrate arrange
-```
-
-`summamrise`
-
-```{r}
-# demonstrate summarise
-```
-
-`group_by` and `summarise`
-
-```{r}
-# mean mass per homeplanet
-```
-
-Running the code demonstrates...
+`select` to select columns!
 
 ```{r, eval=FALSE}
-starwars %>% 
-  group_by(homeworld) %>% 
-  mutate(mass = mass / max(mass, na.rm = TRUE) )
+select(starwars, name, height)
 ```
 
-... so this code...
+`filter` to ask for specific rows based on a condition.
+
+```{r, eval=FALSE}
+filter(starwars, mass > 100)
+```
+
+`mutate` to add columns or modify existing columns.
+
+```{r, eval=FALSE}
+mutate(starwars, NewHeight = height * 2)
+```
+
+Renaming columns works with `rename` but also inside
+of `select`.
+
+```{r}
+starwars %>%
+  rename(character = name) %>% 
+  select(biggness = mass, character, height) %>% 
+  head(1)
+```
+
+`arrange` to sort based on a column.
+
+```{r, eval=FALSE}
+starwars %>% arrange(mass)
+```
+
+`summarize` to summarise columns down to
+a single value per column (note, that the tidyverse accepts
+American and British English, both functions exist).
+
+```{r}
+starwars %>% summarize(max(height, na.rm = TRUE),
+                       min(mass, na.rm = TRUE))
+```
+
+It is best to give names to the arguments, so we write it
+as:
+
+```{r}
+starwars %>% summarize(MaxHeight = max(height, na.rm = TRUE),
+                       MinMass   =  min(mass, na.rm = TRUE))
+```
+
+`group_by` and `summarise` to summarise **within**
+each group in the grouping column(s):
+
+```{r}
+starwars %>% 
+  group_by(homeworld) %>% 
+  summarise(mass = mean(mass, na.rm = TRUE)) %>% 
+  head(3)
+```
+
+Running the code in the first question
+thus demonstrates, how to normalize 
+the mass to the maximum mass in each homeworld.
+For example, _Luke Skywalker_ weights 56% as much
+as the heaviest person from his planet, while
+_Darth Vader_ is the heaviest person on his planet
+(that made it into this dataset).
+
+```{r}
+starwars %>% 
+  filter(!is.na(mass)) %>% 
+  group_by(homeworld) %>% 
+  mutate(mass = mass / max(mass) ) %>% 
+  select(name, height, mass, homeworld) %>% 
+  head(4)
+```
+
+#### Statistics
 
 For the definition of p-values, check out chapter \@ref(p-values).
 
-Hypergeometric distribution
+The hypergeometric distribution is for sampling without replacement.
 
 ```{r}
 x <- rhyper(10000, m = 50, n =  50, k =  80)
 hist(x)
 ```
 
-Binomial distribution
+The binomial distribution is for sampling **with** replacement
+(Like tossing a coin to your witcher).
 
 ```{r}
 x <- rbinom(n = 10000, size = 10, prob = 0.5)
@@ -99,36 +134,218 @@ hist(x, breaks = 0:10)
 
 ## Visualization with ggplot2
 
-### The Grammar of Graphics
+### The Grammar of Graphics 
+
+The idea of a "grammar of graphics" was
+first introduced by Leland Wilkinson [@wilkinsonGrammarGraphics2005].
+It enables us to describe graphics (data visualizations)
+in terms of relatively simple building blocks.
+
+Hadley Wickham took this idea and translated
+it with slight modifications into an R package
+[@wickhamLayeredGrammarGraphics2010].
+Understanding the individual building blocks
+and their grammar (how they connect) allows
+us to create intricate visualizations that
+can be iterated on with great speed
+without learning a different set of rules
+for each type of visualization.
+
+So, what makes up a graph?
 
 ```{r}
 starwars %>% 
-  filter(mass < 500) %>% 
-  ggplot(aes(height, mass, color = gender, label = name)) +
-  geom_point() 
+  filter(mass < 500, !is.na(birth_year)) %>% 
+  ggplot(aes(x = height,
+             y = mass,
+             color = gender)) +
+  geom_point(aes(size = birth_year))
+```
+
+The building ground for our visualization is data.
+We then decide on some features in the data (like height,
+mass, gender and birth year) and map them to an aesthetic property.
+This is what happens inside the `aes` function as the
+`mapping` argument to `ggplot`. Height for example is mapped
+to the x-axis whereas gender is mapped to the color.
+"The color of what?", you might ask, and rightfully so.
+There is no visualization without geometric objects
+to represent those aesthetics. This is where the functions
+starting wiht `geom_` come into play. We add them
+to our plot with the `+` operator. Here, we use `geom_point()`
+to add points to our plot. This is a good fit
+because one point can represent reveral dimensions
+of our data at the same time (like, height as the x position,
+mass as the y position etc.). Other pieces of the grammar
+of graphics are not handled explicitely in the code above
+because the defaults work just fine. But they are handled
+nontheless in the background: Scales define
+how exactly the data is mapped to aesthetics and can be modified
+with functions starting with `scale_` (like
+`scale_color_...` to change the colors used in the color
+aesthetic, or `scale_x_log10()` to apply a logarithmic scale
+to the x-axis). Lastly, the objects with their
+scales need to placed on a coordinate system, like
+the default carthesian coordinates in the above example.
+
+> Data => Aesthetic Mapping =>
+  Scales => (Statistical Transformation) =>
+  Geometric Objects => Coordinate System =>
+
+Instead of displaying the plot straight away, we
+can save it to a variable:
+
+```{r}
+plt1 <- starwars %>% 
+  filter(mass < 500, !is.na(birth_year)) %>% 
+  ggplot(aes(x = height,
+             y = mass,
+             color = gender,
+             label = name)) +
+  geom_point(aes(size = birth_year))
+```
+
+And then display it later
+
+```{r, eval=FALSE}
+plt1 # not run
+```
+
+Or pass it to other functions,
+like the handy `ggplotly` function
+from the `plotly` package, that creates
+and interactive java script visualization
+from a normal ggplot object:
+
+```{r}
+plotly::ggplotly(plt1)
+```
+
+We can also use this object to pass it to the
+`ggsave` function to, well..., save it to a file.
+
+```{r,eval=FALSE}
+ggsave("myGGplot.png", plt2)
+```
+
+A cool little R-package that comes with and RStudio-Addin
+is the "colourpicker". This makes it easier to
+choose the colors for our plot.
+
+```{r}
+plt1 +
+  scale_color_manual(values =  c("#1f78b4", "#D10808", "#139E99", "#59807A"))
+```
+
+
+```{r}
+starwars %>% 
+  count(gender) %>% 
+  ggplot(aes(gender, n, fill = gender)) +
+  geom_col()
+```
+
+A shortcut for this is `geom_bar()` (it does the counting
+for us, similar to `geom_histogram()`).
+
+```{r, eval=TRUE}
+starwars %>% 
+  ggplot(aes(gender, fill = gender)) +
+  geom_bar()
+```
+
+We can also pass different data to individual
+geometric layers e.g. to highlite certain
+parts in our data. The other geoms inherit
+the data passed into `ggplot`. The
+same holds true for aesthetics. `aes` defined
+in `ggplot()` are passed on to all geoms,
+but individual geoms can have their
+own `aes`, adding or overwriting the global aesthetics
+of the whole plot.
+
+```{r}
+justLuke <- starwars %>% 
+  filter(name == "Luke Skywalker")
+
+plt2 <- starwars %>% 
+  filter(mass < 500, birth_year < 500) %>% 
+  ggplot(aes(birth_year, mass)) +
+  geom_point() +
+  geom_line() +
+  labs(x        = "birth year",
+       y        = "mass [kg]",
+       title    = "Awesome Plot 1",
+       caption  = "Data from Starwars",
+       subtitle = "This is my subtitle",
+       tag      = "A") +
+  geom_point(data = justLuke, color = "red") +
+  geom_text(data = justLuke, aes(label = name), vjust = 1, hjust  = 0) +
+  theme_classic() +
+  theme(axis.title = element_text(face = "bold"))
+
+plt2
+```
+
+While saving this plot, we can also decide on
+the dimensions (in inch), pixel density (dots per inch, dpi)
+and other properties of the plot:
+
+```{r, eval=FALSE}
+ggsave(filename = "plots/myFirstGggplot.png", plt2,
+       width = 12,
+       height = 12)
+```
+
+Inside of rmarkdown documents, this is handled
+by the chunk options. E.g. `{r, fig.width=5}`
+leads to a differently sized plot.
+
+```{r, fig.width=5}
+plt2
 ```
 
 
 ## Visualization is Key
 
+Because visualization is so important,
+we dive into one example here:
+
 ### Anscombes Quartet
 
-And a note on _Tidy Data_ and the `tidyr` package.
+> And a note on _Tidy Data_ and the `tidyr` package.
 
 ```{r}
-# show anscombe
+head(anscombe)
 ```
 
 Anscombes quartet is special because the datasets 1 to 4
 look quite different but have the same x-mean, y-mean
-and simple linear regression!
+and simple linear regression (down to a couple of decimal digits)!
 
 ```{r}
-# demonstrate mean, sd, corr
+paste(
+mean(anscombe$x1),
+mean(anscombe$x2),
+sd(anscombe$x1),
+sd(anscombe$x2)
+)
 ```
 
 A cool trick from functional programming:
-**Higher order functions**, e.g. the `map`-family.
+**Higher order functions**.
+Higher order functions are functions that take
+other functions as arguments. They enable us
+to express ideas and instructions to the computer
+in a concise yet powerfull manner.
+
+E.g. the `map`-family. Map functions apply a funcion
+to every element of a vector or list.
+
+```{r}
+addOne <- function(x) x + 1
+map(list(1,2,3), addOne)
+```
 
 For all the datatypes (e.g. _integer_ or _double_)
 there is a special version of map named `map_<datatype>`,
@@ -136,20 +353,28 @@ which will always return this type
 and is thus safer to program with.
 
 ```{r}
-# map mean
+map(anscombe, mean)
 ```
 
 ```{r}
-# map_dbl
+map_dbl(anscombe, mean)
+```
+
+```{r}
+map_dbl(anscombe, sd)
 ```
 
 ### Excursion Tidy Data
 
 Tidy Data means:
 
-> Every row is an observation, every column is a feature
+> Every row is an observation, every column is a feature.
 
-But this is not always straightforward.
+```{r tidy-data, fig.cap="Following three rules makes a dataset tidy: variables are in columns, observations are in rows, and values are in cells. (Source: R4DS, Hadley Wickham)", echo=FALSE}
+knitr::include_graphics("img/tidy-1.png")
+```
+
+But this is not always straightforward because...
 
 > "Happy families are all alike;
   every unhappy family is unhappy in its own way."
@@ -165,9 +390,14 @@ The `anscombe` dataset actually hides a feature
 in its column names! The `tidyr` package helps us,
 to extract it into it's own column.
 
-```{r tidy-data, fig.cap="Following three rules makes a dataset tidy: variables are in columns, observations are in rows, and values are in cells. (Source: R4DS, Hadley Wickham)", echo=FALSE}
-knitr::include_graphics("img/tidy-1.png")
+
+```{r}
+anscombe %>% head(3)
 ```
+
+The feature hidden in the column names is the dataset (1 to 4).
+Belonging to a dataset is actually a property
+of each value.
 
 ```{r}
 anscombe_long <- anscombe %>%
@@ -177,15 +407,39 @@ anscombe_long <- anscombe %>%
  )
 ```
 
+Now, each row represents one point (one observationaly unit),
+while every column represents a property / feature
+of said points.
+
+```{r}
+head(anscombe_long)
+```
+
 Now our dataset plays better with the rest of the tidyverse,
 especially ggplot:
 
 ```{r}
-# plot anscombe sets
+anscombe_long %>% 
+  ggplot(aes(x, y)) +
+  geom_point() +
+  facet_wrap(~ set)
 ```
 
 ```{r}
-# summarise sets
+anscombe_long %>% 
+  group_by(set) %>% 
+  summarise(mean_x = mean(x),
+            mean_y = mean(y) )
+```
+
+Or, to showcase a more functional style
+of programming:
+
+```{r}
+anscombe_long %>% 
+  group_by(set) %>% 
+  summarise_at(vars(x,y), list(mean = mean, sd = sd)) %>% 
+  mutate_at(vars(-set), round, 2)
 ```
 
 #### Plate Reader Example
@@ -194,52 +448,106 @@ especially ggplot:
 knitr::include_graphics("img/plate-reader.jpg")
 ```
 
+Sometimes, we end up with variable- / column-names that are not readily
+allowed. "Forbidden" names only work when they are encompassed
+by backticks (\`). Thus, wrapping a variable name in backticks
+allows us to even have spaces and symbols in the name.
+But try to avoid this if possible! You will nevertheless
+encounter forbidden variable names when you read in data from
+a spreadsheet that has those names for its columns.
+Use `rename` to asssign a better name or install the
+`janitor` package for the handy function `janitor::clean_names()`.
 
 ```{r}
-# read atpase data
+rawData <- tibble(
+  `this is a "forbidden" name! #` = 1:5,
+  `column 2` = rep("hi", 5)
+)
+rawData
 ```
+
+Turns into
+
+```{r}
+rawData %>% janitor::clean_names()
+```
+
+Reading in the example data from a plate reader,
+we end up with:
+
+```{r}
+raw_atpase <- readxl::read_xlsx("data/04_ATPase_assay.xlsx", skip = 10) %>% 
+  janitor::clean_names()
+
+head(raw_atpase[,1:6])
+```
+
+Note that if you do not have the `janitor` package,
+you can also use the `.name_repair` argument to
+`read_xlsx` to repair the names while reading the data,
+but the names produced in doing so are not as pretty.
+
+
+```{r, message=FALSE}
+readxl::read_xlsx("data/04_ATPase_assay.xlsx",
+                                skip = 10,
+                                .name_repair = "universal") %>% 
+  head(1)
+```
+
+> New names:
+> * `Time [s]` -> Time..s.
+> * ...
 
 Clean the data, make it tidy
 
 ```{r}
-# pivot longer
+tidy_atpase <- raw_atpase %>% 
+  select(-content) %>% 
+  pivot_longer(
+    -time_s,
+    names_to  = "sample",
+    values_to = "absorbance"
+  ) %>%
+  rename(time = time_s)
 ```
 
 Visualize data
 
 ```{r}
-# line plot
+tidy_atpase %>% 
+  ggplot(aes(time, absorbance, color = sample)) +
+  geom_line()
 ```
 
 Normalize data
 
 ```{r}
-# normalize by max absorbtion
-```
+normalized_atpase <- tidy_atpase %>% 
+  group_by(sample) %>% 
+  mutate(absorbance = absorbance / max(absorbance)) %>% 
+  ungroup()
 
-Visualize data again
-
-```{r}
-# lineplot
+normalized_atpase %>%
+  ggplot(aes(time, absorbance, color = sample)) +
+  geom_point() +
+  geom_line()
 ```
 
 ### Summary Statistics
 
 #### Standard Deviation
 
-```{r}
-# explain mean, SD, SEM based on random numbers from normal distribution
-```
-
 $$sd = \sqrt{\frac{\sum_{i=0}^{n}{(x_i-\bar x)^2}}{(n-1)} }$$
 
-Why n-1?
+Why n-1? The degrees of freedom are n reduced by 1 because
+if we know the mean of a sample, once we know all but 1
+of the individual values, the last value is automatically
+known and thus doesn't count towards the degrees of freedom.
 
-```{r}
-x = c(1,1,3,1)
-mean(x)
-sd(x)
-```
+#### Variance
+
+The variance is the squared standard deviation.
 
 $$var = \sigma^2$$
 
@@ -252,134 +560,204 @@ $$SEM=\sigma / \sqrt{n}$$
 ## Distributions
 
 ```{r}
-# generate 1000 random normally distributed numbers
+x <- rnorm(1000)
+SD <- sd(x)
+
+hist(x, probability = TRUE)
+curve(dnorm, add = TRUE, col  = "red")
+abline(v = SD, col = "red")
+abline(v = -SD, col = "red")
 ```
 
+SEM
 
 ```{r}
-# hist
-```
-
-
-```{r}
-# sd
-```
-
-
-```{r}
-# hist with lines for SD
-# explain percentages within the lines
-```
-
-
-```{r}
-# sem
+sd(x) / sqrt(length(x))
 ```
 
 ### From Distributions to Quantiles
 
-```{r}
-# curve dnorm
+`d` stands for density i.e. the probability density
+funtion of a distribution.
+
+```{r dnorm1, fig.cap="Probability density function for the normal distribution."}
+curve(dnorm, -4, 4)
 ```
 
+`p` stands for probability. And it represents
+the cumulative probability i.e. the integral
+of the density function from $-\infty$ to $x$.
 
-```{r}
-# curve pnorm
+```{r pnorm1, fig.cap="pnorm of x is the probability to draw a value less than or equal than x from a normal distribution."}
+curve(pnorm, -4, 4)
 ```
 
+`q` stands for quantile. It is the inverse of
+the probability density funtion (so the axis are swapped).
+
 ```{r}
-# curve qnorm
+curve(qnorm)
 ```
 
 Quantiles!
 
 #### Quantile-Quantile Plots
 
-> Is my data normally distributed?
+Quantile-Quantile plots can answer the question
+
+> "Does my data follow a certain distribution?"
+
+In this case: "Is my data normally distributed?"
 
 ```{r}
-# qqnorm
-# qqline
+qqnorm(x)
+qqline(x, col = "red")
 ```
 
 ## The Datasaurus Dozen
 
+The Datasaurus Dozen is a greate dataset
+showcasing similar properties
+to anscombes quartet (but in a more
+impressive way).
+
+```{r}
+datasauRus::datasaurus_dozen %>% 
+  ggplot(aes(x,y)) +
+  geom_point(size = 0.9) +
+  facet_wrap(~dataset) +
+  coord_equal() +
+  theme_classic()
+```
+
 You can find the research paper [here](https://www.autodeskresearch.com/publications/samestats)
 [@matejka2017a].
 
-```{r}
-# install.packages("datasauRus")
-```
+But not only does it highlite the importance
+of not relying solely on summary statistics,
+it also comes with additional datasets.
+
+One of them is designed to show the potential
+problems of so called box-plots:
 
 ```{r}
-# get dino boxplot data
+dinos <- datasauRus::box_plots
+head(dinos)
 ```
 
+This data is not in the tidy format but this can
+easily be fixed:
+
 ```{r}
-# tidy it
+tidy_dinos <- dinos %>%
+  pivot_longer(everything(), names_to =  "set", values_to = "value")
+
+head(tidy_dinos)
 ```
 
 Boxplots!
 
 ```{r}
-# make boxplot
+tidy_dinos %>% 
+  ggplot(aes(set, value)) +
+  geom_boxplot()
 ```
 
+A Boxplot shows the median (50th percentile) as a black
+line, the 25th and 75th percentile (= first and third quartile)
+as lower and upper limits of the box,
+as well as whiskers.
+The upper whisker extends from the hinge to the largest value no further than 1.5 * IQR from the hinge (where IQR is the inter-quartile range, or distance between the first and third quartiles). [...]
+Data beyond the end of the whiskers are called "outlying" points
+and are plotted individually (from `?geom_boxplot`).
+
+However, this type of plot ignores the
+underlying distribution of datapoints.
+And if we look at the actual points,
+the full range of what the boxplot didn't
+tell us can be seen:
 
 ```{r}
-# summarise data by set with SD, SEM, mean
+ tidy_dinos %>% 
+  ggplot(aes(set, value)) +
+  geom_boxplot() +
+  geom_jitter(alpha = 0.1)
 ```
 
 ```{r}
-# create barplot with errorbars, SD or SEM
+tidy_dinos %>% 
+  group_by(dataset = set) %>% 
+  summarise(Median = median(value) %>% round(2))
+```
+
+Plotting the points individually with `geom_point`
+doesn't quite work here because they overlap too much.
+`geom_jitter` helps us out by distributing the points
+an the x-axis. We are allowed to move the points
+on the x-axis a bit because it is a categorical
+axis, not a continuous. Shifting the points
+within their categories does not change the data.
+We could not have moved the points on the y-axis
+because that would have falsified the data.
+
+```{r}
+tidy_dinos %>% 
+  ggplot(aes(set, value)) +
+  geom_point(alpha = 0.01)
 ```
 
 ```{r}
-# finally show the point plot 
+tidy_dinos %>%
+  ggplot(aes(set, value)) +
+  geom_jitter()
 ```
 
-```{r}
-# and the jitter plot
-```
-
+An even more problematic visualization would have been
+to display the data with a barplot of means
+and errorbars for the SD or SEM.
 Friends don't let friends make barplots!
 
+Histograms or density plots on the other hand
+tell us about the distribtion, not just
+summary statistics, while at the same
+time not overloading the plot like
+the points do in some cases.
+
 ```{r}
-# histograms
+tidy_dinos %>% 
+  ggplot(aes(value, fill = set)) +
+  geom_histogram(bins = 50) +
+  facet_wrap(~ set)
 ```
 
 ```{r}
-# density plot
+tidy_dinos %>% 
+  ggplot(aes(value, fill = set)) +
+  geom_density() +
+  facet_wrap(~ set)
+```
+
+The `ggbeeswarm`-package gives us even more
+possibilities to display all those points
+in an orderly fashion.
+
+```{r}
+tidy_dinos %>% 
+  ggplot(aes(set, value, fill = set)) +
+  ggbeeswarm::geom_quasirandom(method = "smiley")
 ```
 
 ## Exercises
 
 ### Inclusion Bodies
 
-You can get the dataset from my Github Repository:
+You can get the dataset from my Github Repository.
 
-```{r, eval=FALSE}
-read_csv("https://raw.githubusercontent.com/jannikbuhr/dataIntro19/master/data/03_inclusion_bodies.csv") %>% 
-  write_csv("data/03_inclusion_bodies.csv")
-```
-
-Natürlich kannst du auch direkt die Daten über den Link laden,
-aber so hast du sie für schlechte Zeiten (sprich: keine Internetverbindung)
-gleich gespeichert.
-
-_Disclaimer_: Die Daten stammen aus dem letztjährigen Kurs
-und sind echte Daten,
-aber ich lüge euch bei der Bedeutung ein
-ganz klein wenig an um den biologischen Hintergrund
-schneller erklären und sie ohne Probleme veröffentlichen
-zu können.
-
-```{r}
-# Erklärung Inclusion Bodies
-```
+_Disclaimer_: This is real biological data but
+the explanation and context are changed.
 
 - If you want to impress me, do all the exercises
-  in a Rmarkdown document, add your conclusions and thoughts
+  in an Rmarkdown document, add your conclusions and thoughts
   along with the data analysis process and structure it
   with meaningful headlines using `#`.
 - Read the csv-file `data/03_inclusion_bodies.csv`.
@@ -393,12 +771,15 @@ zu können.
   - Zwei overlayed density plots
     (_Hint_: use the parameter `alpha`
     to make both of them visble at the same time)
-  - A Barplot with errorbars, _hints_:
-    - Create a summary first
+  - A Barplot with the mean and errorbars, _hints_:
+    - Create a summary tibble first
     - Use `geom_col`, **not** `geom_bar`
   - BONUS: Make the plots pretty with ggplot theme options
 
+
 ### Solutions
 
-
+- [Rmarkdown document](/misc/dataIntro19_day03/analysis.rmd)
+- [Result as html document](/misc/dataIntro19_day03/analysis.html)
+- [Result as pdf document](/misc/dataIntro19_day03/analysis.pdf)
 

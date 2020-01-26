@@ -1,233 +1,228 @@
-# Statistische Tests und Power {#day4}
+# Significance Tests and Power {#day4}
 
-```{r include=FALSE}
-knitr::opts_chunk$set(eval = FALSE, echo = FALSE, include = FALSE)
-```
+## The Central Limit Theorem (CLT)
 
-## Lösung für Tag 3
+From distributions of measurements
+to distributions of means.
 
-- [Ausgangsdokument](/misc/dataIntro19_day03/analysis.rmd)
-- [Ergebnis als html Dokument](/misc/dataIntro19_day03/analysis.html)
-- [Ergebnis als pdf Dokument](/misc/dataIntro19_day03/analysis.pdf)
+What if Johanna didn't count as many cells?
+Say 30 instead of 300?
 
-## Der zentrale Grenzwertsatz (CLT)
+To turn this into a demonstration, we assume
+that the 300 cells are completely representative
+of the all WT and KO cells and thus call this
+our population.
 
-Von Verteilungen zu Verteilungen von Mittelwerten
+- Now we draw a sample of 30 from the population
+- We calculate the mean
+- And repeat this procedure 1000 times
+- What does the distribution of means look like?
 
-Was wäre, wenn Johanna als Master Studentin nicht ganz
-so fleißig gewesen wäre, und statt 300 je Zell Typ nur
-je 30 mal gezählt hätte?
+### Reading in Data
 
-Der Einfachheit nehmen wir an, dass die 300 Zellen
-komplett repräsentativ für alle WT bzw. KO Zellen sind,
-also die Gesamtpopulation darstellen.
-
-- Nun ziehen wir zufällig daraus je 30 Zellen.
-- Das machen wir nun 1000 mal.
-- Wie sieht nun die Verteilung der Mittelwerte aus?
-
-### Daten einlesen
-
-Zunächst laden wir das Tidyverse und unsere Daten:
+Firstly, we load the tidyverse and our data.
 
 ```{r}
-# load tidyverse
 library(tidyverse)
-
-# import data
-data <- read_csv("data/03_inclusion_bodies.csv")
-
-# attach data, handle with CARE!
-attach(data)
 ```
 
-`attach` macht die Spalten des Datensets (in unserem Fall _ko_ and _wt_)
-global verfügbar. Daher können wir im Folgenden
-`wt` statt `data$wt` oder `data["wt"]` schreiben.
+```{r}
+# import data for inclusion bodies
 
-> Verwende `attach` mit Vorsicht! Denn die Reihenfolge der beiden
-> Vektoren ist nun unabhängig voneinander. Operationen,
-> die Du mit den Vektoren `wt` und `ko` ausführst, beeinflussen
-> nicht den jeweils anderen Vektor oder den zugrundeliegenden
-> Data.frame `data`.
+# attach data, handle with CARE!
+```
 
-### Der einfache Fall
+`attach` makes the columns of a datensets (in our case _ko_ and _wt_)
+globally available as vectors. This enables us to write
+`wt` intead `data$wt` or `data["wt"]`.
 
-Für den einfachen Fall ziehen wir 30 Punkte aus einem der beiden Vektoren
-und berechnen den Mittelwert.
+> Use `attach` carefully and only in very few situations!
+  The order of those two vectors is now independent of each
+  other. Operations on the vectors `wt` und `ko` do not
+  influence the other vector or the original column
+  of the dataframe `data`!
+  
+### Programming and Problemsolving
+
+#### The basic Case
+
+First, we solve the first part of our roadmap:
+
+- Now we draw a sample of 30 from the population
+- We calculate the mean
 
 ```{r}
 # sample n = 30 points from a vector
-subset <- sample(wt, 30)
 
 # calculate mean
-mean(subset)
 ```
 
-### Abstraktion für viele Fälle 
+#### Abstraction for many Cases
 
-Da wir diese Zeilen nicht 1000 mal tippen wollen schreiben wir eine Funktion,
-die genau das tut. Sie nimmt einen Vektor (`x`) und zieht `n` Punkte daraus.
+We do not want to type the above lines 1000 times.
+One way to solve this would be with a `for`-loop.
+But there is a more elegant way.
+This might seem daunting at first but will
+enable you to solve very complex problems
+faster in the long run.
+
+We turn the two lines of code above into a function.
+And while doing so also introduce a bit of abstraction
+(generalization)
+
+We create a function that takes a vector (`x`),
+draws `n` elements from it and returns the mean of those elements.
 
 ```{r}
-get_subset_mean <- function(n, x) {
-  subset <- sample(x, n)
-  mean(subset)
-}
+# getMeanOfSubset
 ```
 
-Die Funktion funktioniert:
+Now we can now test that the function is working.
 
 ```{r}
-get_subset_mean(2, wt)
+# test getMeanOfSubset
 ```
 
-Mit der `map` Funktion aus dem `purrr`-Package rufen wir diese
-Funktion nun 1000 mal auf uns speichern das Ergebnis in einem
-Vektor, bestehend aus Kommazahlen (daher `map_dbl` für
-map _double_).
+We now use the `map` function from the `purrr`-package
+to call this function 1000 times and save the result
+in a list or vector (`map_dbl` for map _double_).
 
 ```{r}
-N <- 1000
-Ms <- map_dbl(1:N, ~ get_subset_mean(30, wt) )
+# define N
+# map over 1:N
 ```
 
-### Exkurs: Lambda-Funktionen
+Now you might be asking yourselves: "What is this weird tild
+symbol doing there?"
 
-Das `~`-Symbol (Tilde) erstellt eine sogenannte _lambda_ Funktion, also
-eine Funktion, der wir keinen Namen geben, da wir sie nur einmal
-brauchen. Im Kontext der Familie von `map` Funktionen wird `~`
-übersetzt:
+#### Excursion: Lambda Functions
+
+$$\lambda$$
+
+The `~` symbol (tilde) in the context
+of `map` functions creates a so called _lambda_ function.
+_Lambda_ functions are anonymous functions, functions
+without a name. So we generally use them whenever
+we need a function only once.
+
 
 `add_one <- function(x) x + 1`
-Ist equivalent zu
+is equivalent to
 `~ .x + 1`.
-Hierbei heißt das Argument der Funktion immer `.x`.
 
-Die
-lambda Funktion `~ get_subset_mean(30, wt)` nimmt nacheinander
-die Zahlen in `1:N` als Eingabe, nennt sie `.x`, aber verwendet
-das Argument `.x` überhaubt nicht. In unserem Fall bedeutet das also,
-dass die Funktion `get_subset_mean`
-bloß 1000 mal aufgerufen wird mit den Argumenten `30` und `wt`.
+The parameter passed to the lambda function is
+always called `.x` inside of the function.
 
-### Populationsverteilung vs. Verteilung der Mittelwerte
-
-Mit großem n wird die Verteilung der Mittelwerte symmetrisch,
-obwohl die Populationsverteilung unsymmetrisch ist.
+So the lambda funcion `~ getMeanOfSubset(wt, 30)`
+takes the numbers from 1 to N (`1:N`) but completely
+ignores them (there is no mention of `.x`). 
+The result is thus `getMeanOfSubset` beeing called
+1000 times with the same arguments (`wt` and `30`).
 
 ```{r}
-hist(Ms)
+# show replicate as the special case for functions
+# that don't use the elements of the vector
+
+```
+
+### Population Distribution vs. Distribution of Means
+
+With large enough n, the distribtion of means
+follows a normal distribution, even though
+the values are not normally distributed.
+
+```{r}
+# hist of Ms
 ```
 
 ```{r}
-hist(wt)
+# hist of wt
 ```
 
-Nach dem Central Limit Theorem folgen die Mittelwerte
-einer Normalverteilung. Dies lässt sich zeigen:
+According to the Central Limit Theorem the means
+follow a normal distribution. We can show this.
 
 ```{r}
 # show qqnorm of Ms
-qqnorm(Ms)
-qqline(Ms, col = "red")
+# and qqline
 ```
 
-### Exkurs: Quantiles
+## The T-Distribution
 
-Am Beispiel einer Normalverteilung zeigt
-`dnorm` die Wahrscheinlichkeitsdichteverteilung
-(Im Englischen _Probability Density Function, PDF_).
+The CLT is only valid for large  _sample sizes_.
+For smaller sample sizes, the distribution of
+means has fatter tails than a normal distribution
 
-```{r dnorm1, fig.cap="Die Wahrscheinlichkeit, einen Wert zwischen z.B. -1 und 1 zu ziehen, entspricht dem Integral der Funktion in diesem Bereich."}
-curve(dnorm, -3, 3)
-```
+This is why for most statistical tests,
+we use the t-distribtion instead of the
+normal distribution.
 
-Wenn wir nun das Integral von $-\infty$ bis $x$ berechnen erhalten wir
-die kumulative Wahrscheinlichkeitsfunktion `pnorm`.
+For 3 degrees of freedom (DF):
 
-```{r pnorm1, fig.cap="pnorm von x ist also die Wahrscheinlichkeit, einen Wert kleiner oder gleich x aus dnorm zu ziehen."}
-curve(pnorm, -3, 3)
-```
-
-`qnomr`, die Quantil-Funktion,
-ist nun die Inverse dieser Funkion, hat also die Achsen vertauscht.
-
-```{r}
-curve(qnorm, 0, 1)
-```
-
-## Die T-Verteilung
-
-Der zentrale Grenzwertsatz gilt erst bei großen _sample sizes_.
-Darunter ist die Verteilung der Mittelwerte an den Rändern
-dicker, als eine Normalverteilung.
-
-Daher verwenden wir (sicherheitshalber) für
-die meisten Daten und statistischen Tests die T-Verteilung,
-nicht die Normalverteilung.
-
-Für 3 Freiheitsgrade:
-
-```{r tdist, fig.cap="T-Verteilung in Rot"}
-curve(dnorm, -3, 3)
+```{r tdist, fig.cap="t-distribution in red, normal distribution in black."}
 tdist <- function(x) dt(x, df = 3)
-curve(tdist, -3, 3, add = TRUE, col = "red")
-```
-
-Für 30 Freiheitsgrade
-
-```{r}
 curve(dnorm, -3, 3)
-tdist <- function(x) dt(x, df = 30)
 curve(tdist, -3, 3, add = TRUE, col = "red")
 ```
 
-### Konfidenz Intervalle (CI)
+For 30 DF:
 
-Gleichermaßen können wir mit der t-Verteilung
-95% Konfidenzintervalle berechnen.
+```{r tdist2, fig.cap="t-distribution in red, normal distribution in black."}
+tdist <- function(x) dt(x, df = 30)
+curve(dnorm, -3, 3)
+curve(tdist, -3, 3, add = TRUE, col = "red")
+```
 
-Das 95% Konfidenzintervall eines Sample-Mittelwerts
-umschließt den wahren Mittelwert (den Mittelwert der Gesamtpopulation)
-in 95% der Fälle (wenn Du das Experiment unendlich oft wiederholen würdest).
+### Confidence Intervalls (CIs)
 
-```{r ci-vis, fig.cap="Wahrer Mittelwert in Rot"}
+We can use the t-distribution to
+calculate (95%-) confidence intervals.
+
+The 95% CI of a sample mean contains the
+true mean (the mean of the population)
+in 95% of cases (if you where to repeat the experiment
+infenitely often).
+
+```{r ci-vis, fig.cap="True mean in red."}
 # show hist of Ms
-hist(Ms)
 
-# add line for true mean of wt
-abline(v = mean(wt), col = "red", lwd = 3)
+# add line for true mean of wt, lwd = 3
+
 ```
 
 ```{r}
-# use t.test for conf.int
-subset <- sample(wt, 30)
-mean(subset)
+# use t.test for conf.int of a sample (30) from wt
 
-lims <- t.test(subset)$conf.int
+# get limits with $conf.int
 
-hist(subset, breaks = 20)
-abline(v = lims[1], col = "red")
-abline(v = lims[2], col = "red")
+# hist of sample
+
+# add lines with CI
 ```
 
-## Signifikanztests
+## Significance Tests
 
-Signifikanztests beantworten die Frage:
+Significance tests answer the question:
 
-> Unter der Annahme, dass es zwischen zwei (oder mehr)
-> Gruppen keinen Unterschied gibt (also sie aus der gleichen
-> Verteilung stammen), wie wahrscheinlich ist es dann,
-> einen so großen, oder größeren, Unterschied, wie beobachtet,
-> zu finden? 
+> _"Under the assumption of no difference
+  between two (or more) groups (i.e. they
+  are samples of the same population),
+  what is the probability to find a difference
+  as large as or more extreme than the
+  difference observed."_
 
 ### Students T-Test
 
-Für normalverteilte Daten verwenden wir den Students T-Test.
+For normally distributed data,
+we would use students t-test.
+
+```{r, eval=FALSE}
+t.test(wt, ko)
+```
+
 
 ```{r, echo = FALSE}
-data %>% 
+read_csv("data/03_inclusion_bodies.csv") %>% 
   pivot_longer(1:2) %>% 
   ggplot(aes(value, fill = name)) +
   geom_histogram(position = "identity") +
@@ -235,7 +230,7 @@ data %>%
 ```
 
 ```{r}
-t.test(wt, ko)
+
 ```
 
 ```{r}
@@ -357,8 +352,9 @@ wilcox.test(draw1,  draw2)
 
 ### Statistical Power
 
-Als statistische Power bezeichnen wir die Wahrscheinlichkeit eines Tests, einen wahren Unterschied
-zwischen Gruppen bei dem gewählten $\alpha$ auch tatsächlich als statistisch signifikant zu kennzeichnen
+Als statistische Power bezeichnen wir die Wahrscheinlichkeit eines Tests,
+einen wahren Unterschied zwischen Gruppen bei dem gewählten $\alpha$ auch
+tatsächlich als statistisch signifikant zu kennzeichnen
 und damit ein wahr positives Ergebnis zu produzieren.
 
 $$Power = 1-\beta$$
@@ -439,7 +435,9 @@ data.frame(
 
 ```{r, echo = FALSE}
 data.frame(
-  parts = c("detected positives", "not detected positives (false negatives)", "negatives"),
+  parts = c("detected positives",
+            "not detected positives (false negatives)",
+            "negatives"),
   vals = c(true_positives, positives - true_positives, negatives)
 ) %>% 
 ggplot(aes(fill = parts, values = vals)) +
@@ -471,11 +469,11 @@ data.frame(
 - Intuitive Biostatistics, auch in der Uni-Bib: https://katalog.ub.uni-heidelberg.de/cgi-bin/titel.cgi?katkey=68260114&sess=050a1316767b181982c9bce94283e9ae&query=Intuitive%20Biostatistics
 - https://www.graphpad.com/guides/prism/8/statistics/index.htm
 
-## Übungen
+## Exercises
 
-### Zeige die folgenden Statements anhand von Simulationen in R
+### Show the following Statements with Simulations in R
 
-#### Wenn Du die Sample Size n erhöhst, verringert sich der Standard Error of the Mean mit der Wurzel von n.
+#### Increasing the sample size n reduces the standard error of the mean with the square root of n.
 
 - Ziehe 10 Zellen aus dem wt (oder ko) Vektor
 - Berechne den Mittelwert
@@ -487,8 +485,48 @@ data.frame(
 - Füttere die Zahlen von 1 bis 100 in die Funktion
   (mit map_dbl) und plotte das Ergebnis
 
-#### Lösung
-    
+#### Ein 95% Konfidenzintervall eines Samples enthält den Populationsmittelwert mit einer Wahrscheinlichkeit von 95%.
+
+- Ziehe 30 Zellen aus dem wt (oder ko) Vektor
+- Berechne die Limits des CI (Confidence Interval)
+- Schreibe eine Funktion, oben genanntes tut und
+  führe sie 1000 mal aus.
+- Schreibe eine Funktion, die testet, ob ein Set an Limits den
+  wahren Mittelwert einschließt
+- Wende sie auf die 1000 Sets der Limits an
+- Wie oft (prozentual) erhältst du TRUE?
+
+###  Veranschauliche die folgenden Konzepte anhand von Simulationen auf den vorliegenden Daten
+
+#### Sensitivity: Wie groß ist die Wahrscheinlichkeit abhängig von der Sample Size n mit einem Wilcoxon Rank Sum Test tatsächlich einen p-value <= 0.05 zu erhalten, wenn ein Unterschied existiert?
+
+- Ziehe 1000 mal ein Sample von 30 je aus wt und ko und teste
+  auf Signifikanz
+- Wie viele der 1000 Versuche sind statistisch signifikant?
+- Wie verändert sich diese Zahl, wenn 10 statt 30 gezogen werden?
+
+
+#### Specificity: Unter der Voraussetzung, dass **kein** Unterschied zwischen den Bedingungen vorliegt, wie groß ist die Wahrscheinlichkeit, dennoch ein statistisch signifikantes Ergebnis zu erhalten?
+
+- Stell dir vor, alle Zellen seien wie wt-Zellen
+- Ziehe zwei mal 30 aus den wt-Zellen und lasse einen
+  Wilcoxon Rank Sum Test laufen
+- Widerhole das das Prozedere 1000 mal
+- Wie oft ist das Ergebnis statistisch signifikant?
+
+
+#### Resource for p-value Histograms
+
+http://varianceexplained.org/statistics/interpreting-pvalue-histogram/
+
+
+```{r}
+knitr::opts_chunk$set(include = FALSE, eval=FALSE)
+```
+
+#### Solutions
+
+
 ```{r}
 library(tidyverse)
 
@@ -546,18 +584,81 @@ curve(sd(wt)/sqrt(x), add = TRUE, col = "red")
 # talk about difference between sample sd and population sd
 ```
 
-#### Ein 95% Konfidenzintervall eines Samples enthält den Populationsmittelwert mit einer Wahrscheinlichkeit von 95%.
-
-- Ziehe 30 Zellen aus dem wt (oder ko) Vektor
-- Berechne die Limits des CI (Confidence Interval)
-- Schreibe eine Funktion, oben genanntes tut und
-  führe sie 1000 mal aus.
-- Schreibe eine Funktion, die testet, ob ein Set an Limits den
-  wahren Mittelwert einschließt
-- Wende sie auf die 1000 Sets der Limits an
-- Wie oft (prozentual) erhältst du TRUE?
 
 #### Lösung
+
+```{r}
+test_samle_wilcox <- function(n) {
+  draw_wt <- sample(wt, n, replace = TRUE)
+  draw_ko <- sample(ko, n, replace = TRUE)
+  wilcox.test(draw_wt, draw_ko, exact = FALSE)$p.value
+}
+```
+
+```{r}
+many_p_values <- map_dbl(1:1000, ~test_samle_wilcox(30))
+```
+
+```{r}
+hist(many_p_values)
+```
+
+```{r}
+many_p_values <- map_dbl(1:1000, ~test_samle_wilcox(10))
+```
+
+```{r}
+hist(many_p_values)
+```
+
+```{r}
+many_p_values <- map_dbl(1:1000, ~test_samle_wilcox(4))
+```
+
+```{r}
+hist(many_p_values)
+```
+
+```{r}
+alpha = 0.05
+mean(many_p_values <= alpha)
+```
+
+```{r}
+# talk about power, effect size, difference between wilcox and t-test
+```
+
+
+#### Lösung
+
+```{r}
+test_same_wilcox <- function(n) {
+  draw_wt <- sample(wt, n, replace = TRUE)
+  draw_ko <- sample(wt, n, replace = TRUE)
+  wilcox.test(draw_wt, draw_ko, exact = FALSE)$p.value
+}
+```
+
+```{r}
+many_p_values <- map_dbl(1:1000, ~test_same_wilcox(30))
+```
+
+```{r}
+hist(many_p_values)
+```
+
+```{r}
+alpha = 0.05
+mean(many_p_values <= alpha)
+```
+
+```{r}
+# this is what we would expect from p-values!
+```
+
+
+
+#### Solutions
 
 ```{r}
 draw <- sample(wt, 30)
@@ -679,96 +780,4 @@ x + y
 map2_dbl(x,y, `+`)
 ```
 
-###  Veranschauliche die folgenden Konzepte anhand von Simulationen auf den vorliegenden Daten
-
-#### Sensitivity: Wie groß ist die Wahrscheinlichkeit abhängig von der Sample Size n mit einem Wilcoxon Rank Sum Test tatsächlich einen p-value <= 0.05 zu erhalten, wenn ein Unterschied existiert?
-
-- Ziehe 1000 mal ein Sample von 30 je aus wt und ko und teste
-  auf Signifikanz
-- Wie viele der 1000 Versuche sind statistisch signifikant?
-- Wie verändert sich diese Zahl, wenn 10 statt 30 gezogen werden?
-
-#### Lösung
-
-```{r}
-test_samle_wilcox <- function(n) {
-  draw_wt <- sample(wt, n, replace = TRUE)
-  draw_ko <- sample(ko, n, replace = TRUE)
-  wilcox.test(draw_wt, draw_ko, exact = FALSE)$p.value
-}
-```
-
-```{r}
-many_p_values <- map_dbl(1:1000, ~test_samle_wilcox(30))
-```
-
-```{r}
-hist(many_p_values)
-```
-
-```{r}
-many_p_values <- map_dbl(1:1000, ~test_samle_wilcox(10))
-```
-
-```{r}
-hist(many_p_values)
-```
-
-```{r}
-many_p_values <- map_dbl(1:1000, ~test_samle_wilcox(4))
-```
-
-```{r}
-hist(many_p_values)
-```
-
-```{r}
-alpha = 0.05
-mean(many_p_values <= alpha)
-```
-
-```{r}
-# talk about power, effect size, difference between wilcox and t-test
-```
-
-
-#### Specificity: Unter der Voraussetzung, dass **kein** Unterschied zwischen den Bedingungen vorliegt, wie groß ist die Wahrscheinlichkeit, dennoch ein statistisch signifikantes Ergebnis zu erhalten?
-
-- Stell dir vor, alle Zellen seien wie wt-Zellen
-- Ziehe zwei mal 30 aus den wt-Zellen und lasse einen
-  Wilcoxon Rank Sum Test laufen
-- Widerhole das das Prozedere 1000 mal
-- Wie oft ist das Ergebnis statistisch signifikant?
-
-#### Lösung
-
-```{r}
-test_same_wilcox <- function(n) {
-  draw_wt <- sample(wt, n, replace = TRUE)
-  draw_ko <- sample(wt, n, replace = TRUE)
-  wilcox.test(draw_wt, draw_ko, exact = FALSE)$p.value
-}
-```
-
-```{r}
-many_p_values <- map_dbl(1:1000, ~test_same_wilcox(30))
-```
-
-```{r}
-hist(many_p_values)
-```
-
-```{r}
-alpha = 0.05
-mean(many_p_values <= alpha)
-```
-
-```{r}
-# this is what we would expect from p-values!
-```
-
-
-#### Resource zu p-value Histogrammen
-
-http://varianceexplained.org/statistics/interpreting-pvalue-histogram/
 
