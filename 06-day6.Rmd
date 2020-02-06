@@ -1,20 +1,17 @@
-# Folgt {#day6}
+# Examples and Feedback {#day6}
 
-## Exkurs: Tricks für viele Daten / Dateien
+## Excursion: Many Files, Many Folders
 
 ```{r}
 paths <- dir("data", full.names = TRUE, pattern = ".csv")
-map(paths, read_csv)
-# map_dfr
+allDatasets <- map(paths, read_csv)
 ```
 
-
-## Datenanalyse, Beispiel: Global Plastic Waste
-
+## Lot's of Examples
 
 
 
-## Feedbackrunde
+## Feedback
 
 
 

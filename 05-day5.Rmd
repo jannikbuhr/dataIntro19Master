@@ -1,410 +1,237 @@
-# Korrelation und Regression {#day5}
+# Correlation and Regression {#day5}
 
-```{r include=FALSE}
-knitr::opts_chunk$set(eval = FALSE, echo = FALSE, include = FALSE)
-```
+## Side note: What is the main goal of this course?
 
-## Korrelation und Regression
+I can not teach you every single function,
+every data structure, every statistical analysis.
 
-Unter den Links https://figshare.com/articles/Storks_and_human_babies_data/839299/1 oder
-https://github.com/jannikbuhr/dataIntro19/tree/master/data findest du die Daten für
-den heutigen Tag.
+Rather, I want to give you a high level overview
+of what is possible. And I want to teach you
+how you can view your data problems in a way
+that enables you to solve them.
 
-Es geht um Störche! Wie allgemein bekannt bringen die ja die Babies.
-Daher enthält das Datenset für ein 17 Länder jeweils
-die Geburtenrate in $10^3$ pro Jahr, die Zahl der Menschen im Land in $10^6$,
-Zahl der Storchenpaare im Land sowie die Fläche in $km^2$.
+We want to go from seeing the numbers
 
-```{r}
-library(tidyverse)
-library(broom)
+![](img/matrix_A06UFEx8jxEwU.gif)
 
-storks <- read_csv("data/05_storks.csv")
-head(storks)
-```
+To seeing the structure behind it
 
-Diese Daten zeigen nun unmissverständlich, dass es einne klaren Zusammenhang
-zwischen der Zahl der Storchenpaare und der Geburtenrate gibt
-[@matthews2000].
+![](img/matrix+pill_SCt3Miv6ugvSg.gif)
 
-```{r}
-ggplot(storks, aes(Storks, Birth)) +
-  geom_point()
-```
+## Correlation and Regression
 
-Welche statistische Größe dabei zum Einsatz kommt, und warum
-die Schlussfolgerung dieser satirischen wissenschaftlichen Arbeit
-zweifelhaft ist, lernen wir im Folgenden.
+The data for today are available from their
+[original source](https://figshare.com/articles/Storks_and_human_babies_data/839299/1)
+or [my github repository](https://github.com/jannikbuhr/dataIntro19Master/tree/master/data).
 
-Zunächst schauen wir uns die Daten noch auf einer logarithmischen Skala
-an.
+It's about storks! And because according to folk wisdom storks bring
+the babies, we get the number of stork pairs per country and
+the birthrate in $10^3$ babies per year.
+Additionally, we get the number of people per country and
+the area in $km^2$.
 
 ```{r}
-ggplot(storks, aes(Storks, Birth)) +
-  geom_point() +
-  scale_x_continuous(trans = "log10") +
-  scale_y_continuous(trans = "log10") +
-  annotation_logticks() +
-  theme_classic()
+# load tidyverse
+# load stork data
 ```
 
-### Regression
-
-Sowohl durch die ursprünglichen als auch die log-transformierten
-Daten können wir eine lineare Regressionslinie legen:
+This data shows a clear relationship between the number
+of stork pairs and the birthrate in a country [@matthews2000].
 
 ```{r}
-model <- lm(Birth ~ Storks, data = storks)
-summary(model)
+# show storks vs birth rate with ggplot, points
+```
+
+The data looks better on a logarithmic scale,
+this diminishes the effect of outliers in our plot.
+
+```{r}
+# ggplot with dual log scale and annotation_logticks, theme classic
 ```
 
 ```{r}
-ggplot(storks, aes(Storks, Birth)) +
-  geom_point() +
-  scale_x_continuous(trans = "log10", breaks = scales::log_breaks()) +
-  scale_y_continuous(trans = "log10", breaks = scales::log_breaks()) +
-  annotation_logticks() +
-  theme_classic() +
-  geom_smooth(method = "lm")
+# talk about log tranformation in general, biological data, tests
 ```
 
-```{r}
-model <- lm(log(Birth) ~ log(Storks), data = storks)
-summary(model)
-```
 
-Tatsächlich ist an dieser Stelle aber eine lineare Regression
-nicht exakt der Messwert, der hier angebracht ist.
-
-Auftritt: Korrelation
-
-### Korrelation
+### Correlation
 
 $$cor(X,Y)=\frac{cov(X,Y)}{\sigma_X \sigma_Y}=\frac{E\left[(X-\mu_X)(Y-\mu_Y)\right]}{\sigma_X \sigma_Y}$$
 
 ```{r}
 # explain correlation
+# show cor of Storks and Birth
+```
+
+```{r}
+# do cor of log transformed data
+```
+
+```{r}
+# do cor.test
 # explain range of correlation coefficient
-cor(storks$Storks, storks$Birth)
+# explain R and R^2
 ```
 
 ```{r}
-cor(log(storks$Storks), log(storks$Birth))
+# cor with default pearson and spearman
+```
+
+```{r, echo=FALSE, fig.cap='Source: XKCD, https://www.xkcd.com/552/'}
+knitr::include_graphics("img/correlation.png")
+```
+
+### Regression
+
+A related concept is linear regression.
+
+```{r}
+# create lm model of babies ~ storks
+# show summary
+```
+
+The _R squared_ value, also called the coefficient of determination,
+in fact refers to the same R as Pearsons R (the correlation coefficient).
+
+```{r}
+# ggplot of Storks and Birth
+# with log scale
+# and geom_smooth for lm
 ```
 
 ```{r}
-cor.test(storks$Storks, storks$Birth)
+# create the loglinear lm
 ```
 
-```{r}
-cor(storks$Storks, storks$Birth, method = "spearman")
-```
-
-```{r}
-cor(storks$Storks, storks$Birth)^2
-```
-
-```{r}
-# show xkcd
-# talk about confounding factors / variables
-```
+But what happens when our data does not follow
+a linear model?
 
 ## Non-Linear Regression
 
-### Michaelis-Menten-Kinetik
+### Michaelis-Menten Kinetics
+
+As an example we will use the common Michaelis-Menten kinetics.
+There is a dataset for enzyme reaction rates included in R.
 
 ```{r}
-Puromycin <- as_tibble(Puromycin)
-head(Puromycin)
+# load Puromycin, as_tibble
 ```
 
-```{r}
-Puromycin %>% count(state)
-```
 
 ```{r}
-puro_treat <- Puromycin %>% 
-  filter(state == "treated")
+# get only treated
 ```
 
 ```{r puro_treat_plts, fig.show='hold', out.width="50%"}
-plot(puro_treat$conc, puro_treat$rate, main = "base R plot")
-
-ggplot(puro_treat, aes(conc, rate)) + geom_point() + labs(title = "ggplot")
+# base R plot
+# ggplot
 ```
 
 
 ```{r}
-michaelis_menten_fun <- function(conc, Vm, K) {
-  (Vm * conc) / (K + conc)
-}
+# define calculateMM
+# (Vm * conc) / (K + conc)
 ```
 
 ```{r}
-x = seq(0, 1, by = 0.001)
-y = michaelis_menten_fun(x, Vm = 200, K = 0.2)
-plot(x, y, type = "l")
-```
-
-
-```{r}
-plot(puro_treat$conc, puro_treat$rate)
-curve(michaelis_menten_fun(conc = x, Vm = 200, K = 0.1),
-      add = TRUE,
-      col = "red",
-      from = 0, to = 1,
-      n = 100)
+# calculate y  <- x , x > 0, x < 1
+# plot x y
 ```
 
 ```{r}
-model <- nls(rate ~ michaelis_menten_fun(conc, Vm, K),
-             start = list(Vm = 200, K = 0.1),
-             data  = puro_treat)
-model
-```
-
-```{r}
-coef(model)
-```
-
-```{r}
-summary(model)$coefficients
+# plot function in ggplot with starting conditions
+# show args as well as ~ notation
 ```
 
 
 ```{r}
-Vm_est <- coef(model)[1]
-K_est  <- coef(model)[2]
+# run nls of rate ~ function on data
 ```
 
 ```{r}
-plot(puro_treat$conc, puro_treat$rate)
-curve(michaelis_menten_fun(x, Vm = Vm_est, K = K_est),
-      add = TRUE,
-      col = "red")
+# show str of model summary
 ```
 
 ```{r}
-ggplot(puro_treat, aes(conc, rate)) +
-  geom_point() +
-  stat_function(fun = ~ michaelis_menten_fun(conc = .x, Vm = Vm_est, K = K_est),
-                col = "red") +
-  theme_classic()
-```
-
-Oder gleich mit einem "Self Starting Model"
-
-```{r}
-model2 <- nls(rate ~ SSmicmen(conc, Vm, K),
-             data  = puro_treat)
-model2
+# get coefficients
 ```
 
 ```{r}
-predict(model2, newdata = list(conc = 1:10))
-```
-
-```{r}
-nested_data <- Puromycin %>% 
-  group_nest(state)
-nested_data
-```
-
-```{r}
-nested_data$data[[1]]
-```
-
-```{r}
-all_models <- nested_data %>% 
-  mutate(model = map(data, ~ nls(rate ~ michaelis_menten_fun(conc, Vm, K),
-                                start = list(Vm = 200, K = 0.1),
-                                data = .x))
-  )
-
-all_models
-```
-
-```{r}
-fit_my_model <- function(df) {
-  nls(rate ~ michaelis_menten_fun(conc, Vm, K),
-                                start = list(Vm = 200, K = 0.1),
-                                data = df)
-}
-```
-
-```{r}
-fit_my_model(puro_treat)
+# coef
 ```
 
 
 ```{r}
-all_models <- nested_data %>% 
-  mutate(model = map(data, fit_my_model)
-  )
-
-all_models
+# extract estimated coefficients
 ```
 
 ```{r}
-all_models$model[[1]]
+# use coeffictionts to plot function in ggplot
+```
+
+Side note: There is also _self starting models_
+
+```{r}
+# e.g. SSmicmen (conc, Vm, K)
+```
+
+You can use any model created with a modelling
+function such as `nls` or `lm` with
+the `predict` function to predict new values
+for new data:
+
+```{r}
+# show the predict function
+```
+
+### Many Models
+
+The superpower of tibbles!
+
+```{r}
+# nest puromycin by state
+```
+
+```{r}
+# show how to acces content of nested data
+```
+
+```{r}
+# add a model column with nls as lambda function
 ```
 
 
 ```{r}
-all_models <- all_models %>% 
-  mutate(fitted = map(model, augment),
-         coef   = map(model, coef))
-
-all_models
+# ggplot of puromycin with geom_smooth method nls and method.args
+# remember se = FALSE
 ```
 
 ```{r}
-all_models %>% 
-  unnest_wider(coef)
+# add coef column with map coef
+# unnest coef wider
 ```
+
+
+## Exercises
+
+### With the Datasaurus Dozen Data Sets
 
 ```{r}
-all_models %>% 
-  select(state, fitted) %>% 
-  unnest(fitted)
+datasauRus::datasaurus_dozen %>% head()
 ```
 
-```{r}
-all_models %>% 
-  select(state, fitted) %>% 
-  unnest(fitted) %>% 
-  ggplot(aes(conc, rate, color = state)) +
-  geom_point() +
-  geom_line(aes(y = .fitted))
-```
+- Visualize all data sets in one ggplot,
+  - Hint: use`facet_wrap`
+- Add linear regression lines
+  - Hint: use `geom_smooth`
+- Do the fit manually on the dataset and extract the coefficients
+  - Hints: See above, nest the data first, create the model column, etc.
+  
+### Example Data Analysis
 
-```{r}
-make_data <- function(model, from, to, n) {
-  conc <- seq(from, to, length.out = n)
-  tibble(conc,
-         .fitted = predict(model, newdata = list(conc = conc)))
-}
-
-new_data <- all_models %>% 
-  mutate(new_data = map(model, make_data, 0, 1, 100)) %>% 
-  select(state, new_data) %>% 
-  unnest(new_data)
-```
-
-```{r}
-all_models %>% 
-  select(state, fitted) %>% 
-  unnest(fitted) %>% 
-  ggplot(aes(conc, rate, color = state)) +
-  geom_point() +
-  geom_line(data = new_data, aes(y = .fitted))
-```
-
-## Übung
-
-### Mit den Datasaurus Dozen Datensets
-
-```{r}
-datasauRus::datasaurus_dozen
-```
-
-- Visualisiere alle Sets gemeinsam in einem ggplot Scatterplot,
-  nutze dazu `facet_wrap`.
-- Füge mittels `geom_smooth` lineare Trendlinien hinzu
-- Fitte eine Lineare Regression and jedes der Datensets. Nutze dazu die
-  Techniken aus
-  [R4DataScience: Many Models](https://r4ds.had.co.nz/many-models.html)
-  und das `broom` package.
-- Analysiere die Fits.
+With your data!
 
 ### Solutions
-
-```{r}
-knitr::opts_chunk$set(include = FALSE, eval = FALSE)
-```
-
-
-```{r}
-library(tidyverse)
-library(broom)
-```
-
-
-```{r}
-datasauRus::datasaurus_dozen
-```
-
-- Visualisiere alle Sets gemeinsam in einem ggplot Scatterplot,
-  nutze dazu `facet_wrap`.
-- Füge mittels `geom_smooth` lineare Trendlinien hinzu
-
-
-- Fitte eine Lineare Regression and jedes der Datensets. Nutze dazu die
-  Techniken aus
-  [R4DataScience: Many Models](https://r4ds.had.co.nz/many-models.html)
-  und das `broom` package.
-- Analysiere die Fits.
-
-```{r}
-dinos <- datasauRus::datasaurus_dozen
-dinos
-```
-
-```{r}
-dinos %>% 
-  count(dataset)
-```
-
-```{r}
-dinos %>% 
-  ggplot(aes(x = x, y = y)) +
-  geom_point() +
-  geom_smooth(method = "lm") +
-  facet_wrap("dataset", scales = "free_y") +
-  ggthemes::theme_few()
-```
-
-```{r}
-nested_dinos <- dinos %>% 
-  group_nest(dataset)
-nested_dinos
-```
-
-```{r}
-beispiel <- nested_dinos$data[[1]]
-
-model <- lm(y ~ x, data = beispiel)
-summary(model)
-
-glance(model)
-tidy(model)
-coef(model)
-```
-
-
-```{r}
-all_models <- nested_dinos %>% 
-  mutate(
-    model        = map(data, ~ lm(y ~ x, data = .x)),
-    glance       = map(model, glance),
-    coefficients = map(model, coef),
-    corr         = map(data, ~ cor(.x$x, .x$y))
-  )
-all_models
-```
-
-```{r}
-all_models %>% 
-  select(dataset, coefficients) %>% 
-  unnest_wider(coefficients)
-```
-
-```{r}
-all_models %>% 
-  select(dataset, corr) %>% 
-  unnest_wider(corr)
-```
-
 
 
 

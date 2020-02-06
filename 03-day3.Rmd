@@ -311,7 +311,7 @@ plt2
 Because visualization is so important,
 we dive into one example here:
 
-### Anscombes Quartet
+### Anscombes Quartet {#anscombe}
 
 > And a note on _Tidy Data_ and the `tidyr` package.
 

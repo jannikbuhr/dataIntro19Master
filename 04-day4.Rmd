@@ -10,8 +10,8 @@ Say 30 instead of 300?
 
 To turn this into a demonstration, we assume
 that the 300 cells are completely representative
-of the all WT and KO cells and thus call this
-our population.
+of all WT and KO cells and thus call this
+our **population**.
 
 - Now we draw a sample of 30 from the population
 - We calculate the mean
@@ -24,37 +24,44 @@ Firstly, we load the tidyverse and our data.
 
 ```{r}
 library(tidyverse)
-```
 
-```{r}
 # import data for inclusion bodies
+data <- read_csv("data/03_inclusion_bodies.csv")
 
 # attach data, handle with CARE!
+attach(data)
 ```
 
-`attach` makes the columns of a datensets (in our case _ko_ and _wt_)
+`attach` makes the columns of a data sets (in our case _ko_ and _wt_)
 globally available as vectors. This enables us to write
-`wt` intead `data$wt` or `data["wt"]`.
+`wt` instead of `data$wt` or `data["wt"]`.
 
 > Use `attach` carefully and only in very few situations!
   The order of those two vectors is now independent of each
-  other. Operations on the vectors `wt` und `ko` do not
+  other. Operations on the vectors `wt` and `ko` do not
   influence the other vector or the original column
-  of the dataframe `data`!
+  of the data frame `data`!
   
-### Programming and Problemsolving
+### Programming and Problem Solving
+
+This approach will help you not only for this exercise
+but for all sorts of problems that come up in programming.
+First, find the smallest piece of the problem that we
+want to solve.
 
 #### The basic Case
 
-First, we solve the first part of our roadmap:
+This is exactly the first part of our road map:
 
 - Now we draw a sample of 30 from the population
 - We calculate the mean
 
 ```{r}
 # sample n = 30 points from a vector
+draw <- sample(wt, 30, replace = TRUE)
 
 # calculate mean
+mean(draw)
 ```
 
 #### Abstraction for many Cases
@@ -75,13 +82,21 @@ draws `n` elements from it and returns the mean of those elements.
 
 ```{r}
 # getMeanOfSubset
+getMeanOfSubset <- function(x, n) {
+  draw <- sample(x, n, replace = TRUE)
+  mean(draw)
+}
 ```
 
 Now we can now test that the function is working.
 
 ```{r}
 # test getMeanOfSubset
+getMeanOfSubset(wt, 30)
 ```
+
+Remember the higher order functions introduced
+in the chapter about anscombes quartet (\@ref(anscombe))?
 
 We now use the `map` function from the `purrr`-package
 to call this function 1000 times and save the result
@@ -89,10 +104,12 @@ in a list or vector (`map_dbl` for map _double_).
 
 ```{r}
 # define N
+N <- 1000
 # map over 1:N
+wtMeans <- map(1:N, ~ getMeanOfSubset(wt, 30))
 ```
 
-Now you might be asking yourselves: "What is this weird tild
+Now you might be asking yourselves: "What is this weird tilde
 symbol doing there?"
 
 #### Excursion: Lambda Functions
@@ -101,51 +118,52 @@ $$\lambda$$
 
 The `~` symbol (tilde) in the context
 of `map` functions creates a so called _lambda_ function.
-_Lambda_ functions are anonymous functions, functions
-without a name. So we generally use them whenever
+_Lambda_ functions are anonymous functions,
+functions without a name.
+So we generally use them whenever
 we need a function only once.
 
-
-`add_one <- function(x) x + 1`
-is equivalent to
-`~ .x + 1`.
-
-The parameter passed to the lambda function is
+`function(x) x + 1` is equivalent to
+`~ .x + 1`. The argument passed to the lambda function is
 always called `.x` inside of the function.
 
-So the lambda funcion `~ getMeanOfSubset(wt, 30)`
+So in `map(1:N, ~ getMeanOfSubset(wt, 30))`,
+the lambda function `~ getMeanOfSubset(wt, 30)`
 takes the numbers from 1 to N (`1:N`) but completely
 ignores them (there is no mention of `.x`). 
-The result is `getMeanOfSubset` beeing called
+The result is `getMeanOfSubset` being called
 1000 times with the same arguments (`wt` and `30`).
 
-```{r}
-# show replicate as the special case for functions
-# that don't use the elements of the vector
+We can explicitly request the results as a vector
+of numbers instead of a list with `map_dbl`.
 
+```{r}
+wtMeans <- map_dbl(1:N, ~ getMeanOfSubset(wt, 30))
 ```
 
 ### Population Distribution vs. Distribution of Means
 
-With large enough n, the distribtion of means
+With large enough n, the distribution of means
 follows a normal distribution, even though
 the values are not normally distributed.
 
-```{r}
-# hist of Ms
-```
-
-```{r}
-# hist of wt
+```{r, fig.show='hold', out.width='50%'}
+wtMeans <- map_dbl(1:N, ~ getMeanOfSubset(wt, 30))
+hist(wtMeans)
+hist(wt)
 ```
 
 According to the Central Limit Theorem the means
 follow a normal distribution. We can show this.
 
 ```{r}
-# show qqnorm of Ms
-# and qqline
+qqnorm(wtMeans)
+qqline(wtMeans, col = "red")
 ```
+
+For another great visualization of the central limit
+theorem, check out this interactive tutorial by
+[Seeing Theory](https://seeing-theory.brown.edu/probability-distributions/index.html#section3).
 
 ## The T-Distribution
 
@@ -154,26 +172,26 @@ For smaller sample sizes, the distribution of
 means has fatter tails than a normal distribution
 
 This is why for most statistical tests,
-we use the t-distribtion instead of the
+we use the t-distribution instead of the
 normal distribution.
 
 For 3 degrees of freedom (DF):
 
 ```{r tdist, fig.cap="t-distribution in red, normal distribution in black."}
-# define tdist as dt of x for df = 3
-# curve dnorm from -3 to 3
-# add tdist curve in red
+tdist <- function(x) dt(x, df = 3)
+curve(dnorm, -3, 3)
+curve(tdist, -3, 3, add = TRUE, col = "red")
 ```
 
 For 30 DF:
 
 ```{r tdist2, fig.cap="t-distribution in red, normal distribution in black."}
-# define tdist as dt of x for df = 30
-# curve dnorm from -3 to 3
-# add tdist curve in red
+tdist <- function(x) dt(x, df = 30)
+curve(dnorm, -3, 3)
+curve(tdist, -3, 3, add = TRUE, col = "red")
 ```
 
-### Confidence Intervalls (CIs)
+### Confidence Intervals (CIs)
 
 We can use the t-distribution to
 calculate (95%-) confidence intervals.
@@ -181,23 +199,19 @@ calculate (95%-) confidence intervals.
 The 95% CI of a sample mean contains the
 true mean (the mean of the population)
 in 95% of cases (if you where to repeat the experiment
-infenitely often).
+infinitely often).
 
 ```{r ci-vis, fig.cap="True mean in red."}
-# show hist of Ms
-
-# add line for true mean of wt, lwd = 3
-
+hist(wtMeans)
+abline(v = mean(wt), col = "red")
 ```
 
 ```{r}
-# use t.test for conf.int of a sample (30) from wt
-
-# get limits with $conf.int
-
-# hist of sample
-
-# add lines with CI
+draw <- sample(wt, 7)
+CI <- t.test(draw)$conf.int
+hist(draw)
+abline(v = CI[1], col = "red")
+abline(v = CI[2], col = "red")
 ```
 
 ## Significance Tests
@@ -217,23 +231,28 @@ For normally distributed data,
 we would use students t-test.
 
 ```{r}
-# show t.test on wt and ko
+t.test(wt, ko)
 ```
 
 ```{r}
-# show t.test on samples of data
+wtDraw <- sample(wt, 3, replace = TRUE)
+koDraw <- sample(ko, 3, replace = TRUE)
+t.test(wtDraw, koDraw)
 ```
 
 But our data is not normally distributed!
 
 ```{r}
-# take inclusion bodies, pivot longer, plot histograms
+data %>% 
+  pivot_longer(c(1,2)) %>% 
+  ggplot(aes(name, value, fill = name)) +
+  geom_jitter()
 ```
 
 ### Wilcoxon Rank Sum Test
 
 With non-normal data, we need a so called
-non-parametric test. Thoses tests do not
+**non-parametric** test. Those tests do not
 make the assumption of normality.
 
 The Wilcoxon Rank Sum test (also called Mann-Whitney U test)
@@ -248,23 +267,17 @@ The rank of a value in our dataset answers the question:
 Example:
 
 ```{r}
-# define x
-
-# call rank on x
-
+x <- c(1,2,1.12312, 4000000, 42)
+rank(x)
 ```
 
-With our data
+We run this test in R as follows:
 
 ```{r}
-# pivot_longer, plot jitter, demonstrate ranks
+wilcox.test(wt, ko)
 ```
 
-```{r}
-# run wilcox.test on wt and ko
-```
-
-## Type I und Type II Errors
+## Type I and Type II Errors
 
 - Type I:  False Positives (rejection of a true null hypothesis)
 - Type II: False Negatives (non-rejection of false null hypothesis)
@@ -280,26 +293,27 @@ a "statistically significant" result. Keep in mind,
 that this cutoff is arbitrary and has no physical
 meaning. This cutoff also means that by definition
 we are accepting a minimum of 5% false positives!
-This cutoff, the significancelevel is also called
+This cutoff, the significance level is also called
 $\alpha$.
 
 $$\alpha=\text{Type I error rate}$$
 
 ```{r}
-# show normal distribution
+curve(dnorm, -3, 3)
 ```
 
 ```{r}
-# define n
-n <- 3
+n <- 5
+draw1 <- rnorm(n)
+draw2 <- rnorm(n)
+```
 
-# draw twice from the same normal distributions
+```{r}
+t.test(draw1, draw2)
+```
 
-# do the t.test
-
-
-# do the rank sum test
-
+```{r}
+wilcox.test(draw1, draw2)
 ```
  
 Test this code with different values of `n`.
@@ -318,16 +332,17 @@ the type II error rate is called  $\beta$
 $$\beta=\text{Type II error rate}$$
 
 ```{r}
-# define n
+n <- 5
+draw1 <- rnorm(n, mean = 0)
+draw2 <- rnorm(n, mean = 1)
+```
 
-# draw from different normal distributions
+```{r}
+t.test(draw1, draw2)
+```
 
-
-# convert to tibble, pivot_longer, plot points, add stat_summary for means
-
-# do the t.test
-
-# do the rank sum test
+```{r}
+wilcox.test(draw1, draw2)
 ```
 
 Repeat with different values of `n`.
@@ -341,17 +356,15 @@ So it represents true positives.
 
 $$Power = 1-\beta$$
 
-In R, we have the funtion `power.t.test`, which
-can tell us the power
-
-Für den T-Test können wir in R die folgende Funktion verwenden, die uns hier beispielsweise
-die Frage beantwortet: "Wie viele Proben muss ich pro Gruppe (mindestens) nehmen,
-um einen erwarteten Unterschied der Mittelwerte von 1 mit einer Standardabweichung von 1
-in 80% der Fälle auch tatsächlich als solchen zu erkennen?"
+In R, we have the function `power.t.test`, which
+can tell us the power (or any of the arguments left blank / set to NULL)
 
 ```{r}
-# show power.t.test
-
+power.t.test(n = NULL,
+             delta = 5,
+             sd = 1,
+             sig.level = 0.05,
+             power = 0.9)
 ```
 
 ## Problems
@@ -367,11 +380,9 @@ Controlling the False Discovery Rate (FDA):
 #### Bonferroni correction
 
 ```{r}
-# show p.adjust
-# with bonferroni
+pValues <- c(0.5, 0.05, 0.3, 0.001, 0.003)
+p.adjust(pValues, method = "bonferroni")
 ```
-
-Jeder P-Value wird mutipliziert mit der Zahl der Tests
 
 #### Benjamini-Hochberg procedure
 
@@ -382,7 +393,7 @@ Jeder P-Value wird mutipliziert mit der Zahl der Tests
 - This is your new threshold for significance
 
 ```{r}
-# show p.adjust for BH
+p.adjust(pValues, method = "BH")
 ```
 
 ### The Base Rate Fallacy
@@ -393,7 +404,6 @@ Example: mammogram
 - Specificity = true negative rate = $1-\alpha$
 
 ```{r}
-# calculate 
 total <- 1000
 positives <- 10
 negatives <- total - positives
@@ -403,7 +413,6 @@ true_positives  <- sensitivity * positives
 false_positives <- (1 - specificity) * negatives
 p_positive <- true_positives / (true_positives + false_positives)
 ```
-
 
 ```{r, echo = FALSE}
 library(waffle)
@@ -455,6 +464,36 @@ tibble(
   guides(fill = guide_legend(title = "", override.aes = list(color = "black")))
 ```
 
+```{r}
+p_positive
+```
+
+Bayes Formula:
+
+$$P(A|B)=\frac{P(B|A)*P(A)}{P(B)}$$
+
+With $P(X)$ as the probability of $X$ and $P(X|Y)$ being the
+probability of $X$ given $Y$ (_conditional probability_).
+
+In terms of our example:
+
+$$P( Cancer | positive Test)=\frac{P(positive Test|Cancer)*P(Cancer)}{P(positive Test)}$$
+
+The probability of having the disease given a positive test result ($P(A|B)$),
+is equal to the probability of testing positive while having the disease
+(the sensitivity!) times the probability of having the disease just based on
+the prevalence of the disease (this is also called the prior probability, $P(A)$)
+divided by the probability of testing positive, no matter the condition.
+The latter part, the denominator, can be broken down further
+to be expressed in terms of our definitions from the beginning
+of this section:
+
+$$P( Cancer | positive Test)=\frac{P(positive Test|Cancer)*P(Cancer)}{P(positive Test | Cancer) *  P(Cancer) + P(positive Test | no Cancer) *  P(no Cancer)}$$
+
+So in other words:
+
+$$P( Cancer | positive~test)=\frac{Sensitivity*Prevalence}{Sensitivity *  Prevalence + (1-Specificity) *  (1-Prevalence)}$$
+
 ### Resources
 
 - Statistics Done Wrong: https://www.statisticsdonewrong.com/
@@ -462,6 +501,9 @@ tibble(
 - https://www.graphpad.com/guides/prism/8/statistics/index.htm
 
 ## Exercises
+
+> The Solutions will be done live
+  and will end up underneath the questions.
 
 ### Show the following statements with simulations in R
 
@@ -473,11 +515,28 @@ tibble(
 - run it 1000 times and save the result in a vector
 - calculate the SD of the means
 - now, draw 40 instead of 10 cells and repeat. How does the SD change?
-- Write a function of n that does obove steps
+- Write a function of n that does above steps
 - Feed the numbers from 1 to 100 to the function and
   plot the resulting SDs
+  
 
-#### A 95% confifence interval of a sample contains the true mean (of the population) with a probability of 95%
+```{r}
+library(tidyverse)
+```
+
+```{r}
+getMeanOfSample <- function(x, n) sample(x, n, replace = TRUE) %>% mean()
+getSdOfManyMeans <- function(n, x) {
+  map_dbl(1:100, ~ getMeanOfSample(x, n) ) %>% sd()
+}
+
+sdByN <- tibble(N = 1:100) %>% 
+  mutate(sd = map_dbl(N, getSdOfManyMeans, x = wt))
+
+plot(sdByN$N, sdByN$sd)
+```
+
+#### A 95% confidence interval of a sample contains the true mean (of the population) with a probability of 95%
 
 - draw 30 cells from the wt (or ko) vector
 - Calculate the limits of the CI
@@ -486,7 +545,7 @@ tibble(
 - Write a function that tests, if a set
   of limits contains the true mean
 - Map this function over the list of limits
-- How often to you optain `TRUE`?
+- How often to you obtain `TRUE`?
 
 ### Show the following concepts with simulations in R
 
@@ -497,7 +556,12 @@ tibble(
 - Do this 1000 times. How many are statistically significant?
 - What changes when you draw 10 instead of 30? Or 5?
 
-#### Specificity: With **no** difference existing, what is the probabilty to detect one nonetheless?
+```{r}
+# talk about alternative in tests
+```
+
+
+#### Specificity: With **no** difference existing, what is the probability to detect one nonetheless?
 
 - Imagine all cells are wt-cells
 - Draw two samples of n = 30 from the wt-cells (i.e. the same population)
@@ -506,269 +570,44 @@ tibble(
 - How are the p-values distributed?
 - How often is the result statistically significant?
 
+
 #### Resource for p-value Histograms
 
 http://varianceexplained.org/statistics/interpreting-pvalue-histogram/
 
 
-```{r}
-knitr::opts_chunk$set(include = FALSE, eval=FALSE)
-```
-
-#### Solutions
-  
-
-```{r}
-library(tidyverse)
-
-read_csv("data/03_inclusion_bodies.csv") %>% attach()
-```
-
-```{r}
-draw <- sample(wt, 10)
-mean(draw)
-```
-
-```{r}
-get_sample_mean <- function(x, n) {
-  draw <- sample(x, n, replace = TRUE)
-  mean(draw)
-}
-```
-
-```{r}
-get_sample_mean(wt, 10)
-```
-
-```{r}
-N <- 1000
-many_means <- map_dbl(1:N, ~ get_sample_mean(wt, 10) )
-sd(many_means)
-```
-
-```{r}
-many_means <- map_dbl(1:N, ~get_sample_mean(wt, 40))
-sd(many_means)
-```
-
-```{r}
-# explain default arguments and scoping
-get_sd_of_many_means <- function(n, x, N = 1000) {
-  many_means <- map_dbl(1:N, ~get_sample_mean(x, n))
-  sd(many_means)
-}
-```
-
-```{r}
-n_max <- 100
-sds_by_n <- map_dbl(1:n_max, get_sd_of_many_means, x = wt)
-```
-
-```{r}
-plot(x = 1:n_max,
-     y = sds_by_n, type = "p")
-
-curve(sd(wt)/sqrt(x), add = TRUE, col = "red")
-```
-
-```{r}
-# talk about difference between sample sd and population sd
-```
-
-
-#### Solutions
-
-```{r}
-test_samle_wilcox <- function(n) {
-  draw_wt <- sample(wt, n, replace = TRUE)
-  draw_ko <- sample(ko, n, replace = TRUE)
-  wilcox.test(draw_wt, draw_ko, exact = FALSE)$p.value
-}
-```
-
-```{r}
-many_p_values <- map_dbl(1:1000, ~test_samle_wilcox(30))
-```
-
-```{r}
-hist(many_p_values)
-```
-
-```{r}
-many_p_values <- map_dbl(1:1000, ~test_samle_wilcox(10))
-```
-
-```{r}
-hist(many_p_values)
-```
-
-```{r}
-many_p_values <- map_dbl(1:1000, ~test_samle_wilcox(4))
-```
-
-```{r}
-hist(many_p_values)
-```
-
-```{r}
-alpha = 0.05
-mean(many_p_values <= alpha)
-```
-
-```{r}
-# talk about power, effect size, difference between wilcox and t-test
-```
-
-
-#### Solutions
-
-```{r}
-test_same_wilcox <- function(n) {
-  draw_wt <- sample(wt, n, replace = TRUE)
-  draw_ko <- sample(wt, n, replace = TRUE)
-  wilcox.test(draw_wt, draw_ko, exact = FALSE)$p.value
-}
-```
-
-```{r}
-many_p_values <- map_dbl(1:1000, ~test_same_wilcox(30))
-```
-
-```{r}
-hist(many_p_values)
-```
-
-```{r}
-alpha = 0.05
-mean(many_p_values <= alpha)
-```
-
-```{r}
-# this is what we would expect from p-values!
-```
-
-
-
-#### Solutions
-
-```{r}
-draw <- sample(wt, 30)
-```
-
-```{r}
-test_results <- t.test(draw)
-```
-
-```{r}
-test_results
-```
-
-```{r}
-summary(test_results)
-```
-
-```{r}
-str(test_results)
-```
-
-```{r}
-test_results$conf.int
-```
-
-```{r}
-get_sample_ci <- function(x, n) {
-  draw <- sample(x, n, replace = TRUE)
-  t.test(draw)$conf.int
-}
-```
-
-```{r}
-get_sample_ci(wt, 30)
-```
-
-```{r}
-CIs <- map(1:1000, ~get_sample_ci(wt, 30))
-```
-
-```{r}
-head(CIs)
-```
-
-```{r}
-# explain list subsetting
-CIs[1]
-```
-
-```{r}
-CIs[[1]]
-```
-
-```{r}
-CIs[[1]][1]
-```
-
-
-```{r}
-test_ci <- function(limits, true_mean) {
-  limits[1] < true_mean & limits[2] > true_mean
-}
-```
-
-
-```{r}
-# sidenote
-# note difference between & and &&
-c(TRUE, TRUE) &  c(FALSE, TRUE)
-```
-
-```{r}
-c(TRUE, TRUE) && c(FALSE, TRUE)
-```
-
-
-```{r}
-results <- map_lgl(CIs, test_ci, true_mean = mean(wt))
-head(results)
-```
-
-```{r}
-mean(results)
-```
-
-```{r}
-# talk about organisation of code
-# source("test.R")
-```
-
 #### Further notes
 
 ```{r}
-# check out
-?map
-# for the subtle differences between:
-map(1:100, ~ .x + 1)
-# and
-add_one <- function(x) x + 1
-map(1:100, add_one)
-# and
-map_dbl(1:100, add_one)
+# talk about organisation of code
+# and reusing code
+# source and package
+```
 
-# especially the meaning of ~ (speak: lambda)
-map(1:5, ~ print("hi"))
+Note: I showed you a lot of map functions, but
+often, you don't need a map function because
+a lot of the basic operations in R are
+vectorised by default (so they operate on
+elements of vectors).
 
-# more examples
-map(1:10, paste, "hi")
-is_even <- function(x) x %% 2 == 0
-map_lgl(1:10, is_even)
+With two vectors `x` and `y`
 
-# Note: Often, you don't need a map function
-# Because many functions in R are vectorised by default:
-x <- 1:10
-y <- 1:10
-# thus, just write
+```{r}
+x <- 1:5
+y <- 1:5
+```
+
+We can just write
+
+```{r}
 x + y
-# instead of
+```
+
+Instead of
+
+```{r}
 map2_dbl(x,y, `+`)
 ```
+
 
 
