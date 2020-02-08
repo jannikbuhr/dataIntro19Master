@@ -416,7 +416,6 @@ p_positive <- true_positives / (true_positives + false_positives)
 
 ```{r, echo = FALSE}
 library(waffle)
-theme_set(theme_void())
 
 tibble(
   parts = c("positives", "negatives"),
@@ -427,7 +426,8 @@ tibble(
   coord_equal() +
   scale_fill_manual(values = c("white", "red")) +
   theme(legend.position = "bottom") +
-  guides(fill = guide_legend(title = "", override.aes = list(color = "black")))
+  guides(fill = guide_legend(title = "", override.aes = list(color = "black"))) +
+  theme_void()
 ```
 
 ```{r, echo = FALSE}
@@ -442,7 +442,8 @@ tibble(
   coord_equal() +
   scale_fill_manual(values = c("darkred", "white", "red"))  +
   theme(legend.position = "bottom") +
-  guides(fill = guide_legend(title = "", override.aes = list(color = "black")))
+  guides(fill = guide_legend(title = "", override.aes = list(color = "black"))) +
+  theme_void()
 ```
 
 ```{r, echo = FALSE}
@@ -461,7 +462,8 @@ tibble(
   coord_equal() +
   scale_fill_manual(values = c("darkred", "palevioletred1", "red", "white")) +
   theme(legend.position = "bottom") +
-  guides(fill = guide_legend(title = "", override.aes = list(color = "black")))
+  guides(fill = guide_legend(title = "", override.aes = list(color = "black"))) +
+  theme_void()
 ```
 
 ```{r}
@@ -502,9 +504,6 @@ $$P( Cancer | positive~test)=\frac{Sensitivity*Prevalence}{Sensitivity *  Preval
 
 ## Exercises
 
-> The Solutions will be done live
-  and will end up underneath the questions.
-
 ### Show the following statements with simulations in R
 
 #### Increasing the sample size n reduces the standard error of the mean with the square root of n.
@@ -518,11 +517,7 @@ $$P( Cancer | positive~test)=\frac{Sensitivity*Prevalence}{Sensitivity *  Preval
 - Write a function of n that does above steps
 - Feed the numbers from 1 to 100 to the function and
   plot the resulting SDs
-  
 
-```{r}
-library(tidyverse)
-```
 
 ```{r}
 getMeanOfSample <- function(x, n) sample(x, n, replace = TRUE) %>% mean()
@@ -533,7 +528,9 @@ getSdOfManyMeans <- function(n, x) {
 sdByN <- tibble(N = 1:100) %>% 
   mutate(sd = map_dbl(N, getSdOfManyMeans, x = wt))
 
-plot(sdByN$N, sdByN$sd)
+sdByN %>% 
+  ggplot(aes(N, sd)) +
+  geom_point()
 ```
 
 #### A 95% confidence interval of a sample contains the true mean (of the population) with a probability of 95%
@@ -547,6 +544,33 @@ plot(sdByN$N, sdByN$sd)
 - Map this function over the list of limits
 - How often to you obtain `TRUE`?
 
+
+```{r}
+calculateCIforSample <- function(x, n) {
+  sample(x, n, replace = TRUE) %>%
+    t.test() %>% 
+    pluck("conf.int")
+}
+
+testLimitContainsMean <- function(limit, M) {
+  limit[1] <= M && limit[2] >= M
+}
+
+manyCIs <- map(1:100, ~ calculateCIforSample(wt, 30))
+
+map_lgl(manyCIs, testLimitContainsMean, M  = mean(wt)) %>% 
+  mean()
+```
+
+Ootionally
+
+```{r}
+manyCIs %>% 
+  enframe() %>% 
+  unnest_wider(value)
+```
+
+
 ### Show the following concepts with simulations in R
 
 #### Sensitivity: With a true difference existing, how large is the probability to detect it (i.e. get a p-value <= 0.05) with a wilcoxon rank sum test?
@@ -556,8 +580,22 @@ plot(sdByN$N, sdByN$sd)
 - Do this 1000 times. How many are statistically significant?
 - What changes when you draw 10 instead of 30? Or 5?
 
+
 ```{r}
-# talk about alternative in tests
+runWilcoxOnSample <- function(n, x1, x2) {
+  draw1 <- sample(x1, n, replace = TRUE)
+  draw2 <- sample(x2, n, replace = TRUE)
+  wilcox.test(draw1, draw2, exact = FALSE)$p.value
+}
+
+pValues <- map_dbl(1:1000, ~ runWilcoxOnSample(9, wt, ko))
+mean(pValues <= 0.05)
+hist(pValues)
+```
+
+
+```{r}
+?wilcox.test
 ```
 
 
@@ -571,6 +609,14 @@ plot(sdByN$N, sdByN$sd)
 - How often is the result statistically significant?
 
 
+```{r}
+pValues <- map_dbl(1:1000, ~ runWilcoxOnSample(10, wt, wt))
+mean(pValues <= 0.05)
+
+hist(pValues)
+```
+
+
 #### Resource for p-value Histograms
 
 http://varianceexplained.org/statistics/interpreting-pvalue-histogram/
@@ -578,11 +624,11 @@ http://varianceexplained.org/statistics/interpreting-pvalue-histogram/
 
 #### Further notes
 
-```{r}
-# talk about organisation of code
-# and reusing code
-# source and package
+```{r, eval = FALSE}
+source("usefullFunctions.R")
 ```
+
+
 
 Note: I showed you a lot of map functions, but
 often, you don't need a map function because

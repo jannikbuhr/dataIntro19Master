@@ -31,8 +31,10 @@ Additionally, we get the number of people per country and
 the area in $km^2$.
 
 ```{r}
-# load tidyverse
-# load stork data
+library(tidyverse)
+
+storks <- read_csv("data/05_storks.csv")
+head(storks)
 ```
 
 This data shows a clear relationship between the number
@@ -40,6 +42,8 @@ of stork pairs and the birthrate in a country [@matthews2000].
 
 ```{r}
 # show storks vs birth rate with ggplot, points
+ggplot(storks, aes(Storks, Birth)) +
+  geom_point()
 ```
 
 The data looks better on a logarithmic scale,
@@ -47,34 +51,68 @@ this diminishes the effect of outliers in our plot.
 
 ```{r}
 # ggplot with dual log scale and annotation_logticks, theme classic
+ggplot(storks, aes(Storks, Birth)) +
+  geom_point() +
+  scale_x_log10() +
+  scale_y_log10() +
+  annotation_logticks() +
+  theme_classic()
 ```
 
-```{r}
-# talk about log tranformation in general, biological data, tests
-```
-
+Log transformations are in fact quite important
+for a range of applications. Especially in
+biological data, you will encounter them
+quite a bit. The reason is as follows:
+While the central limit theorem states
+that the **sum** of independent random variables
+tends towards a normal distribution,
+biological processes often contain signal
+cascades and other **multiplicative** effects.
+A logarithm conveniently turns a **product**
+into a **sum**, so while your original
+data may not look very much like a normal
+distribution, it might very well be
+_log-normal_.
 
 ### Correlation
 
+We get a measure of linear relation between to random variables
+with the (Pearson's) correlation coefficient.
+
 $$cor(X,Y)=\frac{cov(X,Y)}{\sigma_X \sigma_Y}=\frac{E\left[(X-\mu_X)(Y-\mu_Y)\right]}{\sigma_X \sigma_Y}$$
 
+$cor$ is equal to the quotient of the co variance $cov$ and
+the product of the standard deviations $\sigma$. The
+co variance in turn is the expected value (i.e. the mean)
+of the element-wise product of the difference of
+vector X to its mean and the difference of vector Y to its mean.
+
 ```{r}
-# explain correlation
-# show cor of Storks and Birth
+cor(storks$Storks, storks$Birth)
 ```
 
 ```{r}
-# do cor of log transformed data
+cor(log(storks$Storks), log(storks$Birth))
 ```
 
-```{r}
-# do cor.test
-# explain range of correlation coefficient
-# explain R and R^2
-```
+The correlation coefficient is also called
+_Pearson's R_, and its square consequently
+is _R squared_. This value is the
+coefficient of determination, the fraction
+of explained variance of one variable by
+the other.
 
 ```{r}
-# cor with default pearson and spearman
+cor(storks$Storks, storks$Birth)^2
+```
+
+Both `cor` and `cor.test` can used
+the Spearman method to return correlation
+of ranks instead of values.
+
+```{r}
+cor(storks$Storks, storks$Birth, method = "spearman")
+cor(log(storks$Storks), log(storks$Birth), method = "spearman")
 ```
 
 ```{r, echo=FALSE, fig.cap='Source: XKCD, https://www.xkcd.com/552/'}
@@ -86,21 +124,29 @@ knitr::include_graphics("img/correlation.png")
 A related concept is linear regression.
 
 ```{r}
-# create lm model of babies ~ storks
-# show summary
+model <- lm(Birth ~ Storks, data = storks)
+summary(model)
 ```
 
-The _R squared_ value, also called the coefficient of determination,
-in fact refers to the same R as Pearsons R (the correlation coefficient).
+This _R squared_ value is in fact the coefficient of
+determination that you saw earlier for correlation.
+When your linear model is free to choose an intercept,
+this R squared also has the same value as for correlation.
+
+Using `geom_smooth`, we
+can fit any model to our data right
+within ggplot, even after applying
+the log-transformation.
 
 ```{r}
-# ggplot of Storks and Birth
-# with log scale
-# and geom_smooth for lm
-```
-
-```{r}
-# create the loglinear lm
+storks %>% 
+  ggplot(aes(Storks, Birth)) +
+  geom_point() +
+  scale_x_log10() +
+  scale_y_log10() +
+  geom_smooth(method = "lm",
+              se     = FALSE,
+              color  = "red")
 ```
 
 But what happens when our data does not follow
@@ -114,65 +160,145 @@ As an example we will use the common Michaelis-Menten kinetics.
 There is a dataset for enzyme reaction rates included in R.
 
 ```{r}
-# load Puromycin, as_tibble
-```
+puromycin <- as_tibble(Puromycin)
 
+treatedPuro <- puromycin %>% 
+  filter(state == "treated")
 
-```{r}
-# get only treated
+head(treatedPuro)
 ```
 
 ```{r puro_treat_plts, fig.show='hold', out.width="50%"}
-# base R plot
-# ggplot
+plot(treatedPuro$conc, treatedPuro$rate, main = "In case you miss base-R")
+
+treatedPuro %>% 
+  ggplot(aes(conc, rate)) +
+  geom_point() +
+  theme_classic()
 ```
 
+This data follows a Michaelis-Menten kinetic,
+so we define a function that translates
+a concentration into a rate given
+a maximal velocity Vm and the Michaelis-Menten
+constant K. Having the concentration
+as the first argument helps for later usage
+of the function.
 
 ```{r}
-# define calculateMM
-# (Vm * conc) / (K + conc)
+calcMicMen <- function(conc, Vm, K) {
+  (Vm * conc) / (K + conc)
+}
 ```
 
+`calcMicMen` is actually vectorised by default,
+because it just used basic mathematical operations:
+
 ```{r}
-# calculate y  <- x , x > 0, x < 1
-# plot x y
+x <- seq(0, 1, by = 0.01)
+y <- calcMicMen(x, Vm = 200, K = 0.1)
+plot(x,y)
 ```
 
+We can plot this function with some
+initial values for Vm and K using
+`stat_function` (it is a `stat`, not
+a `geom`, because it needs to do
+some calculation on the data before
+plotting it). Note that we use a lambda
+function to define a function
+on the fly that is only dependent 
+on one argument, passed as `.x` and
+already has Vm and K set at some value
+we chose.
+
 ```{r}
-# plot function in ggplot with starting conditions
-# show args as well as ~ notation
+treatedPuro %>% 
+  ggplot(aes(conc, rate)) +
+  geom_point() +
+  stat_function(fun   = ~ calcMicMen(conc = .x, Vm = 200, K = 0.1),
+                color = "red")
 ```
 
+Another way to write this is using the
+`args` argument of `stat_fun`. This way, we
+can supply just the name of the function and
+additional arguments such as Vm and K go
+into a list passed to `args`. The only argument
+we do not supply (`conc`) is then
+automatically taken from the x-axis and
+the result uses as the y-value.
 
-```{r}
-# run nls of rate ~ function on data
+```{r, eval=FALSE}
+# output not shown because it is the same as above
+treatedPuro %>% 
+  ggplot(aes(conc, rate)) +
+  geom_point() +
+  stat_function(fun   = calcMicMen,
+                args  = list(Vm = 200, K = 0.1),
+                color = "red")
 ```
 
+But this function doesn't fit our data! It
+just has some Vm and K that we manually
+put in, so let's use R to move
+it closer to our data. This process of taking
+some initial function and moving
+it closer to our data is called
+_least squares regression_ and as opposed
+to the simple case of linear models earlier,
+here we are using a non-linear model and thus the
+function `nls` for non-linear least squares.
+
 ```{r}
-# show str of model summary
+model <- nls(formula = rate ~ calcMicMen(conc, Vm, K),
+             data    = treatedPuro,
+             start   = list(Vm = 200, K = 0.1))
+model
 ```
 
+It also tells us the residual sum of squares,
+which is a measure of distance between the
+function and our data. For a brilliant
+interactive visualization of this process,
+check out this [link](http://setosa.io/ev/ordinary-least-squares-regression/)
+[@OrdinaryLeastSquares]!
+
 ```{r}
-# get coefficients
+summary(model)
 ```
 
+We get the estimated coefficients (the fitted Vm and K)
+from our model with the function `coef`.
+
 ```{r}
-# coef
+Vm_est <- coef(model)["Vm"]
+K_est  <- coef(model)["K"]
+coef(model)
 ```
 
+Now we can supply those as arguments to the
+`calcMicMen` function used in `stat_function`
 
 ```{r}
-# extract estimated coefficients
+treatedPuro %>% 
+  ggplot(aes(conc, rate)) +
+  geom_point() +
+  stat_function(fun   = calcMicMen,
+                args  = list(Vm = Vm_est, K = K_est),
+                color = "red")
 ```
 
-```{r}
-# use coeffictionts to plot function in ggplot
-```
+Side note: There is also _self starting models_,
+but I do not cover them a lot because their use case
+is more specific than being able to fit
+any self defined function. Self starting
+models are able to estimate sensible starting 
+parameters from the data.
 
-Side note: There is also _self starting models_
-
 ```{r}
-# e.g. SSmicmen (conc, Vm, K)
+nls(formula = rate ~ SSmicmen(conc, Vm, K),
+    data = treatedPuro)
 ```
 
 You can use any model created with a modelling
@@ -181,36 +307,100 @@ the `predict` function to predict new values
 for new data:
 
 ```{r}
-# show the predict function
+predict(model, newdata = list(conc  = c(0, 0.5, 1)))
 ```
 
 ### Many Models
 
 The superpower of tibbles!
 
-```{r}
-# nest puromycin by state
-```
+Our data set actually contained
+two experimental conditions,
+one where the enzyme was treated and another
+where it was not.
 
 ```{r}
-# show how to acces content of nested data
+puromycin %>% 
+  ggplot(aes(conc, rate, color = state)) + 
+  geom_point()
 ```
+
+We want to fit models to both conditions
+individually, without having to write the
+same code twice. In order to achieve this,
+we first _nest_ the data. We retain one
+column with the _state_ and the data for
+that state is in another column called _data_
+and stored as a list of tibbles (one tibble
+for each state). So we go from this:
 
 ```{r}
-# add a model column with nls as lambda function
+head(puromycin)
 ```
 
+To this:
 
 ```{r}
-# ggplot of puromycin with geom_smooth method nls and method.args
-# remember se = FALSE
+nestedPuromycin <- puromycin %>% 
+  group_nest(state)
+
+nestedPuromycin
 ```
+
+Just to check that we didn't lose anything,
+here I pluck the data column, from this I
+pluck the first element and then I take only
+the first 5 rows of this element with `head`.
 
 ```{r}
-# add coef column with map coef
-# unnest coef wider
+nestedPuromycin %>% 
+  pluck("data", 1) %>% 
+  head(5)
 ```
 
+Now we go on fitting a model for `every element`
+of the data column, so for every sub-dataset (one for each state).
+I also apply the `coef` function to all resulting
+models and go straight ahead with unnesting
+those coefficients into their own columns.
+
+```{r}
+nestedPuromycin %>% 
+  mutate(
+    model = map(data, ~ nls(formula = rate ~ calcMicMen(conc, Vm, K),
+                            data = .x,
+                            start = list(Vm = 200, K = 0.1))),
+    coefficients = map(model, coef)
+  ) %>% 
+  unnest_wider(coefficients)
+```
+
+ggplot is also able to fit
+individual models and it can use any
+fitting-function in `geom_smooth`,
+not just linear models. So nothing
+is stopping us from writing:
+
+```{r}
+puromycin %>% 
+  ggplot(aes(conc, rate, color = state)) +
+  geom_point() +
+  geom_smooth(
+    method       = "nls",
+    formula      = y ~ calcMicMen(conc  = x, Vm, K),
+    method.args  = list(start = list(Vm = 200, K = 0.1)),
+    se           = FALSE
+  )
+```
+
+Note that we need to supply the formula for the
+method nls in a general form (with y ~ x) and
+the additionally arguments that nls needs, namely
+the starting parameters, are supplied as a list
+with `method.args`. We also set the standard
+error `se` to `FALSE` because `"nls"` doesn't
+report it, so if we where to try and display it,
+we would get an error message.
 
 ## Exercises
 
@@ -227,10 +417,126 @@ datasauRus::datasaurus_dozen %>% head()
 - Do the fit manually on the dataset and extract the coefficients
   - Hints: See above, nest the data first, create the model column, etc.
   
+#### Solutions
+
 ### Example Data Analysis
 
-With your data!
+As an exemplary data analysis,
+I quickly went through some actual lab data
+from y'all. Because the data is
+not yet published, this section only
+provides the code and can not be
+run by itself.
 
+However, I leave you with a couple
+of pointers to excellent learning
+resources to understand the vital
+data cleaning steps for this "untidy"
+dataset. This code can of course
+be used in an R script but I split
+it up into individual chunks
+to provide more explanation.
+
+First, we load the tidyverse and
+read in the raw data from and excel file
+
+```{r, eval=FALSE}
+# not run
+library(tidyverse)
+rawData <- readxl::read_excel("data/Data Rkurs .xlsx")
+```
+
+Not on to data tidying. The `tidyr` package
+from the tidyverse comes in handy here.
+The first column, which was unnamed and thus
+called `..1` by R. Actually contains
+more than one feature. So we extract the
+features _compound_ and _condition_ into
+their own columns with the `extract`
+function. The _regular expression_ (regex)
+provides two groups with which to extract
+the data from the text in the original
+column.
+Check out [the help page](https://tidyr.tidyverse.org/reference/extract.html)
+for more examples.
+A great resource for most data analysis
+tasks are the RStudio cheat sheets.
+They provide most of what you need
+in a concise format:
+[https://rstudio.com/resources/cheatsheets/](https://rstudio.com/resources/cheatsheets/)
+One of those also provides a guide
+to the regular expressions we use in both cleaning
+steps: [download cheatsheet](https://github.com/rstudio/cheatsheets/raw/master/strings.pdf). Additionally,
+because finding the correct regular expression
+can be hard, there is also an R package
+out there, which provides an interactive
+experience of building your regex called
+`regexplain`. You can find it on github:
+[regexplain link](https://github.com/gadenbuie/regexplain)
+And frankly, it is magic!
+
+```{r, eval=FALSE}
+tidyData <- rawData %>% 
+  extract(col = `...1`,
+          into = c("compound", "condition"),
+          regex = "(Compound \\d\\d?) (.+)") %>% 
+  pivot_longer(starts_with("E"),
+               names_to = c("experiment", "replicate"),
+               names_pattern = "(E\\d)(.?)") %>% 
+  mutate(compound = fct_reorder(compound, parse_number(compound)))
+```
+
+The data cleaning step was in fact the most
+complicated thing about this analysis.
+Once your data is in tidy format,
+you can use the tools we discovered in
+earlier weeks with ease:
+
+```{r, eval=FALSE}
+summaryData <- tidyData %>% 
+  group_by(compound, condition) %>% 
+  summarise(SEM = sd(value) / sqrt(n()),
+            value = mean(value))
+
+signif <- summaryData %>% 
+  filter(compound  == "Compound 1") %>% 
+  filter(condition == first(condition)) %>% 
+  mutate(value = 100,
+         label = "*")
+
+tidyData %>% 
+  ggplot(aes(compound, value,
+             color = condition,
+             fill = condition)) +
+  geom_col(data = summaryData, position = position_dodge(width = 0.9),
+           color = "black") +
+  geom_errorbar(data = summaryData,
+                aes(ymin = value - SEM,
+                    ymax = value + SEM),
+                position = position_dodge(width = 0.9),
+                color = "black",
+                width = 0.5) +
+  geom_point(position = position_dodge(width = 0.9),
+             shape = 21,
+             color = "black") +
+  geom_text(data = signif, aes(label = label),
+            color = "black", size = 13,
+            position = "identity") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+You might also want to run a statistical analysis,
+such as ANOVA, but this is just an example. Do
+not take this as advice for which type of analysis
+to run, this depends on your data and
+hypothesis you want to test!
+
+```{r, eval=FALSE}
+anovaResult <- aov(value ~ compound * condition, data = tidyData)
+TukeyHSD(anovaResult)$condition %>% head()
+```
+
+  
 ### Solutions
 
 

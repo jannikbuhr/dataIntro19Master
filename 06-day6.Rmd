@@ -9,11 +9,4 @@ allDatasets <- map(paths, read_csv)
 
 ## Lot's of Examples
 
-
-
 ## Feedback
-
-
-
-
-
