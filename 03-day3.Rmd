@@ -69,7 +69,7 @@ starwars %>%
 starwars %>% arrange(mass)
 ```
 
-`summarize` to summarise columns down to
+`summarize` to summarize columns down to
 a single value per column (note, that the tidyverse accepts
 American and British English, both functions exist).
 
@@ -171,22 +171,22 @@ to the x-axis whereas gender is mapped to the color.
 "The color of what?", you might ask, and rightfully so.
 There is no visualization without geometric objects
 to represent those aesthetics. This is where the functions
-starting wiht `geom_` come into play. We add them
+starting with `geom_` come into play. We add them
 to our plot with the `+` operator. Here, we use `geom_point()`
 to add points to our plot. This is a good fit
-because one point can represent reveral dimensions
+because one point can represent several dimensions
 of our data at the same time (like, height as the x position,
 mass as the y position etc.). Other pieces of the grammar
-of graphics are not handled explicitely in the code above
+of graphics are not handled explicitly in the code above
 because the defaults work just fine. But they are handled
-nontheless in the background: Scales define
+nonetheless in the background: Scales define
 how exactly the data is mapped to aesthetics and can be modified
 with functions starting with `scale_` (like
 `scale_color_...` to change the colors used in the color
 aesthetic, or `scale_x_log10()` to apply a logarithmic scale
 to the x-axis). Lastly, the objects with their
 scales need to placed on a coordinate system, like
-the default carthesian coordinates in the above example.
+the default cartesian coordinates in the above example.
 
 > Data => Aesthetic Mapping =>
   Scales => (Statistical Transformation) =>
@@ -228,8 +228,8 @@ We can also use this object to pass it to the
 ggsave("myGGplot.png", plt2)
 ```
 
-A cool little R-package that comes with and RStudio-Addin
-is the "colourpicker". This makes it easier to
+A cool little R-package that comes with a RStudio addin
+is the `colourpicker`. This makes it easier to
 choose the colors for our plot.
 
 ```{r}
@@ -255,7 +255,7 @@ starwars %>%
 ```
 
 We can also pass different data to individual
-geometric layers e.g. to highlite certain
+geometric layers e.g. to highlight certain
 parts in our data. The other geoms inherit
 the data passed into `ggplot`. The
 same holds true for aesthetics. `aes` defined
@@ -337,9 +337,9 @@ A cool trick from functional programming:
 Higher order functions are functions that take
 other functions as arguments. They enable us
 to express ideas and instructions to the computer
-in a concise yet powerfull manner.
+in a concise yet powerful manner.
 
-E.g. the `map`-family. Map functions apply a funcion
+E.g. the `map`-family. Map functions apply a function
 to every element of a vector or list.
 
 ```{r}
@@ -407,7 +407,7 @@ anscombe_long <- anscombe %>%
  )
 ```
 
-Now, each row represents one point (one observationaly unit),
+Now, each row represents one point (one observational unit),
 while every column represents a property / feature
 of said points.
 
@@ -455,7 +455,7 @@ allows us to even have spaces and symbols in the name.
 But try to avoid this if possible! You will nevertheless
 encounter forbidden variable names when you read in data from
 a spreadsheet that has those names for its columns.
-Use `rename` to asssign a better name or install the
+Use `rename` to assign a better name or install the
 `janitor` package for the handy function `janitor::clean_names()`.
 
 ```{r}
@@ -578,7 +578,7 @@ sd(x) / sqrt(length(x))
 ### From Distributions to Quantiles
 
 `d` stands for density i.e. the probability density
-funtion of a distribution.
+function of a distribution.
 
 ```{r dnorm1, fig.cap="Probability density function for the normal distribution."}
 curve(dnorm, -4, 4)
@@ -593,7 +593,7 @@ curve(pnorm, -4, 4)
 ```
 
 `q` stands for quantile. It is the inverse of
-the probability density funtion (so the axis are swapped).
+the probability density function (so the axis are swapped).
 
 ```{r}
 curve(qnorm)
@@ -616,7 +616,7 @@ qqline(x, col = "red")
 
 ## The Datasaurus Dozen
 
-The Datasaurus Dozen is a greate dataset,
+The Datasaurus Dozen is a great dataset,
 showcasing similar properties
 to anscombes quartet (but in a more
 impressive way).
@@ -633,7 +633,7 @@ datasauRus::datasaurus_dozen %>%
 You can find the research paper [here](https://www.autodeskresearch.com/publications/samestats)
 [@matejka2017a].
 
-But not only does it highlite the importance
+But not only does it highlight the importance
 of not relying solely on summary statistics,
 it also comes with additional datasets.
 
@@ -714,11 +714,11 @@ tidy_dinos %>%
 
 An even more problematic visualization would have been
 to display the data with a barplot of means
-and errorbars for the SD or SEM.
+and error bars for the SD or SEM.
 Friends don't let friends make barplots!
 
 Histograms or density plots on the other hand
-tell us about the distribtion, not just
+tell us about the distribution, not just
 summary statistics, while at the same
 time not overloading the plot like
 the points do in some cases.
@@ -765,13 +765,13 @@ the explanation and context are changed.
 - Visualize the data with ggplot as:
   - Jittered point plot
   - Boxplot
-  - Two overlayed histograms
+  - Two overlaid histograms
     (_Hint_: use `position = "identity"`
     so that R doesn't stack the bars)
-  - Zwei overlayed density plots
+  - Two overlaid density plots
     (_Hint_: use the parameter `alpha`
-    to make both of them visble at the same time)
-  - A Barplot with the mean and errorbars, _hints_:
+    to make both of them visible at the same time)
+  - A Barplot with the mean and error bars, _hints_:
     - Create a summary tibble first
     - Use `geom_col`, **not** `geom_bar`
   - BONUS: Make the plots pretty with ggplot theme options

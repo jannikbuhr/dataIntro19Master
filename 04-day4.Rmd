@@ -562,12 +562,13 @@ map_lgl(manyCIs, testLimitContainsMean, M  = mean(wt)) %>%
   mean()
 ```
 
-Ootionally
+Optionally
 
-```{r}
+```{r, warning=FALSE, message=FALSE}
 manyCIs %>% 
   enframe() %>% 
-  unnest_wider(value)
+  unnest_wider(value) %>% 
+  head()
 ```
 
 
@@ -594,7 +595,7 @@ hist(pValues)
 ```
 
 
-```{r}
+```{r, eval=FALSE}
 ?wilcox.test
 ```
 

@@ -1,12 +1,170 @@
 # Examples and Feedback {#day6}
 
-## Excursion: Many Files, Many Folders
+## Random Sidenotes
+
+This is a loose collection of data and concepts we explored.
 
 ```{r}
+library(tidyverse)
+```
+
+
+```{r, eval=FALSE}
+plt <- mpg %>%
+  ggplot(aes(displ, cty)) +
+  geom_point()
+
+ggsave(filename = "myPlot.png", plot = plt)
+```
+
+- `ggsave` uses width and height of the
+  current graphics device by default and messages
+  them in the console
+- Many files, many folders? Use `map`!
+
+```{r, eval=FALSE}
 paths <- dir("data", full.names = TRUE, pattern = ".csv")
+paths <- set_names(paths, basename(paths))
+
 allDatasets <- map(paths, read_csv)
+
+
+createDataset <- function(i) {
+  tibble(
+    x = rnorm(100),
+    y = rnorm(100)
+  )
+}
+
+aBunchOfDatasets <- map(1:10, createDataset)
+names(aBunchOfDatasets) <- paste0("myData/dataset ", 1:10, ".csv")
+walk2(aBunchOfDatasets, names(aBunchOfDatasets), ~ write_csv(.x, path = .y) )
+```
+
+
+```{r, eval=FALSE}
+paths <- dir("myData", pattern = ".csv", full.names = TRUE) %>% 
+  set_names(basename(.))
+
+allDatasets <- map_dfr(paths, read_csv, .id = "dataset")
+
+allDatasets %>% 
+  ggplot(aes(x, y)) +
+  geom_point() +
+  facet_wrap(~ dataset)
 ```
 
 ## Lot's of Examples
 
-## Feedback
+### Tidytuesday: Spotify
+
+```{r}
+rawData <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-01-21/spotify_songs.csv')
+```
+
+
+
+```{r}
+spotifySongs <- rawData %>% 
+    mutate(track_album_release_date = lubridate::ymd(track_album_release_date))
+```
+
+Popularity with One-Hit-Wonders removed.
+You need to have at least 10 songs to be in my list.
+
+```{r}
+spotifySongs %>% 
+  group_by(track_artist) %>% 
+  filter(n() > 10) %>% 
+  summarise(popularity = mean(track_popularity)) %>% 
+  arrange(desc(popularity)) %>% 
+  head()
+```
+
+```{r}
+getMainGenre <- function(x) {
+  names( table(x)[which.max(table(x))] )
+}
+```
+
+```{r}
+byArtist <- spotifySongs %>% 
+  group_by(track_artist) %>% 
+  filter(n() > 10) %>% 
+  summarise(popularity = mean(track_popularity),
+            genre = getMainGenre(playlist_genre)) %>% 
+  top_n(n = 20, wt = abs(mean(popularity) - popularity)) %>% 
+  mutate(track_artist = fct_reorder(track_artist, popularity))
+```
+
+```{r}
+byArtist %>% 
+  ggplot(aes(x = track_artist, y = popularity,
+             color = genre)) +
+  geom_linerange(aes(ymax = popularity), ymin = 0, color = "grey30") +
+  geom_point() +
+  coord_flip() +
+  scale_y_continuous(expand = c(0,1)) +
+  theme_classic() +
+  labs(x = "",
+       title = "The least and most popular artists",
+       subtitle = "With at least 10 songs in the dataset")
+```
+
+
+```{r}
+spotifySongs %>% 
+  filter(playlist_genre == "rock") %>% 
+  ggplot(aes(track_album_release_date, valence)) +
+  geom_point()
+```
+
+
+### Shiny App
+
+Create a file called `app.R`, copy and paste,
+hit run app in the top right corner.
+
+```{r, eval=FALSE}
+library(shiny)
+library(tidyverse)
+
+rawData <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-01-21/spotify_songs.csv')
+spotifySongs <- rawData %>% 
+    mutate(track_album_release_date = lubridate::ymd(track_album_release_date))
+
+ui <- fluidPage(
+    titlePanel("Old Faithful Geyser Data"),
+    sidebarLayout(
+        sidebarPanel(
+            selectInput("genre",
+                        "Select a Genre",
+                        choices = unique(spotifySongs$playlist_genre)),
+            selectInput("variable",
+                        "Select a Genre",
+                        choices = c("valence", "loudness",
+                                    "speechiness",
+                                    "liveness",
+                                    "energy"))
+        ),
+        mainPanel(
+           plotOutput("plot")
+        )
+    )
+)
+
+server <- function(input, output) {
+
+    output$plot <- renderPlot({
+        spotifySongs %>% 
+            filter(playlist_genre == input$genre) %>% 
+            ggplot(aes(track_album_release_date, !!sym(input$variable) )) +
+            geom_point()
+    })
+}
+
+# Run the application 
+shinyApp(ui = ui, server = server)
+```
+
+

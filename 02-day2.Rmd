@@ -2,7 +2,7 @@
 
 ## Project-based Workflow
 
-Whenever you work on a new project (like a lab analyis),
+Whenever you work on a new project (like a lab analysis),
 create a new RStudio Project. You can find the quick menu
 for this in the top right corner of RStudio.
 
@@ -39,7 +39,7 @@ knitr::include_graphics("img/newrmd.png")
 ```
 
 This will present you with an example document showcasing
-some of the possibilites. A plethora of information can be found
+some of the possibilities. A plethora of information can be found
 in the official
 [Rmarkdown guide](https://bookdown.org/yihui/rmarkdown/) [@R-rmarkdown].
 
@@ -127,7 +127,7 @@ abline(linearModel)
 The `readr`-package is part of the `tidyverse`,
 which we already loaded above with `library(tidyverse)`.
 
-Take your favourit table calculation program (Excel, Libre Office).
+Take your favourite table calculation program (Excel, Libre Office).
 We create a list of course participants and at the same
 time note the row in which they are sitting and their hair length.
 
@@ -141,10 +141,10 @@ to keep everything organized.
 read_csv("data/students.csv")
 ```
 
-You might have a german Excel version... 
+You might have a German Excel version... 
 Because the German language uses
 the comma as a decimal separator, it can't use
-the comma to separe entries in a table as well.
+the comma to separate entries in a table as well.
 This is why the German version of a "csv" produced
 by Excel is actually semicolon (`;`) separated.
 But there is an easy fix for that:
@@ -235,7 +235,7 @@ callOutResult(evenNewerData)
 
 This is not fun to write! We might want to
 overwrite our original data instead of 
-creating a new varible for every step.
+creating a new variable for every step.
 
 ```{r}
 data <- 1:5
@@ -389,8 +389,8 @@ students$nameLength <- str_length(students$name)
 
 But with the `mutate` function, it gets more
 readable. Note, that we do not refer to
-`students$name` explicitely inside of `mutate`.
-`mutate` knows that `name` is refering to a column of
+`students$name` explicitly inside of `mutate`.
+`mutate` knows that `name` is referring to a column of
 the tibble passed into the function from the left.
 Furthermore, there is an equal sign (`=`) in there,
 because everything inside of mutate is a parameter
@@ -479,7 +479,7 @@ students %>%
 `group_by` is an adverb because by itself, it doesn't
 do anything to the data, but it changes the way the
 other `dplyr` verbs operate. Any function that
-summarises a vector, like `mean`, `sum`, `max`,
+summarizes a vector, like `mean`, `sum`, `max`,
 now operates on the groups.
 
 ```{r}
@@ -579,7 +579,7 @@ in the first row:
 firstRow <- sample(hat, 5)
 ```
 
-This is represantative of people coming
+This is representative of people coming
 into the room and getting seated randomly.
 
 > Note that the default for sample is `replace = FALSE`
@@ -660,7 +660,7 @@ like this in our data.
 
 ### P-Values {#p-values}
 
-P-Values were introduced in the 1920th by Ronald Fisher:
+P-Values were introduced in the 1920s by Ronald Fisher:
 
 > _"The P value is defined as the probability, under the assumption of
   no effect or no difference (the null hypothesis),
@@ -697,7 +697,7 @@ barplot(dhyper(x = 0:5, m = 6, n = 3, k =  5), names.arg = 0:5)
 
 ## Exercise: Transfer to new Data
 
-Starwars, a datenset that comes with the tidyverse.
+Starwars, a dataset that comes with the tidyverse.
 
 ```{r, eval=FALSE}
 ?starwars
@@ -705,10 +705,10 @@ Starwars, a datenset that comes with the tidyverse.
 
 - In a new Rmarkdown document:
 - Preview the dataset
-- Select the columns name, heigth, mass, gender
+- Select the columns name, height, mass, gender
 - Who is the heaviest?
 - Convert height from cm to m
-- Which gender is taller on average in StarWars?
+- Which gender is taller on average in starwars?
   - _Hint:_ use `group_by` and `summarise`
   - You will need the argument `na.rm = TRUE` in `mean()`
 
@@ -731,13 +731,13 @@ library(tidyverse)
 ```
 
 ```{r}
-starwars %>% select(name, mass, height, gender)
+starwars %>% select(name, mass, height, gender) %>% head()
 ```
 
 Sidenote: to put a column in the front:
 
 ```{r}
-starwars %>% select(gender, everything() )
+starwars %>% select(gender, everything() ) %>% head()
 ```
 
 Height is not in SI units! But we love SI units!
@@ -755,12 +755,14 @@ View(starwars)
 
 ```{r}
 starwars %>% 
-  arrange(desc(mass))
+  arrange(desc(mass)) %>%
+  head()
 ```
 
 ```{r}
 starwars %>% 
-  filter(mass == max(mass, na.rm = TRUE))
+  filter(mass == max(mass, na.rm = TRUE)) %>%
+  head()
 ```
 
 ```{r}
@@ -772,7 +774,7 @@ starwars %>%
 
 - Who is the heaviest?
 - Convert height from cm to m
-- Which gender is taller on average in StarWars?
+- Which gender is taller on average in starwars?
   - _Hint:_ use `group_by` and `summarise`
   - You will need the argument `na.rm = TRUE` in `mean()`
   
@@ -781,7 +783,8 @@ starwars %>%
 starwars %>% 
   group_by(gender) %>% 
   summarise(height = mean(height, na.rm = TRUE),
-            N = n() )
+            N = n()) %>%
+  head()
 ```
   
 
@@ -790,7 +793,7 @@ starwars %>%
 - How often do you obtain 62 or more male characters?
 - How surprised should we be about the data?
 - Calculate an exact p-value for the observed frequency
-  - note: use pbinom instead of phyper to sample WITH replacement
+  - note: use `pbinom` instead of `phyper` to sample WITH replacement
 - Knit the document into a report
 
 

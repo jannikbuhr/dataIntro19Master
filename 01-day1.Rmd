@@ -16,7 +16,7 @@ programming language and is inspired by
 [learnXinYminutes](https://learnxinyminutes.com/docs/r/).
 It is completely normal that some of the concepts covered
 in this section will not appear obvious at first. Programming
-languages are not onlike human languages and the computer
+languages are not unlike human languages and the computer
 will not always understand what you want it to do unless you
 use exactly the right grammar and vocabulary. However, R will
 sometimes tell you, that it didn't understand you through
@@ -29,7 +29,7 @@ knitr::include_graphics("img/errors.jpg")
 
 ### Executing Code in R
 
-The simplest usecase for any programming language is probably just
+The simplest use-case for any programming language is probably just
 to use it as a calculator (because that's what computers are,
 big calculators). Type the following line in
 your R script and then hit Ctrl+Enter to send it to the R console.
@@ -98,7 +98,7 @@ NULL
 NA
 ```
 
-`NA` is contagious. Any computation invloving `NA` will return `NA`
+`NA` is contagious. Any computation involving `NA` will return `NA`
 (because R has no way of knowing the answer):
 
 ```{r}
@@ -170,14 +170,14 @@ y
 
 Variable names can contain letters (capitalization matters),
 numbers (but not as the first character) and underscores `_`.
-^[They can also contain dots (`.`), but it is considerd bad practice
+^[They can also contain dots (`.`), but it is considered bad practice
 because it can lead to some confusing edge cases.]
 
 ```{r}
 # snake_case
 main_character_name <- "Harry"
 
-# or camaleCase
+# or camelCase
 mainCharacterName <- "Also Harry"
 
 # you can have numbers in the name
@@ -231,7 +231,7 @@ sin(x = 0)
 
 The `sin` function takes just one argument `x` and returns its sine.
 
-Note, that the `=` inside the function parethesis
+Note, that the `=` inside the function parenthesis
 gives `x = 0` to the function and has nothing to do with
 any `x` defined outside of the function, it doesn't do any assignment
 and the parameter `x` used in the function is separate from
@@ -259,7 +259,7 @@ sin(12)
 
 The basic datatypes in R are all vectors, which means they can
 contain more than one entry. You can create a vector
-by combining things of the same datatype with the function `c`
+by combining things of the same data type with the function `c`
 for combine.
 
 ```{r}
@@ -282,7 +282,7 @@ The original vector `x` was not changed in doing so.
 x
 ```
 
-But we could have by assigning the result back to `x`, thos overwriting
+But we could have by assigning the result back to `x`, thus overwriting
 its previous content. The right hand side (RHS) is executed first:
 
 ```{r}
@@ -349,7 +349,7 @@ TRUE | FALSE | FALSE
 TRUE | TRUE
 ```
 
-They also work elementwise.
+They also work element-wise.
 
 ```{r}
 a <- c(TRUE, FALSE, TRUE)
@@ -368,14 +368,14 @@ c(1,2,)
 There are errors, messages and warnings. Your code will not
 run to the end if R finds errors, but warnings and messages
 are Rs way of telling you, that your code ran but
-you might want to doublecheck if it is doing what you expected it to be doing.
+you might want to double-check if it is doing what you expected it to be doing.
 
 ```{r}
 warning("Warnings are often fine!")
 message("I am a message")
 ```
 
-Combining different datatyped into a vector with the `c` function
+Combining different datatypes into a vector with the `c` function
 will coerce them into the same type, choosing the
 one that allows the most operations. It can also be done
 explicitly.
@@ -429,7 +429,7 @@ If your function fits on one line, you can leave out the curly braces `{}`.
 addOne <- function(x) x + 1
 ```
 
-If you don't explicitely use the `return()` statement inside
+If you don't explicitly use the `return()` statement inside
 of the function definition, the function
 will return the last evaluated line, which is why
 both versions of `addOne` above are valid R code and do the same thing.
@@ -441,8 +441,8 @@ arguments / parameters:
 addOne(x = 1)
 ```
 
-Instead of explicitely stating the parameters with their
-names when calling the funcion, we can also rely on the order
+Instead of explicitly stating the parameters with their
+names when calling the function, we can also rely on the order
 in which a function is expecting the arguments:
 
 ```{r}
@@ -458,7 +458,7 @@ x <- c("harry", "ron", "hermione")
 x
 ```
 
-Getting specific elements of a vector (or other datastructure) is
+Getting specific elements of a vector (or other data structure) is
 called subsetting:
 
 ```{r}
@@ -480,7 +480,7 @@ x[c(1,3)]
 x[which(logicalVector)]
 ```
 
-There is a number of usefull functions for vectors like:
+There is a number of useful functions for vectors like:
 
 ```{r}
 x <- 1:100
@@ -562,7 +562,7 @@ m <- matrix(1:9, nrow = 3)
 # Ask for the first row
 m[1, ]
 
-# the first colum
+# the first column
 m[, 1]
 
 # the element in the top right corner
@@ -610,7 +610,7 @@ students <- data.frame(
 students
 ```
 
-Usefull functions for dataframes
+Useful functions for dataframes
 
 ```{r}
 # nrow, ncol, dim

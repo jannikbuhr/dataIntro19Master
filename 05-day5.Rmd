@@ -301,7 +301,7 @@ nls(formula = rate ~ SSmicmen(conc, Vm, K),
     data = treatedPuro)
 ```
 
-You can use any model created with a modelling
+You can use any model created with a modeling
 function such as `nls` or `lm` with
 the `predict` function to predict new values
 for new data:
@@ -344,7 +344,8 @@ To this:
 nestedPuromycin <- puromycin %>% 
   group_nest(state)
 
-nestedPuromycin
+nestedPuromycin %>% 
+  head()
 ```
 
 Just to check that we didn't lose anything,
@@ -372,7 +373,8 @@ nestedPuromycin %>%
                             start = list(Vm = 200, K = 0.1))),
     coefficients = map(model, coef)
   ) %>% 
-  unnest_wider(coefficients)
+  unnest_wider(coefficients) %>% 
+  head()
 ```
 
 ggplot is also able to fit
@@ -406,8 +408,8 @@ we would get an error message.
 
 ### With the Datasaurus Dozen Data Sets
 
-```{r}
-datasauRus::datasaurus_dozen %>% head()
+```{r, eval=FALSE}
+datasauRus::datasaurus_dozen
 ```
 
 - Visualize all data sets in one ggplot,
@@ -418,6 +420,44 @@ datasauRus::datasaurus_dozen %>% head()
   - Hints: See above, nest the data first, create the model column, etc.
   
 #### Solutions
+
+```{r}
+dinos <- datasauRus::datasaurus_dozen
+head(dinos)
+```
+
+```{r}
+dinos %>% 
+  filter(dataset == "dino") %>% 
+  ggplot(aes(x, y)) +
+  geom_point() +
+  facet_wrap(~ dataset) +
+  geom_smooth(method = "lm") +
+  coord_equal()
+```
+
+
+```{r}
+nestedDinos <- dinos %>% 
+  group_nest(dataset)
+
+nestedDinos %>% 
+  mutate(model  = map(data, ~ lm(y ~ x, data = .x )),
+         coef   = map(model, coef),
+         resids = map(model, residuals))
+```
+
+
+```{r}
+dinos %>% 
+  filter(dataset == "dino") %>% 
+  lm(data = ., y ~ x) %>% 
+  broom::augment() %>% 
+  ggplot(aes(x, .resid)) +
+  geom_point()
+```
+
+
 
 ### Example Data Analysis
 
@@ -535,10 +575,4 @@ hypothesis you want to test!
 anovaResult <- aov(value ~ compound * condition, data = tidyData)
 TukeyHSD(anovaResult)$condition %>% head()
 ```
-
-  
-### Solutions
-
-
-
 
