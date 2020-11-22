@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Day 5 Correlation and Regression | Introduction to Data Science with R for Biochemists</title>
+  <meta name="description" content="Day 5 Correlation and Regression | Introduction to Data Science with R for Biochemists" />
+  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Day 5 Correlation and Regression | Introduction to Data Science with R for Biochemists" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Day 5 Correlation and Regression | Introduction to Data Science with R for Biochemists" />
+  <meta name="github-repo" content="jannikbuhr/dataIntro19Master" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Day 5 Correlation and Regression | Introduction to Data Science with R for Biochemists" />
+  
+  <meta name="twitter:description" content="Day 5 Correlation and Regression | Introduction to Data Science with R for Biochemists" />
+  
+
+<meta name="author" content="Jannik Buhr" />
+
+
+<meta name="date" content="2020-11-22" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="day4.html"/>
+<link rel="next" href="day6.html"/>
+<script src="libs/header-attrs-2.5/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.9.2.1/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-1.52.2/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-1.52.2/plotly-latest.min.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="https://jmbuhr.de/dataIntro19Master/">Introduction to data analysis with R</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Prologue</a>
+<ul>
+<li class="chapter" data-level="0.1" data-path="index.html"><a href="index.html#preparation-for-the-course"><i class="fa fa-check"></i><b>0.1</b> Preparation for the Course</a></li>
+<li class="chapter" data-level="0.2" data-path="index.html"><a href="index.html#structure-of-the-course"><i class="fa fa-check"></i><b>0.2</b> Structure of the Course</a></li>
+<li class="chapter" data-level="0.3" data-path="index.html"><a href="index.html#content"><i class="fa fa-check"></i><b>0.3</b> Content</a></li>
+<li class="chapter" data-level="0.4" data-path="index.html"><a href="index.html#resources"><i class="fa fa-check"></i><b>0.4</b> Resources</a>
+<ul>
+<li class="chapter" data-level="0.4.1" data-path="index.html"><a href="index.html#tidyverse"><i class="fa fa-check"></i><b>0.4.1</b> Tidyverse</a></li>
+<li class="chapter" data-level="0.4.2" data-path="index.html"><a href="index.html#r-in-general"><i class="fa fa-check"></i><b>0.4.2</b> R in general</a></li>
+<li class="chapter" data-level="0.4.3" data-path="index.html"><a href="index.html#statistics"><i class="fa fa-check"></i><b>0.4.3</b> Statistics</a></li>
+<li class="chapter" data-level="0.4.4" data-path="index.html"><a href="index.html#talks-podcasts-blogs"><i class="fa fa-check"></i><b>0.4.4</b> Talks, Podcasts, Blogs</a></li>
+<li class="chapter" data-level="0.4.5" data-path="index.html"><a href="index.html#misc"><i class="fa fa-check"></i><b>0.4.5</b> Misc</a></li>
+</ul></li>
+<li class="chapter" data-level="0.5" data-path="index.html"><a href="index.html#other-resources"><i class="fa fa-check"></i><b>0.5</b> Other Resources</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="day1.html"><a href="day1.html"><i class="fa fa-check"></i><b>1</b> And Go!</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="day1.html"><a href="day1.html#basic-datastructures-in-r"><i class="fa fa-check"></i><b>1.1</b> Basic Datastructures in R</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="day1.html"><a href="day1.html#executing-code-in-r"><i class="fa fa-check"></i><b>1.1.1</b> Executing Code in R</a></li>
+<li class="chapter" data-level="1.1.2" data-path="day1.html"><a href="day1.html#basic-datatypes"><i class="fa fa-check"></i><b>1.1.2</b> Basic Datatypes</a></li>
+<li class="chapter" data-level="1.1.3" data-path="day1.html"><a href="day1.html#variables"><i class="fa fa-check"></i><b>1.1.3</b> Variables</a></li>
+<li class="chapter" data-level="1.1.4" data-path="day1.html"><a href="day1.html#math-operators"><i class="fa fa-check"></i><b>1.1.4</b> Math Operators</a></li>
+<li class="chapter" data-level="1.1.5" data-path="day1.html"><a href="day1.html#functions-and-vectors"><i class="fa fa-check"></i><b>1.1.5</b> Functions and Vectors</a></li>
+<li class="chapter" data-level="1.1.6" data-path="day1.html"><a href="day1.html#datastructures"><i class="fa fa-check"></i><b>1.1.6</b> Datastructures</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="day1.html"><a href="day1.html#the-first-plots"><i class="fa fa-check"></i><b>1.2</b> The first Plots</a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="day1.html"><a href="day1.html#scatterplot"><i class="fa fa-check"></i><b>1.2.1</b> Scatterplot</a></li>
+<li class="chapter" data-level="1.2.2" data-path="day1.html"><a href="day1.html#curve"><i class="fa fa-check"></i><b>1.2.2</b> Curve</a></li>
+<li class="chapter" data-level="1.2.3" data-path="day1.html"><a href="day1.html#histogram"><i class="fa fa-check"></i><b>1.2.3</b> Histogram</a></li>
+<li class="chapter" data-level="1.2.4" data-path="day1.html"><a href="day1.html#the-last-piechart-you-will-ever-need."><i class="fa fa-check"></i><b>1.2.4</b> The last piechart you will ever need.</a></li>
+<li class="chapter" data-level="1.2.5" data-path="day1.html"><a href="day1.html#saving-plots"><i class="fa fa-check"></i><b>1.2.5</b> Saving Plots</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="day2.html"><a href="day2.html"><i class="fa fa-check"></i><b>2</b> Bring on the Data!</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="day2.html"><a href="day2.html#project-based-workflow"><i class="fa fa-check"></i><b>2.1</b> Project-based Workflow</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="day2.html"><a href="day2.html#workflow-of-a-data-analysis"><i class="fa fa-check"></i><b>2.1.1</b> Workflow of a Data Analysis</a></li>
+<li class="chapter" data-level="2.1.2" data-path="day2.html"><a href="day2.html#communication"><i class="fa fa-check"></i><b>2.1.2</b> Communication!</a></li>
+<li class="chapter" data-level="2.1.3" data-path="day2.html"><a href="day2.html#important-rstudio-settings"><i class="fa fa-check"></i><b>2.1.3</b> Important RStudio-Settings</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="day2.html"><a href="day2.html#packages-the-tidyverse"><i class="fa fa-check"></i><b>2.2</b> Packages: The Tidyverse</a></li>
+<li class="chapter" data-level="2.3" data-path="day2.html"><a href="day2.html#exercise-from-day-1"><i class="fa fa-check"></i><b>2.3</b> Exercise from day 1</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="day2.html"><a href="day2.html#questions"><i class="fa fa-check"></i><b>2.3.1</b> Questions</a></li>
+<li class="chapter" data-level="2.3.2" data-path="day2.html"><a href="day2.html#answers"><i class="fa fa-check"></i><b>2.3.2</b> Answers</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="day2.html"><a href="day2.html#reading-data"><i class="fa fa-check"></i><b>2.4</b> Reading data</a></li>
+<li class="chapter" data-level="2.5" data-path="day2.html"><a href="day2.html#the-pipe-and-dplyr-verbs"><i class="fa fa-check"></i><b>2.5</b> The Pipe and dplyr Verbs</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="day2.html"><a href="day2.html#the-pipe"><i class="fa fa-check"></i><b>2.5.1</b> The Pipe</a></li>
+<li class="chapter" data-level="2.5.2" data-path="day2.html"><a href="day2.html#overview-of-the-dplyr-verbs"><i class="fa fa-check"></i><b>2.5.2</b> Overview of the dplyr Verbs</a></li>
+<li class="chapter" data-level="2.5.3" data-path="day2.html"><a href="day2.html#select"><i class="fa fa-check"></i><b>2.5.3</b> select</a></li>
+<li class="chapter" data-level="2.5.4" data-path="day2.html"><a href="day2.html#filter"><i class="fa fa-check"></i><b>2.5.4</b> filter</a></li>
+<li class="chapter" data-level="2.5.5" data-path="day2.html"><a href="day2.html#mutate"><i class="fa fa-check"></i><b>2.5.5</b> mutate</a></li>
+<li class="chapter" data-level="2.5.6" data-path="day2.html"><a href="day2.html#arrange"><i class="fa fa-check"></i><b>2.5.6</b> arrange</a></li>
+<li class="chapter" data-level="2.5.7" data-path="day2.html"><a href="day2.html#count"><i class="fa fa-check"></i><b>2.5.7</b> count</a></li>
+<li class="chapter" data-level="2.5.8" data-path="day2.html"><a href="day2.html#summarise"><i class="fa fa-check"></i><b>2.5.8</b> summarise</a></li>
+<li class="chapter" data-level="2.5.9" data-path="day2.html"><a href="day2.html#group_by-und-summarise"><i class="fa fa-check"></i><b>2.5.9</b> group_by und summarise</a></li>
+<li class="chapter" data-level="2.5.10" data-path="day2.html"><a href="day2.html#moving-on-to-probability"><i class="fa fa-check"></i><b>2.5.10</b> Moving on to Probability</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="day2.html"><a href="day2.html#but-what-is-probability"><i class="fa fa-check"></i><b>2.6</b> But what is Probability?</a>
+<ul>
+<li class="chapter" data-level="2.6.1" data-path="day2.html"><a href="day2.html#example"><i class="fa fa-check"></i><b>2.6.1</b> Example:</a></li>
+<li class="chapter" data-level="2.6.2" data-path="day2.html"><a href="day2.html#p-values"><i class="fa fa-check"></i><b>2.6.2</b> P-Values</a></li>
+</ul></li>
+<li class="chapter" data-level="2.7" data-path="day2.html"><a href="day2.html#exercise-transfer-to-new-data"><i class="fa fa-check"></i><b>2.7</b> Exercise: Transfer to new Data</a>
+<ul>
+<li class="chapter" data-level="2.7.1" data-path="day2.html"><a href="day2.html#solutions"><i class="fa fa-check"></i><b>2.7.1</b> Solutions</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="day3.html"><a href="day3.html"><i class="fa fa-check"></i><b>3</b> Tidy Data, Visualization and Distributions</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="day3.html"><a href="day3.html#recap-of-day-2"><i class="fa fa-check"></i><b>3.1</b> Recap of day 2</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="day2.html"><a href="day2.html#questions"><i class="fa fa-check"></i><b>3.1.1</b> Questions</a></li>
+<li class="chapter" data-level="3.1.2" data-path="day2.html"><a href="day2.html#answers"><i class="fa fa-check"></i><b>3.1.2</b> Answers</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="day3.html"><a href="day3.html#visualization-with-ggplot2"><i class="fa fa-check"></i><b>3.2</b> Visualization with ggplot2</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="day3.html"><a href="day3.html#the-grammar-of-graphics"><i class="fa fa-check"></i><b>3.2.1</b> The Grammar of Graphics</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="day3.html"><a href="day3.html#visualization-is-key"><i class="fa fa-check"></i><b>3.3</b> Visualization is Key</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="day3.html"><a href="day3.html#anscombe"><i class="fa fa-check"></i><b>3.3.1</b> Anscombes Quartet</a></li>
+<li class="chapter" data-level="3.3.2" data-path="day3.html"><a href="day3.html#excursion-tidy-data"><i class="fa fa-check"></i><b>3.3.2</b> Excursion Tidy Data</a></li>
+<li class="chapter" data-level="3.3.3" data-path="day3.html"><a href="day3.html#summary-statistics"><i class="fa fa-check"></i><b>3.3.3</b> Summary Statistics</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="day3.html"><a href="day3.html#distributions"><i class="fa fa-check"></i><b>3.4</b> Distributions</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="day3.html"><a href="day3.html#from-distributions-to-quantiles"><i class="fa fa-check"></i><b>3.4.1</b> From Distributions to Quantiles</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="day3.html"><a href="day3.html#the-datasaurus-dozen"><i class="fa fa-check"></i><b>3.5</b> The Datasaurus Dozen</a></li>
+<li class="chapter" data-level="3.6" data-path="day3.html"><a href="day3.html#exercises"><i class="fa fa-check"></i><b>3.6</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="3.6.1" data-path="day3.html"><a href="day3.html#inclusion-bodies"><i class="fa fa-check"></i><b>3.6.1</b> Inclusion Bodies</a></li>
+<li class="chapter" data-level="3.6.2" data-path="day2.html"><a href="day2.html#solutions"><i class="fa fa-check"></i><b>3.6.2</b> Solutions</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="day4.html"><a href="day4.html"><i class="fa fa-check"></i><b>4</b> Significance Tests and Power</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="day4.html"><a href="day4.html#the-central-limit-theorem-clt"><i class="fa fa-check"></i><b>4.1</b> The Central Limit Theorem (CLT)</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="day4.html"><a href="day4.html#reading-in-data"><i class="fa fa-check"></i><b>4.1.1</b> Reading in Data</a></li>
+<li class="chapter" data-level="4.1.2" data-path="day4.html"><a href="day4.html#programming-and-problem-solving"><i class="fa fa-check"></i><b>4.1.2</b> Programming and Problem Solving</a></li>
+<li class="chapter" data-level="4.1.3" data-path="day4.html"><a href="day4.html#population-distribution-vs.-distribution-of-means"><i class="fa fa-check"></i><b>4.1.3</b> Population Distribution vs. Distribution of Means</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="day4.html"><a href="day4.html#the-t-distribution"><i class="fa fa-check"></i><b>4.2</b> The T-Distribution</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="day4.html"><a href="day4.html#confidence-intervals-cis"><i class="fa fa-check"></i><b>4.2.1</b> Confidence Intervals (CIs)</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="day4.html"><a href="day4.html#significance-tests"><i class="fa fa-check"></i><b>4.3</b> Significance Tests</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="day4.html"><a href="day4.html#students-t-test"><i class="fa fa-check"></i><b>4.3.1</b> Students T-Test</a></li>
+<li class="chapter" data-level="4.3.2" data-path="day4.html"><a href="day4.html#wilcoxon-rank-sum-test"><i class="fa fa-check"></i><b>4.3.2</b> Wilcoxon Rank Sum Test</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="day4.html"><a href="day4.html#type-i-and-type-ii-errors"><i class="fa fa-check"></i><b>4.4</b> Type I and Type II Errors</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="day4.html"><a href="day4.html#type-i-false-positives"><i class="fa fa-check"></i><b>4.4.1</b> Type I: False Positives</a></li>
+<li class="chapter" data-level="4.4.2" data-path="day4.html"><a href="day4.html#type-ii-false-negatives"><i class="fa fa-check"></i><b>4.4.2</b> Type II: False Negatives</a></li>
+<li class="chapter" data-level="4.4.3" data-path="day4.html"><a href="day4.html#statistical-power"><i class="fa fa-check"></i><b>4.4.3</b> Statistical Power</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="day4.html"><a href="day4.html#problems"><i class="fa fa-check"></i><b>4.5</b> Problems</a>
+<ul>
+<li class="chapter" data-level="4.5.1" data-path="day4.html"><a href="day4.html#the-jelly-bean-problem-multiple-testing"><i class="fa fa-check"></i><b>4.5.1</b> The Jelly Bean Problem (Multiple Testing)</a></li>
+<li class="chapter" data-level="4.5.2" data-path="day4.html"><a href="day4.html#the-base-rate-fallacy"><i class="fa fa-check"></i><b>4.5.2</b> The Base Rate Fallacy</a></li>
+<li class="chapter" data-level="4.5.3" data-path="index.html"><a href="index.html#resources"><i class="fa fa-check"></i><b>4.5.3</b> Resources</a></li>
+</ul></li>
+<li class="chapter" data-level="4.6" data-path="day3.html"><a href="day3.html#exercises"><i class="fa fa-check"></i><b>4.6</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="4.6.1" data-path="day4.html"><a href="day4.html#show-the-following-statements-with-simulations-in-r"><i class="fa fa-check"></i><b>4.6.1</b> Show the following statements with simulations in R</a></li>
+<li class="chapter" data-level="4.6.2" data-path="day4.html"><a href="day4.html#show-the-following-concepts-with-simulations-in-r"><i class="fa fa-check"></i><b>4.6.2</b> Show the following concepts with simulations in R</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="day5.html"><a href="day5.html"><i class="fa fa-check"></i><b>5</b> Correlation and Regression</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="day5.html"><a href="day5.html#side-note-what-is-the-main-goal-of-this-course"><i class="fa fa-check"></i><b>5.1</b> Side note: What is the main goal of this course?</a></li>
+<li class="chapter" data-level="5.2" data-path="day5.html"><a href="day5.html#correlation-and-regression"><i class="fa fa-check"></i><b>5.2</b> Correlation and Regression</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="day5.html"><a href="day5.html#correlation"><i class="fa fa-check"></i><b>5.2.1</b> Correlation</a></li>
+<li class="chapter" data-level="5.2.2" data-path="day5.html"><a href="day5.html#regression"><i class="fa fa-check"></i><b>5.2.2</b> Regression</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="day5.html"><a href="day5.html#non-linear-regression"><i class="fa fa-check"></i><b>5.3</b> Non-Linear Regression</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="day5.html"><a href="day5.html#michaelis-menten-kinetics"><i class="fa fa-check"></i><b>5.3.1</b> Michaelis-Menten Kinetics</a></li>
+<li class="chapter" data-level="5.3.2" data-path="day5.html"><a href="day5.html#many-models"><i class="fa fa-check"></i><b>5.3.2</b> Many Models</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="day3.html"><a href="day3.html#exercises"><i class="fa fa-check"></i><b>5.4</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="5.4.1" data-path="day5.html"><a href="day5.html#with-the-datasaurus-dozen-data-sets"><i class="fa fa-check"></i><b>5.4.1</b> With the Datasaurus Dozen Data Sets</a></li>
+<li class="chapter" data-level="5.4.2" data-path="day5.html"><a href="day5.html#example-data-analysis"><i class="fa fa-check"></i><b>5.4.2</b> Example Data Analysis</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="day6.html"><a href="day6.html"><i class="fa fa-check"></i><b>6</b> Examples and Feedback</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="day6.html"><a href="day6.html#random-sidenotes"><i class="fa fa-check"></i><b>6.1</b> Random Sidenotes</a></li>
+<li class="chapter" data-level="6.2" data-path="day6.html"><a href="day6.html#lots-of-examples"><i class="fa fa-check"></i><b>6.2</b> Lot’s of Examples</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="day6.html"><a href="day6.html#tidytuesday-spotify"><i class="fa fa-check"></i><b>6.2.1</b> Tidytuesday: Spotify</a></li>
+<li class="chapter" data-level="6.2.2" data-path="day6.html"><a href="day6.html#shiny-app"><i class="fa fa-check"></i><b>6.2.2</b> Shiny App</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Introduction to Data Science with R for Biochemists</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="day5" class="section level1" number="5">
+<h1><span class="header-section-number">Day 5</span> Correlation and Regression</h1>
+<div id="side-note-what-is-the-main-goal-of-this-course" class="section level2" number="5.1">
+<h2><span class="header-section-number">5.1</span> Side note: What is the main goal of this course?</h2>
+<p>I can not teach you every single function,
+every data structure, every statistical analysis.</p>
+<p>Rather, I want to give you a high level overview
+of what is possible. And I want to teach you
+how you can view your data problems in a way
+that enables you to solve them.</p>
+<p>We want to go from seeing the numbers</p>
+<p><img src="img/matrix_A06UFEx8jxEwU.gif" /></p>
+<p>To seeing the structure behind it</p>
+<p><img src="img/matrix+pill_SCt3Miv6ugvSg.gif" /></p>
+</div>
+<div id="correlation-and-regression" class="section level2" number="5.2">
+<h2><span class="header-section-number">5.2</span> Correlation and Regression</h2>
+<p>The data for today are available from their
+<a href="https://figshare.com/articles/Storks_and_human_babies_data/839299/1">original source</a>
+or <a href="https://github.com/jannikbuhr/dataIntro19Master/tree/master/data">my github repository</a>.</p>
+<p>It’s about storks! And because according to folk wisdom storks bring
+the babies, we get the number of stork pairs per country and
+the birthrate in <span class="math inline">\(10^3\)</span> babies per year.
+Additionally, we get the number of people per country and
+the area in <span class="math inline">\(km^2\)</span>.</p>
+<div class="sourceCode" id="cb473"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb473-1"><a href="day5.html#cb473-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
+<pre><code>## ── Attaching packages ────────</code></pre>
+<pre><code>## ✓ ggplot2 3.3.2     ✓ purrr   0.3.4
+## ✓ tibble  3.0.3     ✓ dplyr   1.0.1
+## ✓ tidyr   1.1.1     ✓ stringr 1.4.0
+## ✓ readr   1.3.1     ✓ forcats 0.5.0</code></pre>
+<pre><code>## ── Conflicts ─────────────────
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()</code></pre>
+<div class="sourceCode" id="cb477"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb477-1"><a href="day5.html#cb477-1" aria-hidden="true" tabindex="-1"></a>storks <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;data/05_storks.csv&quot;</span>)</span></code></pre></div>
+<pre><code>## Parsed with column specification:
+## cols(
+##   Country = col_character(),
+##   Area = col_double(),
+##   Storks = col_double(),
+##   Humans = col_double(),
+##   Birth = col_double()
+## )</code></pre>
+<div class="sourceCode" id="cb479"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb479-1"><a href="day5.html#cb479-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(storks)</span></code></pre></div>
+<pre><code>## # A tibble: 6 x 5
+##   Country    Area Storks Humans Birth
+##   &lt;chr&gt;     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+## 1 Albania   28750    100    3.2    83
+## 2 Austria   83860    300    7.6    87
+## 3 Belgium   30520      1    9.9   118
+## 4 Bulgaria 111000   5000    9     117
+## 5 Denmark   43100      9    5.1    59
+## 6 France   544000    140   56     774</code></pre>
+<p>This data shows a clear relationship between the number
+of stork pairs and the birthrate in a country <span class="citation">(<a href="#ref-matthews2000" role="doc-biblioref"><strong>matthews2000?</strong></a>)</span>.</p>
+<div class="sourceCode" id="cb481"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb481-1"><a href="day5.html#cb481-1" aria-hidden="true" tabindex="-1"></a><span class="co"># show storks vs birth rate with ggplot, points</span></span>
+<span id="cb481-2"><a href="day5.html#cb481-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(storks, <span class="fu">aes</span>(Storks, Birth)) <span class="sc">+</span></span>
+<span id="cb481-3"><a href="day5.html#cb481-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
+<p><img src="05-day5_files/figure-html/unnamed-chunk-2-1.svg" width="672" /></p>
+<p>The data looks better on a logarithmic scale,
+this diminishes the effect of outliers in our plot.</p>
+<div class="sourceCode" id="cb482"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb482-1"><a href="day5.html#cb482-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ggplot with dual log scale and annotation_logticks, theme classic</span></span>
+<span id="cb482-2"><a href="day5.html#cb482-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(storks, <span class="fu">aes</span>(Storks, Birth)) <span class="sc">+</span></span>
+<span id="cb482-3"><a href="day5.html#cb482-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb482-4"><a href="day5.html#cb482-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_log10</span>() <span class="sc">+</span></span>
+<span id="cb482-5"><a href="day5.html#cb482-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_log10</span>() <span class="sc">+</span></span>
+<span id="cb482-6"><a href="day5.html#cb482-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotation_logticks</span>() <span class="sc">+</span></span>
+<span id="cb482-7"><a href="day5.html#cb482-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code></pre></div>
+<p><img src="05-day5_files/figure-html/unnamed-chunk-3-1.svg" width="672" /></p>
+<p>Log transformations are in fact quite important
+for a range of applications. Especially in
+biological data, you will encounter them
+quite a bit. The reason is as follows:
+While the central limit theorem states
+that the <strong>sum</strong> of independent random variables
+tends towards a normal distribution,
+biological processes often contain signal
+cascades and other <strong>multiplicative</strong> effects.
+A logarithm conveniently turns a <strong>product</strong>
+into a <strong>sum</strong>, so while your original
+data may not look very much like a normal
+distribution, it might very well be
+<em>log-normal</em>.</p>
+<div id="correlation" class="section level3" number="5.2.1">
+<h3><span class="header-section-number">5.2.1</span> Correlation</h3>
+<p>We get a measure of linear relation between to random variables
+with the (Pearson’s) correlation coefficient.</p>
+<p><span class="math display">\[cor(X,Y)=\frac{cov(X,Y)}{\sigma_X \sigma_Y}=\frac{E\left[(X-\mu_X)(Y-\mu_Y)\right]}{\sigma_X \sigma_Y}\]</span></p>
+<p><span class="math inline">\(cor\)</span> is equal to the quotient of the co variance <span class="math inline">\(cov\)</span> and
+the product of the standard deviations <span class="math inline">\(\sigma\)</span>. The
+co variance in turn is the expected value (i.e. the mean)
+of the element-wise product of the difference of
+vector X to its mean and the difference of vector Y to its mean.</p>
+<div class="sourceCode" id="cb483"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb483-1"><a href="day5.html#cb483-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(storks<span class="sc">$</span>Storks, storks<span class="sc">$</span>Birth)</span></code></pre></div>
+<pre><code>## [1] 0.6202653</code></pre>
+<div class="sourceCode" id="cb485"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb485-1"><a href="day5.html#cb485-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(<span class="fu">log</span>(storks<span class="sc">$</span>Storks), <span class="fu">log</span>(storks<span class="sc">$</span>Birth))</span></code></pre></div>
+<pre><code>## [1] 0.3853895</code></pre>
+<p>The correlation coefficient is also called
+<em>Pearson’s R</em>, and its square consequently
+is <em>R squared</em>. This value is the
+coefficient of determination, the fraction
+of explained variance of one variable by
+the other.</p>
+<div class="sourceCode" id="cb487"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb487-1"><a href="day5.html#cb487-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(storks<span class="sc">$</span>Storks, storks<span class="sc">$</span>Birth)<span class="sc">^</span><span class="dv">2</span></span></code></pre></div>
+<pre><code>## [1] 0.3847291</code></pre>
+<p>Both <code>cor</code> and <code>cor.test</code> can used
+the Spearman method to return correlation
+of ranks instead of values.</p>
+<div class="sourceCode" id="cb489"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb489-1"><a href="day5.html#cb489-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(storks<span class="sc">$</span>Storks, storks<span class="sc">$</span>Birth, <span class="at">method =</span> <span class="st">&quot;spearman&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] 0.4176917</code></pre>
+<div class="sourceCode" id="cb491"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb491-1"><a href="day5.html#cb491-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(<span class="fu">log</span>(storks<span class="sc">$</span>Storks), <span class="fu">log</span>(storks<span class="sc">$</span>Birth), <span class="at">method =</span> <span class="st">&quot;spearman&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] 0.4176917</code></pre>
+<div class="figure"><span id="fig:unnamed-chunk-8"></span>
+<img src="img/correlation.png" alt="Source: XKCD, https://www.xkcd.com/552/"  />
+<p class="caption">
+Figure 5.1: Source: XKCD, <a href="https://www.xkcd.com/552/" class="uri">https://www.xkcd.com/552/</a>
+</p>
+</div>
+</div>
+<div id="regression" class="section level3" number="5.2.2">
+<h3><span class="header-section-number">5.2.2</span> Regression</h3>
+<p>A related concept is linear regression.</p>
+<div class="sourceCode" id="cb493"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb493-1"><a href="day5.html#cb493-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(Birth <span class="sc">~</span> Storks, <span class="at">data =</span> storks)</span>
+<span id="cb493-2"><a href="day5.html#cb493-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = Birth ~ Storks, data = storks)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -478.8 -166.3 -144.9   -2.0  631.1 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)   
+## (Intercept) 2.250e+02  9.356e+01   2.405   0.0295 * 
+## Storks      2.879e-02  9.402e-03   3.063   0.0079 **
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 332.2 on 15 degrees of freedom
+## Multiple R-squared:  0.3847,	Adjusted R-squared:  0.3437 
+## F-statistic:  9.38 on 1 and 15 DF,  p-value: 0.007898</code></pre>
+<p>This <em>R squared</em> value is in fact the coefficient of
+determination that you saw earlier for correlation.
+When your linear model is free to choose an intercept,
+this R squared also has the same value as for correlation.</p>
+<p>Using <code>geom_smooth</code>, we
+can fit any model to our data right
+within ggplot, even after applying
+the log-transformation.</p>
+<div class="sourceCode" id="cb495"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb495-1"><a href="day5.html#cb495-1" aria-hidden="true" tabindex="-1"></a>storks <span class="sc">%&gt;%</span> </span>
+<span id="cb495-2"><a href="day5.html#cb495-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(Storks, Birth)) <span class="sc">+</span></span>
+<span id="cb495-3"><a href="day5.html#cb495-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb495-4"><a href="day5.html#cb495-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_log10</span>() <span class="sc">+</span></span>
+<span id="cb495-5"><a href="day5.html#cb495-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_log10</span>() <span class="sc">+</span></span>
+<span id="cb495-6"><a href="day5.html#cb495-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>,</span>
+<span id="cb495-7"><a href="day5.html#cb495-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">se     =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb495-8"><a href="day5.html#cb495-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">color  =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="05-day5_files/figure-html/unnamed-chunk-10-1.svg" width="672" /></p>
+<p>But what happens when our data does not follow
+a linear model?</p>
+</div>
+</div>
+<div id="non-linear-regression" class="section level2" number="5.3">
+<h2><span class="header-section-number">5.3</span> Non-Linear Regression</h2>
+<div id="michaelis-menten-kinetics" class="section level3" number="5.3.1">
+<h3><span class="header-section-number">5.3.1</span> Michaelis-Menten Kinetics</h3>
+<p>As an example we will use the common Michaelis-Menten kinetics.
+There is a dataset for enzyme reaction rates included in R.</p>
+<div class="sourceCode" id="cb497"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb497-1"><a href="day5.html#cb497-1" aria-hidden="true" tabindex="-1"></a>puromycin <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(Puromycin)</span>
+<span id="cb497-2"><a href="day5.html#cb497-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb497-3"><a href="day5.html#cb497-3" aria-hidden="true" tabindex="-1"></a>treatedPuro <span class="ot">&lt;-</span> puromycin <span class="sc">%&gt;%</span> </span>
+<span id="cb497-4"><a href="day5.html#cb497-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(state <span class="sc">==</span> <span class="st">&quot;treated&quot;</span>)</span>
+<span id="cb497-5"><a href="day5.html#cb497-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb497-6"><a href="day5.html#cb497-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(treatedPuro)</span></code></pre></div>
+<pre><code>## # A tibble: 6 x 3
+##    conc  rate state  
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;  
+## 1  0.02    76 treated
+## 2  0.02    47 treated
+## 3  0.06    97 treated
+## 4  0.06   107 treated
+## 5  0.11   123 treated
+## 6  0.11   139 treated</code></pre>
+<div class="sourceCode" id="cb499"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb499-1"><a href="day5.html#cb499-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(treatedPuro<span class="sc">$</span>conc, treatedPuro<span class="sc">$</span>rate, <span class="at">main =</span> <span class="st">&quot;In case you miss base-R&quot;</span>)</span>
+<span id="cb499-2"><a href="day5.html#cb499-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb499-3"><a href="day5.html#cb499-3" aria-hidden="true" tabindex="-1"></a>treatedPuro <span class="sc">%&gt;%</span> </span>
+<span id="cb499-4"><a href="day5.html#cb499-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(conc, rate)) <span class="sc">+</span></span>
+<span id="cb499-5"><a href="day5.html#cb499-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb499-6"><a href="day5.html#cb499-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code></pre></div>
+<p><img src="05-day5_files/figure-html/puro_treat_plts-1.svg" width="50%" /><img src="05-day5_files/figure-html/puro_treat_plts-2.svg" width="50%" /></p>
+<p>This data follows a Michaelis-Menten kinetic,
+so we define a function that translates
+a concentration into a rate given
+a maximal velocity Vm and the Michaelis-Menten
+constant K. Having the concentration
+as the first argument helps for later usage
+of the function.</p>
+<div class="sourceCode" id="cb500"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb500-1"><a href="day5.html#cb500-1" aria-hidden="true" tabindex="-1"></a>calcMicMen <span class="ot">&lt;-</span> <span class="cf">function</span>(conc, Vm, K) {</span>
+<span id="cb500-2"><a href="day5.html#cb500-2" aria-hidden="true" tabindex="-1"></a>  (Vm <span class="sc">*</span> conc) <span class="sc">/</span> (K <span class="sc">+</span> conc)</span>
+<span id="cb500-3"><a href="day5.html#cb500-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p><code>calcMicMen</code> is actually vectorised by default,
+because it just used basic mathematical operations:</p>
+<div class="sourceCode" id="cb501"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb501-1"><a href="day5.html#cb501-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="at">by =</span> <span class="fl">0.01</span>)</span>
+<span id="cb501-2"><a href="day5.html#cb501-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">calcMicMen</span>(x, <span class="at">Vm =</span> <span class="dv">200</span>, <span class="at">K =</span> <span class="fl">0.1</span>)</span>
+<span id="cb501-3"><a href="day5.html#cb501-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x,y)</span></code></pre></div>
+<p><img src="05-day5_files/figure-html/unnamed-chunk-13-1.svg" width="672" /></p>
+<p>We can plot this function with some
+initial values for Vm and K using
+<code>stat_function</code> (it is a <code>stat</code>, not
+a <code>geom</code>, because it needs to do
+some calculation on the data before
+plotting it). Note that we use a lambda
+function to define a function
+on the fly that is only dependent
+on one argument, passed as <code>.x</code> and
+already has Vm and K set at some value
+we chose.</p>
+<div class="sourceCode" id="cb502"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb502-1"><a href="day5.html#cb502-1" aria-hidden="true" tabindex="-1"></a>treatedPuro <span class="sc">%&gt;%</span> </span>
+<span id="cb502-2"><a href="day5.html#cb502-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(conc, rate)) <span class="sc">+</span></span>
+<span id="cb502-3"><a href="day5.html#cb502-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb502-4"><a href="day5.html#cb502-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun   =</span> <span class="sc">~</span> <span class="fu">calcMicMen</span>(<span class="at">conc =</span> .x, <span class="at">Vm =</span> <span class="dv">200</span>, <span class="at">K =</span> <span class="fl">0.1</span>),</span>
+<span id="cb502-5"><a href="day5.html#cb502-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">color =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<p><img src="05-day5_files/figure-html/unnamed-chunk-14-1.svg" width="672" /></p>
+<p>Another way to write this is using the
+<code>args</code> argument of <code>stat_fun</code>. This way, we
+can supply just the name of the function and
+additional arguments such as Vm and K go
+into a list passed to <code>args</code>. The only argument
+we do not supply (<code>conc</code>) is then
+automatically taken from the x-axis and
+the result uses as the y-value.</p>
+<div class="sourceCode" id="cb503"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb503-1"><a href="day5.html#cb503-1" aria-hidden="true" tabindex="-1"></a><span class="co"># output not shown because it is the same as above</span></span>
+<span id="cb503-2"><a href="day5.html#cb503-2" aria-hidden="true" tabindex="-1"></a>treatedPuro <span class="sc">%&gt;%</span> </span>
+<span id="cb503-3"><a href="day5.html#cb503-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(conc, rate)) <span class="sc">+</span></span>
+<span id="cb503-4"><a href="day5.html#cb503-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb503-5"><a href="day5.html#cb503-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun   =</span> calcMicMen,</span>
+<span id="cb503-6"><a href="day5.html#cb503-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">args  =</span> <span class="fu">list</span>(<span class="at">Vm =</span> <span class="dv">200</span>, <span class="at">K =</span> <span class="fl">0.1</span>),</span>
+<span id="cb503-7"><a href="day5.html#cb503-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">color =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<p>But this function doesn’t fit our data! It
+just has some Vm and K that we manually
+put in, so let’s use R to move
+it closer to our data. This process of taking
+some initial function and moving
+it closer to our data is called
+<em>least squares regression</em> and as opposed
+to the simple case of linear models earlier,
+here we are using a non-linear model and thus the
+function <code>nls</code> for non-linear least squares.</p>
+<div class="sourceCode" id="cb504"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb504-1"><a href="day5.html#cb504-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">nls</span>(<span class="at">formula =</span> rate <span class="sc">~</span> <span class="fu">calcMicMen</span>(conc, Vm, K),</span>
+<span id="cb504-2"><a href="day5.html#cb504-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">data    =</span> treatedPuro,</span>
+<span id="cb504-3"><a href="day5.html#cb504-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">start   =</span> <span class="fu">list</span>(<span class="at">Vm =</span> <span class="dv">200</span>, <span class="at">K =</span> <span class="fl">0.1</span>))</span>
+<span id="cb504-4"><a href="day5.html#cb504-4" aria-hidden="true" tabindex="-1"></a>model</span></code></pre></div>
+<pre><code>## Nonlinear regression model
+##   model: rate ~ calcMicMen(conc, Vm, K)
+##    data: treatedPuro
+##        Vm         K 
+## 212.68363   0.06412 
+##  residual sum-of-squares: 1195
+## 
+## Number of iterations to convergence: 6 
+## Achieved convergence tolerance: 6.093e-06</code></pre>
+<p>It also tells us the residual sum of squares,
+which is a measure of distance between the
+function and our data. For a brilliant
+interactive visualization of this process,
+check out this <a href="http://setosa.io/ev/ordinary-least-squares-regression/">link</a>
+<span class="citation">(<a href="references.html#ref-OrdinaryLeastSquares" role="doc-biblioref">O A</a>)</span>!</p>
+<div class="sourceCode" id="cb506"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb506-1"><a href="day5.html#cb506-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code></pre></div>
+<pre><code>## 
+## Formula: rate ~ calcMicMen(conc, Vm, K)
+## 
+## Parameters:
+##     Estimate Std. Error t value Pr(&gt;|t|)    
+## Vm 2.127e+02  6.947e+00  30.615 3.24e-11 ***
+## K  6.412e-02  8.281e-03   7.743 1.57e-05 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 10.93 on 10 degrees of freedom
+## 
+## Number of iterations to convergence: 6 
+## Achieved convergence tolerance: 6.093e-06</code></pre>
+<p>We get the estimated coefficients (the fitted Vm and K)
+from our model with the function <code>coef</code>.</p>
+<div class="sourceCode" id="cb508"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb508-1"><a href="day5.html#cb508-1" aria-hidden="true" tabindex="-1"></a>Vm_est <span class="ot">&lt;-</span> <span class="fu">coef</span>(model)[<span class="st">&quot;Vm&quot;</span>]</span>
+<span id="cb508-2"><a href="day5.html#cb508-2" aria-hidden="true" tabindex="-1"></a>K_est  <span class="ot">&lt;-</span> <span class="fu">coef</span>(model)[<span class="st">&quot;K&quot;</span>]</span>
+<span id="cb508-3"><a href="day5.html#cb508-3" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(model)</span></code></pre></div>
+<pre><code>##           Vm            K 
+## 212.68362994   0.06412111</code></pre>
+<p>Now we can supply those as arguments to the
+<code>calcMicMen</code> function used in <code>stat_function</code></p>
+<div class="sourceCode" id="cb510"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb510-1"><a href="day5.html#cb510-1" aria-hidden="true" tabindex="-1"></a>treatedPuro <span class="sc">%&gt;%</span> </span>
+<span id="cb510-2"><a href="day5.html#cb510-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(conc, rate)) <span class="sc">+</span></span>
+<span id="cb510-3"><a href="day5.html#cb510-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb510-4"><a href="day5.html#cb510-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun   =</span> calcMicMen,</span>
+<span id="cb510-5"><a href="day5.html#cb510-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">args  =</span> <span class="fu">list</span>(<span class="at">Vm =</span> Vm_est, <span class="at">K =</span> K_est),</span>
+<span id="cb510-6"><a href="day5.html#cb510-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">color =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<p><img src="05-day5_files/figure-html/unnamed-chunk-19-1.svg" width="672" /></p>
+<p>Side note: There is also <em>self starting models</em>,
+but I do not cover them a lot because their use case
+is more specific than being able to fit
+any self defined function. Self starting
+models are able to estimate sensible starting
+parameters from the data.</p>
+<div class="sourceCode" id="cb511"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb511-1"><a href="day5.html#cb511-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nls</span>(<span class="at">formula =</span> rate <span class="sc">~</span> <span class="fu">SSmicmen</span>(conc, Vm, K),</span>
+<span id="cb511-2"><a href="day5.html#cb511-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> treatedPuro)</span></code></pre></div>
+<pre><code>## Nonlinear regression model
+##   model: rate ~ SSmicmen(conc, Vm, K)
+##    data: treatedPuro
+##        Vm         K 
+## 212.68371   0.06412 
+##  residual sum-of-squares: 1195
+## 
+## Number of iterations to convergence: 0 
+## Achieved convergence tolerance: 1.929e-06</code></pre>
+<p>You can use any model created with a modeling
+function such as <code>nls</code> or <code>lm</code> with
+the <code>predict</code> function to predict new values
+for new data:</p>
+<div class="sourceCode" id="cb513"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb513-1"><a href="day5.html#cb513-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(model, <span class="at">newdata =</span> <span class="fu">list</span>(<span class="at">conc  =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.5</span>, <span class="dv">1</span>)))</span></code></pre></div>
+<pre><code>## [1]   0.0000 188.5088 199.8679</code></pre>
+</div>
+<div id="many-models" class="section level3" number="5.3.2">
+<h3><span class="header-section-number">5.3.2</span> Many Models</h3>
+<p>The superpower of tibbles!</p>
+<p>Our data set actually contained
+two experimental conditions,
+one where the enzyme was treated and another
+where it was not.</p>
+<div class="sourceCode" id="cb515"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb515-1"><a href="day5.html#cb515-1" aria-hidden="true" tabindex="-1"></a>puromycin <span class="sc">%&gt;%</span> </span>
+<span id="cb515-2"><a href="day5.html#cb515-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(conc, rate, <span class="at">color =</span> state)) <span class="sc">+</span> </span>
+<span id="cb515-3"><a href="day5.html#cb515-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
+<p><img src="05-day5_files/figure-html/unnamed-chunk-22-1.svg" width="672" /></p>
+<p>We want to fit models to both conditions
+individually, without having to write the
+same code twice. In order to achieve this,
+we first <em>nest</em> the data. We retain one
+column with the <em>state</em> and the data for
+that state is in another column called <em>data</em>
+and stored as a list of tibbles (one tibble
+for each state). So we go from this:</p>
+<div class="sourceCode" id="cb516"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb516-1"><a href="day5.html#cb516-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(puromycin)</span></code></pre></div>
+<pre><code>## # A tibble: 6 x 3
+##    conc  rate state  
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;  
+## 1  0.02    76 treated
+## 2  0.02    47 treated
+## 3  0.06    97 treated
+## 4  0.06   107 treated
+## 5  0.11   123 treated
+## 6  0.11   139 treated</code></pre>
+<p>To this:</p>
+<div class="sourceCode" id="cb518"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb518-1"><a href="day5.html#cb518-1" aria-hidden="true" tabindex="-1"></a>nestedPuromycin <span class="ot">&lt;-</span> puromycin <span class="sc">%&gt;%</span> </span>
+<span id="cb518-2"><a href="day5.html#cb518-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_nest</span>(state)</span>
+<span id="cb518-3"><a href="day5.html#cb518-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb518-4"><a href="day5.html#cb518-4" aria-hidden="true" tabindex="-1"></a>nestedPuromycin <span class="sc">%&gt;%</span> </span>
+<span id="cb518-5"><a href="day5.html#cb518-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code></pre></div>
+<pre><code>## # A tibble: 2 x 2
+##   state                   data
+##   &lt;fct&gt;     &lt;list&lt;tbl_df[,2]&gt;&gt;
+## 1 treated             [12 × 2]
+## 2 untreated           [11 × 2]</code></pre>
+<p>Just to check that we didn’t lose anything,
+here I pluck the data column, from this I
+pluck the first element and then I take only
+the first 5 rows of this element with <code>head</code>.</p>
+<div class="sourceCode" id="cb520"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb520-1"><a href="day5.html#cb520-1" aria-hidden="true" tabindex="-1"></a>nestedPuromycin <span class="sc">%&gt;%</span> </span>
+<span id="cb520-2"><a href="day5.html#cb520-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pluck</span>(<span class="st">&quot;data&quot;</span>, <span class="dv">1</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb520-3"><a href="day5.html#cb520-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">5</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 5 x 2
+##    conc  rate
+##   &lt;dbl&gt; &lt;dbl&gt;
+## 1  0.02    76
+## 2  0.02    47
+## 3  0.06    97
+## 4  0.06   107
+## 5  0.11   123</code></pre>
+<p>Now we go on fitting a model for <code>every element</code>
+of the data column, so for every sub-dataset (one for each state).
+I also apply the <code>coef</code> function to all resulting
+models and go straight ahead with unnesting
+those coefficients into their own columns.</p>
+<div class="sourceCode" id="cb522"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb522-1"><a href="day5.html#cb522-1" aria-hidden="true" tabindex="-1"></a>nestedPuromycin <span class="sc">%&gt;%</span> </span>
+<span id="cb522-2"><a href="day5.html#cb522-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb522-3"><a href="day5.html#cb522-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">model =</span> <span class="fu">map</span>(data, <span class="sc">~</span> <span class="fu">nls</span>(<span class="at">formula =</span> rate <span class="sc">~</span> <span class="fu">calcMicMen</span>(conc, Vm, K),</span>
+<span id="cb522-4"><a href="day5.html#cb522-4" aria-hidden="true" tabindex="-1"></a>                            <span class="at">data =</span> .x,</span>
+<span id="cb522-5"><a href="day5.html#cb522-5" aria-hidden="true" tabindex="-1"></a>                            <span class="at">start =</span> <span class="fu">list</span>(<span class="at">Vm =</span> <span class="dv">200</span>, <span class="at">K =</span> <span class="fl">0.1</span>))),</span>
+<span id="cb522-6"><a href="day5.html#cb522-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">coefficients =</span> <span class="fu">map</span>(model, coef)</span>
+<span id="cb522-7"><a href="day5.html#cb522-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb522-8"><a href="day5.html#cb522-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest_wider</span>(coefficients) <span class="sc">%&gt;%</span> </span>
+<span id="cb522-9"><a href="day5.html#cb522-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code></pre></div>
+<pre><code>## # A tibble: 2 x 5
+##   state                   data model     Vm      K
+##   &lt;fct&gt;     &lt;list&lt;tbl_df[,2]&gt;&gt; &lt;list&gt; &lt;dbl&gt;  &lt;dbl&gt;
+## 1 treated             [12 × 2] &lt;nls&gt;   213. 0.0641
+## 2 untreated           [11 × 2] &lt;nls&gt;   160. 0.0477</code></pre>
+<p>ggplot is also able to fit
+individual models and it can use any
+fitting-function in <code>geom_smooth</code>,
+not just linear models. So nothing
+is stopping us from writing:</p>
+<div class="sourceCode" id="cb524"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb524-1"><a href="day5.html#cb524-1" aria-hidden="true" tabindex="-1"></a>puromycin <span class="sc">%&gt;%</span> </span>
+<span id="cb524-2"><a href="day5.html#cb524-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(conc, rate, <span class="at">color =</span> state)) <span class="sc">+</span></span>
+<span id="cb524-3"><a href="day5.html#cb524-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb524-4"><a href="day5.html#cb524-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(</span>
+<span id="cb524-5"><a href="day5.html#cb524-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">method       =</span> <span class="st">&quot;nls&quot;</span>,</span>
+<span id="cb524-6"><a href="day5.html#cb524-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">formula      =</span> y <span class="sc">~</span> <span class="fu">calcMicMen</span>(<span class="at">conc  =</span> x, Vm, K),</span>
+<span id="cb524-7"><a href="day5.html#cb524-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">method.args  =</span> <span class="fu">list</span>(<span class="at">start =</span> <span class="fu">list</span>(<span class="at">Vm =</span> <span class="dv">200</span>, <span class="at">K =</span> <span class="fl">0.1</span>)),</span>
+<span id="cb524-8"><a href="day5.html#cb524-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">se           =</span> <span class="cn">FALSE</span></span>
+<span id="cb524-9"><a href="day5.html#cb524-9" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<p><img src="05-day5_files/figure-html/unnamed-chunk-27-1.svg" width="672" /></p>
+<p>Note that we need to supply the formula for the
+method nls in a general form (with y ~ x) and
+the additionally arguments that nls needs, namely
+the starting parameters, are supplied as a list
+with <code>method.args</code>. We also set the standard
+error <code>se</code> to <code>FALSE</code> because <code>"nls"</code> doesn’t
+report it, so if we where to try and display it,
+we would get an error message.</p>
+</div>
+</div>
+<div id="exercises" class="section level2" number="5.4">
+<h2><span class="header-section-number">5.4</span> Exercises</h2>
+<div id="with-the-datasaurus-dozen-data-sets" class="section level3" number="5.4.1">
+<h3><span class="header-section-number">5.4.1</span> With the Datasaurus Dozen Data Sets</h3>
+<div class="sourceCode" id="cb525"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb525-1"><a href="day5.html#cb525-1" aria-hidden="true" tabindex="-1"></a>datasauRus<span class="sc">::</span>datasaurus_dozen</span></code></pre></div>
+<ul>
+<li>Visualize all data sets in one ggplot,
+<ul>
+<li>Hint: use<code>facet_wrap</code></li>
+</ul></li>
+<li>Add linear regression lines
+<ul>
+<li>Hint: use <code>geom_smooth</code></li>
+</ul></li>
+<li>Do the fit manually on the dataset and extract the coefficients
+<ul>
+<li>Hints: See above, nest the data first, create the model column, etc.</li>
+</ul></li>
+</ul>
+<div id="solutions" class="section level4" number="5.4.1.1">
+<h4><span class="header-section-number">5.4.1.1</span> Solutions</h4>
+<div class="sourceCode" id="cb526"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb526-1"><a href="day5.html#cb526-1" aria-hidden="true" tabindex="-1"></a>dinos <span class="ot">&lt;-</span> datasauRus<span class="sc">::</span>datasaurus_dozen</span>
+<span id="cb526-2"><a href="day5.html#cb526-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dinos)</span></code></pre></div>
+<pre><code>## # A tibble: 6 x 3
+##   dataset     x     y
+##   &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;
+## 1 dino     55.4  97.2
+## 2 dino     51.5  96.0
+## 3 dino     46.2  94.5
+## 4 dino     42.8  91.4
+## 5 dino     40.8  88.3
+## 6 dino     38.7  84.9</code></pre>
+<div class="sourceCode" id="cb528"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb528-1"><a href="day5.html#cb528-1" aria-hidden="true" tabindex="-1"></a>dinos <span class="sc">%&gt;%</span> </span>
+<span id="cb528-2"><a href="day5.html#cb528-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(dataset <span class="sc">==</span> <span class="st">&quot;dino&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb528-3"><a href="day5.html#cb528-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
+<span id="cb528-4"><a href="day5.html#cb528-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb528-5"><a href="day5.html#cb528-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> dataset) <span class="sc">+</span></span>
+<span id="cb528-6"><a href="day5.html#cb528-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="sc">+</span></span>
+<span id="cb528-7"><a href="day5.html#cb528-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_equal</span>()</span></code></pre></div>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="05-day5_files/figure-html/unnamed-chunk-30-1.svg" width="672" /></p>
+<div class="sourceCode" id="cb530"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb530-1"><a href="day5.html#cb530-1" aria-hidden="true" tabindex="-1"></a>nestedDinos <span class="ot">&lt;-</span> dinos <span class="sc">%&gt;%</span> </span>
+<span id="cb530-2"><a href="day5.html#cb530-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_nest</span>(dataset)</span>
+<span id="cb530-3"><a href="day5.html#cb530-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb530-4"><a href="day5.html#cb530-4" aria-hidden="true" tabindex="-1"></a>nestedDinos <span class="sc">%&gt;%</span> </span>
+<span id="cb530-5"><a href="day5.html#cb530-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">model  =</span> <span class="fu">map</span>(data, <span class="sc">~</span> <span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> .x )),</span>
+<span id="cb530-6"><a href="day5.html#cb530-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">coef   =</span> <span class="fu">map</span>(model, coef),</span>
+<span id="cb530-7"><a href="day5.html#cb530-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">resids =</span> <span class="fu">map</span>(model, residuals))</span></code></pre></div>
+<pre><code>## # A tibble: 13 x 5
+##    dataset                  data model  coef      resids     
+##    &lt;chr&gt;      &lt;list&lt;tbl_df[,2]&gt;&gt; &lt;list&gt; &lt;list&gt;    &lt;list&gt;     
+##  1 away                [142 × 2] &lt;lm&gt;   &lt;dbl [2]&gt; &lt;dbl [142]&gt;
+##  2 bullseye            [142 × 2] &lt;lm&gt;   &lt;dbl [2]&gt; &lt;dbl [142]&gt;
+##  3 circle              [142 × 2] &lt;lm&gt;   &lt;dbl [2]&gt; &lt;dbl [142]&gt;
+##  4 dino                [142 × 2] &lt;lm&gt;   &lt;dbl [2]&gt; &lt;dbl [142]&gt;
+##  5 dots                [142 × 2] &lt;lm&gt;   &lt;dbl [2]&gt; &lt;dbl [142]&gt;
+##  6 h_lines             [142 × 2] &lt;lm&gt;   &lt;dbl [2]&gt; &lt;dbl [142]&gt;
+##  7 high_lines          [142 × 2] &lt;lm&gt;   &lt;dbl [2]&gt; &lt;dbl [142]&gt;
+##  8 slant_down          [142 × 2] &lt;lm&gt;   &lt;dbl [2]&gt; &lt;dbl [142]&gt;
+##  9 slant_up            [142 × 2] &lt;lm&gt;   &lt;dbl [2]&gt; &lt;dbl [142]&gt;
+## 10 star                [142 × 2] &lt;lm&gt;   &lt;dbl [2]&gt; &lt;dbl [142]&gt;
+## 11 v_lines             [142 × 2] &lt;lm&gt;   &lt;dbl [2]&gt; &lt;dbl [142]&gt;
+## 12 wide_lines          [142 × 2] &lt;lm&gt;   &lt;dbl [2]&gt; &lt;dbl [142]&gt;
+## 13 x_shape             [142 × 2] &lt;lm&gt;   &lt;dbl [2]&gt; &lt;dbl [142]&gt;</code></pre>
+<div class="sourceCode" id="cb532"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb532-1"><a href="day5.html#cb532-1" aria-hidden="true" tabindex="-1"></a>dinos <span class="sc">%&gt;%</span> </span>
+<span id="cb532-2"><a href="day5.html#cb532-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(dataset <span class="sc">==</span> <span class="st">&quot;dino&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb532-3"><a href="day5.html#cb532-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lm</span>(<span class="at">data =</span> ., y <span class="sc">~</span> x) <span class="sc">%&gt;%</span> </span>
+<span id="cb532-4"><a href="day5.html#cb532-4" aria-hidden="true" tabindex="-1"></a>  broom<span class="sc">::</span><span class="fu">augment</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb532-5"><a href="day5.html#cb532-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(x, .resid)) <span class="sc">+</span></span>
+<span id="cb532-6"><a href="day5.html#cb532-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
+<p><img src="05-day5_files/figure-html/unnamed-chunk-32-1.svg" width="672" /></p>
+</div>
+</div>
+<div id="example-data-analysis" class="section level3" number="5.4.2">
+<h3><span class="header-section-number">5.4.2</span> Example Data Analysis</h3>
+<p>As an exemplary data analysis,
+I quickly went through some actual lab data
+from y’all. Because the data is
+not yet published, this section only
+provides the code and can not be
+run by itself.</p>
+<p>However, I leave you with a couple
+of pointers to excellent learning
+resources to understand the vital
+data cleaning steps for this “untidy”
+dataset. This code can of course
+be used in an R script but I split
+it up into individual chunks
+to provide more explanation.</p>
+<p>First, we load the tidyverse and
+read in the raw data from and excel file</p>
+<div class="sourceCode" id="cb533"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb533-1"><a href="day5.html#cb533-1" aria-hidden="true" tabindex="-1"></a><span class="co"># not run</span></span>
+<span id="cb533-2"><a href="day5.html#cb533-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb533-3"><a href="day5.html#cb533-3" aria-hidden="true" tabindex="-1"></a>rawData <span class="ot">&lt;-</span> readxl<span class="sc">::</span><span class="fu">read_excel</span>(<span class="st">&quot;data/Data Rkurs .xlsx&quot;</span>)</span></code></pre></div>
+<p>Not on to data tidying. The <code>tidyr</code> package
+from the tidyverse comes in handy here.
+The first column, which was unnamed and thus
+called <code>..1</code> by R. Actually contains
+more than one feature. So we extract the
+features <em>compound</em> and <em>condition</em> into
+their own columns with the <code>extract</code>
+function. The <em>regular expression</em> (regex)
+provides two groups with which to extract
+the data from the text in the original
+column.
+Check out <a href="https://tidyr.tidyverse.org/reference/extract.html">the help page</a>
+for more examples.
+A great resource for most data analysis
+tasks are the RStudio cheat sheets.
+They provide most of what you need
+in a concise format:
+<a href="https://rstudio.com/resources/cheatsheets/">https://rstudio.com/resources/cheatsheets/</a>
+One of those also provides a guide
+to the regular expressions we use in both cleaning
+steps: <a href="https://github.com/rstudio/cheatsheets/raw/master/strings.pdf">download cheatsheet</a>. Additionally,
+because finding the correct regular expression
+can be hard, there is also an R package
+out there, which provides an interactive
+experience of building your regex called
+<code>regexplain</code>. You can find it on github:
+<a href="https://github.com/gadenbuie/regexplain">regexplain link</a>
+And frankly, it is magic!</p>
+<div class="sourceCode" id="cb534"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb534-1"><a href="day5.html#cb534-1" aria-hidden="true" tabindex="-1"></a>tidyData <span class="ot">&lt;-</span> rawData <span class="sc">%&gt;%</span> </span>
+<span id="cb534-2"><a href="day5.html#cb534-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">extract</span>(<span class="at">col =</span> <span class="st">`</span><span class="at">...1</span><span class="st">`</span>,</span>
+<span id="cb534-3"><a href="day5.html#cb534-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">into =</span> <span class="fu">c</span>(<span class="st">&quot;compound&quot;</span>, <span class="st">&quot;condition&quot;</span>),</span>
+<span id="cb534-4"><a href="day5.html#cb534-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">regex =</span> <span class="st">&quot;(Compound </span><span class="sc">\\</span><span class="st">d</span><span class="sc">\\</span><span class="st">d?) (.+)&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb534-5"><a href="day5.html#cb534-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">starts_with</span>(<span class="st">&quot;E&quot;</span>),</span>
+<span id="cb534-6"><a href="day5.html#cb534-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">&quot;experiment&quot;</span>, <span class="st">&quot;replicate&quot;</span>),</span>
+<span id="cb534-7"><a href="day5.html#cb534-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_pattern =</span> <span class="st">&quot;(E</span><span class="sc">\\</span><span class="st">d)(.?)&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb534-8"><a href="day5.html#cb534-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">compound =</span> <span class="fu">fct_reorder</span>(compound, <span class="fu">parse_number</span>(compound)))</span></code></pre></div>
+<p>The data cleaning step was in fact the most
+complicated thing about this analysis.
+Once your data is in tidy format,
+you can use the tools we discovered in
+earlier weeks with ease:</p>
+<div class="sourceCode" id="cb535"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb535-1"><a href="day5.html#cb535-1" aria-hidden="true" tabindex="-1"></a>summaryData <span class="ot">&lt;-</span> tidyData <span class="sc">%&gt;%</span> </span>
+<span id="cb535-2"><a href="day5.html#cb535-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(compound, condition) <span class="sc">%&gt;%</span> </span>
+<span id="cb535-3"><a href="day5.html#cb535-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">SEM =</span> <span class="fu">sd</span>(value) <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="fu">n</span>()),</span>
+<span id="cb535-4"><a href="day5.html#cb535-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">value =</span> <span class="fu">mean</span>(value))</span>
+<span id="cb535-5"><a href="day5.html#cb535-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb535-6"><a href="day5.html#cb535-6" aria-hidden="true" tabindex="-1"></a>signif <span class="ot">&lt;-</span> summaryData <span class="sc">%&gt;%</span> </span>
+<span id="cb535-7"><a href="day5.html#cb535-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(compound  <span class="sc">==</span> <span class="st">&quot;Compound 1&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb535-8"><a href="day5.html#cb535-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(condition <span class="sc">==</span> <span class="fu">first</span>(condition)) <span class="sc">%&gt;%</span> </span>
+<span id="cb535-9"><a href="day5.html#cb535-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">value =</span> <span class="dv">100</span>,</span>
+<span id="cb535-10"><a href="day5.html#cb535-10" aria-hidden="true" tabindex="-1"></a>         <span class="at">label =</span> <span class="st">&quot;*&quot;</span>)</span>
+<span id="cb535-11"><a href="day5.html#cb535-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb535-12"><a href="day5.html#cb535-12" aria-hidden="true" tabindex="-1"></a>tidyData <span class="sc">%&gt;%</span> </span>
+<span id="cb535-13"><a href="day5.html#cb535-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(compound, value,</span>
+<span id="cb535-14"><a href="day5.html#cb535-14" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> condition,</span>
+<span id="cb535-15"><a href="day5.html#cb535-15" aria-hidden="true" tabindex="-1"></a>             <span class="at">fill =</span> condition)) <span class="sc">+</span></span>
+<span id="cb535-16"><a href="day5.html#cb535-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">data =</span> summaryData, <span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="at">width =</span> <span class="fl">0.9</span>),</span>
+<span id="cb535-17"><a href="day5.html#cb535-17" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb535-18"><a href="day5.html#cb535-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="at">data =</span> summaryData,</span>
+<span id="cb535-19"><a href="day5.html#cb535-19" aria-hidden="true" tabindex="-1"></a>                <span class="fu">aes</span>(<span class="at">ymin =</span> value <span class="sc">-</span> SEM,</span>
+<span id="cb535-20"><a href="day5.html#cb535-20" aria-hidden="true" tabindex="-1"></a>                    <span class="at">ymax =</span> value <span class="sc">+</span> SEM),</span>
+<span id="cb535-21"><a href="day5.html#cb535-21" aria-hidden="true" tabindex="-1"></a>                <span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="at">width =</span> <span class="fl">0.9</span>),</span>
+<span id="cb535-22"><a href="day5.html#cb535-22" aria-hidden="true" tabindex="-1"></a>                <span class="at">color =</span> <span class="st">&quot;black&quot;</span>,</span>
+<span id="cb535-23"><a href="day5.html#cb535-23" aria-hidden="true" tabindex="-1"></a>                <span class="at">width =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb535-24"><a href="day5.html#cb535-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="at">width =</span> <span class="fl">0.9</span>),</span>
+<span id="cb535-25"><a href="day5.html#cb535-25" aria-hidden="true" tabindex="-1"></a>             <span class="at">shape =</span> <span class="dv">21</span>,</span>
+<span id="cb535-26"><a href="day5.html#cb535-26" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb535-27"><a href="day5.html#cb535-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> signif, <span class="fu">aes</span>(<span class="at">label =</span> label),</span>
+<span id="cb535-28"><a href="day5.html#cb535-28" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">size =</span> <span class="dv">13</span>,</span>
+<span id="cb535-29"><a href="day5.html#cb535-29" aria-hidden="true" tabindex="-1"></a>            <span class="at">position =</span> <span class="st">&quot;identity&quot;</span>) <span class="sc">+</span></span>
+<span id="cb535-30"><a href="day5.html#cb535-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code></pre></div>
+<p>You might also want to run a statistical analysis,
+such as ANOVA, but this is just an example. Do
+not take this as advice for which type of analysis
+to run, this depends on your data and
+hypothesis you want to test!</p>
+<div class="sourceCode" id="cb536"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb536-1"><a href="day5.html#cb536-1" aria-hidden="true" tabindex="-1"></a>anovaResult <span class="ot">&lt;-</span> <span class="fu">aov</span>(value <span class="sc">~</span> compound <span class="sc">*</span> condition, <span class="at">data =</span> tidyData)</span>
+<span id="cb536-2"><a href="day5.html#cb536-2" aria-hidden="true" tabindex="-1"></a><span class="fu">TukeyHSD</span>(anovaResult)<span class="sc">$</span>condition <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span></code></pre></div>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="day4.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="day6.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Day 4 Significance Tests and Power | Introduction to Data Science with R for Biochemists</title>
+  <meta name="description" content="Day 4 Significance Tests and Power | Introduction to Data Science with R for Biochemists" />
+  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Day 4 Significance Tests and Power | Introduction to Data Science with R for Biochemists" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Day 4 Significance Tests and Power | Introduction to Data Science with R for Biochemists" />
+  <meta name="github-repo" content="jannikbuhr/dataIntro19Master" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Day 4 Significance Tests and Power | Introduction to Data Science with R for Biochemists" />
+  
+  <meta name="twitter:description" content="Day 4 Significance Tests and Power | Introduction to Data Science with R for Biochemists" />
+  
+
+<meta name="author" content="Jannik Buhr" />
+
+
+<meta name="date" content="2020-11-22" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="day3.html"/>
+<link rel="next" href="day5.html"/>
+<script src="libs/header-attrs-2.5/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.9.2.1/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-1.52.2/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-1.52.2/plotly-latest.min.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="https://jmbuhr.de/dataIntro19Master/">Introduction to data analysis with R</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Prologue</a>
+<ul>
+<li class="chapter" data-level="0.1" data-path="index.html"><a href="index.html#preparation-for-the-course"><i class="fa fa-check"></i><b>0.1</b> Preparation for the Course</a></li>
+<li class="chapter" data-level="0.2" data-path="index.html"><a href="index.html#structure-of-the-course"><i class="fa fa-check"></i><b>0.2</b> Structure of the Course</a></li>
+<li class="chapter" data-level="0.3" data-path="index.html"><a href="index.html#content"><i class="fa fa-check"></i><b>0.3</b> Content</a></li>
+<li class="chapter" data-level="0.4" data-path="index.html"><a href="index.html#resources"><i class="fa fa-check"></i><b>0.4</b> Resources</a>
+<ul>
+<li class="chapter" data-level="0.4.1" data-path="index.html"><a href="index.html#tidyverse"><i class="fa fa-check"></i><b>0.4.1</b> Tidyverse</a></li>
+<li class="chapter" data-level="0.4.2" data-path="index.html"><a href="index.html#r-in-general"><i class="fa fa-check"></i><b>0.4.2</b> R in general</a></li>
+<li class="chapter" data-level="0.4.3" data-path="index.html"><a href="index.html#statistics"><i class="fa fa-check"></i><b>0.4.3</b> Statistics</a></li>
+<li class="chapter" data-level="0.4.4" data-path="index.html"><a href="index.html#talks-podcasts-blogs"><i class="fa fa-check"></i><b>0.4.4</b> Talks, Podcasts, Blogs</a></li>
+<li class="chapter" data-level="0.4.5" data-path="index.html"><a href="index.html#misc"><i class="fa fa-check"></i><b>0.4.5</b> Misc</a></li>
+</ul></li>
+<li class="chapter" data-level="0.5" data-path="index.html"><a href="index.html#other-resources"><i class="fa fa-check"></i><b>0.5</b> Other Resources</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="day1.html"><a href="day1.html"><i class="fa fa-check"></i><b>1</b> And Go!</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="day1.html"><a href="day1.html#basic-datastructures-in-r"><i class="fa fa-check"></i><b>1.1</b> Basic Datastructures in R</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="day1.html"><a href="day1.html#executing-code-in-r"><i class="fa fa-check"></i><b>1.1.1</b> Executing Code in R</a></li>
+<li class="chapter" data-level="1.1.2" data-path="day1.html"><a href="day1.html#basic-datatypes"><i class="fa fa-check"></i><b>1.1.2</b> Basic Datatypes</a></li>
+<li class="chapter" data-level="1.1.3" data-path="day1.html"><a href="day1.html#variables"><i class="fa fa-check"></i><b>1.1.3</b> Variables</a></li>
+<li class="chapter" data-level="1.1.4" data-path="day1.html"><a href="day1.html#math-operators"><i class="fa fa-check"></i><b>1.1.4</b> Math Operators</a></li>
+<li class="chapter" data-level="1.1.5" data-path="day1.html"><a href="day1.html#functions-and-vectors"><i class="fa fa-check"></i><b>1.1.5</b> Functions and Vectors</a></li>
+<li class="chapter" data-level="1.1.6" data-path="day1.html"><a href="day1.html#datastructures"><i class="fa fa-check"></i><b>1.1.6</b> Datastructures</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="day1.html"><a href="day1.html#the-first-plots"><i class="fa fa-check"></i><b>1.2</b> The first Plots</a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="day1.html"><a href="day1.html#scatterplot"><i class="fa fa-check"></i><b>1.2.1</b> Scatterplot</a></li>
+<li class="chapter" data-level="1.2.2" data-path="day1.html"><a href="day1.html#curve"><i class="fa fa-check"></i><b>1.2.2</b> Curve</a></li>
+<li class="chapter" data-level="1.2.3" data-path="day1.html"><a href="day1.html#histogram"><i class="fa fa-check"></i><b>1.2.3</b> Histogram</a></li>
+<li class="chapter" data-level="1.2.4" data-path="day1.html"><a href="day1.html#the-last-piechart-you-will-ever-need."><i class="fa fa-check"></i><b>1.2.4</b> The last piechart you will ever need.</a></li>
+<li class="chapter" data-level="1.2.5" data-path="day1.html"><a href="day1.html#saving-plots"><i class="fa fa-check"></i><b>1.2.5</b> Saving Plots</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="day2.html"><a href="day2.html"><i class="fa fa-check"></i><b>2</b> Bring on the Data!</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="day2.html"><a href="day2.html#project-based-workflow"><i class="fa fa-check"></i><b>2.1</b> Project-based Workflow</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="day2.html"><a href="day2.html#workflow-of-a-data-analysis"><i class="fa fa-check"></i><b>2.1.1</b> Workflow of a Data Analysis</a></li>
+<li class="chapter" data-level="2.1.2" data-path="day2.html"><a href="day2.html#communication"><i class="fa fa-check"></i><b>2.1.2</b> Communication!</a></li>
+<li class="chapter" data-level="2.1.3" data-path="day2.html"><a href="day2.html#important-rstudio-settings"><i class="fa fa-check"></i><b>2.1.3</b> Important RStudio-Settings</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="day2.html"><a href="day2.html#packages-the-tidyverse"><i class="fa fa-check"></i><b>2.2</b> Packages: The Tidyverse</a></li>
+<li class="chapter" data-level="2.3" data-path="day2.html"><a href="day2.html#exercise-from-day-1"><i class="fa fa-check"></i><b>2.3</b> Exercise from day 1</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="day2.html"><a href="day2.html#questions"><i class="fa fa-check"></i><b>2.3.1</b> Questions</a></li>
+<li class="chapter" data-level="2.3.2" data-path="day2.html"><a href="day2.html#answers"><i class="fa fa-check"></i><b>2.3.2</b> Answers</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="day2.html"><a href="day2.html#reading-data"><i class="fa fa-check"></i><b>2.4</b> Reading data</a></li>
+<li class="chapter" data-level="2.5" data-path="day2.html"><a href="day2.html#the-pipe-and-dplyr-verbs"><i class="fa fa-check"></i><b>2.5</b> The Pipe and dplyr Verbs</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="day2.html"><a href="day2.html#the-pipe"><i class="fa fa-check"></i><b>2.5.1</b> The Pipe</a></li>
+<li class="chapter" data-level="2.5.2" data-path="day2.html"><a href="day2.html#overview-of-the-dplyr-verbs"><i class="fa fa-check"></i><b>2.5.2</b> Overview of the dplyr Verbs</a></li>
+<li class="chapter" data-level="2.5.3" data-path="day2.html"><a href="day2.html#select"><i class="fa fa-check"></i><b>2.5.3</b> select</a></li>
+<li class="chapter" data-level="2.5.4" data-path="day2.html"><a href="day2.html#filter"><i class="fa fa-check"></i><b>2.5.4</b> filter</a></li>
+<li class="chapter" data-level="2.5.5" data-path="day2.html"><a href="day2.html#mutate"><i class="fa fa-check"></i><b>2.5.5</b> mutate</a></li>
+<li class="chapter" data-level="2.5.6" data-path="day2.html"><a href="day2.html#arrange"><i class="fa fa-check"></i><b>2.5.6</b> arrange</a></li>
+<li class="chapter" data-level="2.5.7" data-path="day2.html"><a href="day2.html#count"><i class="fa fa-check"></i><b>2.5.7</b> count</a></li>
+<li class="chapter" data-level="2.5.8" data-path="day2.html"><a href="day2.html#summarise"><i class="fa fa-check"></i><b>2.5.8</b> summarise</a></li>
+<li class="chapter" data-level="2.5.9" data-path="day2.html"><a href="day2.html#group_by-und-summarise"><i class="fa fa-check"></i><b>2.5.9</b> group_by und summarise</a></li>
+<li class="chapter" data-level="2.5.10" data-path="day2.html"><a href="day2.html#moving-on-to-probability"><i class="fa fa-check"></i><b>2.5.10</b> Moving on to Probability</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="day2.html"><a href="day2.html#but-what-is-probability"><i class="fa fa-check"></i><b>2.6</b> But what is Probability?</a>
+<ul>
+<li class="chapter" data-level="2.6.1" data-path="day2.html"><a href="day2.html#example"><i class="fa fa-check"></i><b>2.6.1</b> Example:</a></li>
+<li class="chapter" data-level="2.6.2" data-path="day2.html"><a href="day2.html#p-values"><i class="fa fa-check"></i><b>2.6.2</b> P-Values</a></li>
+</ul></li>
+<li class="chapter" data-level="2.7" data-path="day2.html"><a href="day2.html#exercise-transfer-to-new-data"><i class="fa fa-check"></i><b>2.7</b> Exercise: Transfer to new Data</a>
+<ul>
+<li class="chapter" data-level="2.7.1" data-path="day2.html"><a href="day2.html#solutions"><i class="fa fa-check"></i><b>2.7.1</b> Solutions</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="day3.html"><a href="day3.html"><i class="fa fa-check"></i><b>3</b> Tidy Data, Visualization and Distributions</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="day3.html"><a href="day3.html#recap-of-day-2"><i class="fa fa-check"></i><b>3.1</b> Recap of day 2</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="day2.html"><a href="day2.html#questions"><i class="fa fa-check"></i><b>3.1.1</b> Questions</a></li>
+<li class="chapter" data-level="3.1.2" data-path="day2.html"><a href="day2.html#answers"><i class="fa fa-check"></i><b>3.1.2</b> Answers</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="day3.html"><a href="day3.html#visualization-with-ggplot2"><i class="fa fa-check"></i><b>3.2</b> Visualization with ggplot2</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="day3.html"><a href="day3.html#the-grammar-of-graphics"><i class="fa fa-check"></i><b>3.2.1</b> The Grammar of Graphics</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="day3.html"><a href="day3.html#visualization-is-key"><i class="fa fa-check"></i><b>3.3</b> Visualization is Key</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="day3.html"><a href="day3.html#anscombe"><i class="fa fa-check"></i><b>3.3.1</b> Anscombes Quartet</a></li>
+<li class="chapter" data-level="3.3.2" data-path="day3.html"><a href="day3.html#excursion-tidy-data"><i class="fa fa-check"></i><b>3.3.2</b> Excursion Tidy Data</a></li>
+<li class="chapter" data-level="3.3.3" data-path="day3.html"><a href="day3.html#summary-statistics"><i class="fa fa-check"></i><b>3.3.3</b> Summary Statistics</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="day3.html"><a href="day3.html#distributions"><i class="fa fa-check"></i><b>3.4</b> Distributions</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="day3.html"><a href="day3.html#from-distributions-to-quantiles"><i class="fa fa-check"></i><b>3.4.1</b> From Distributions to Quantiles</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="day3.html"><a href="day3.html#the-datasaurus-dozen"><i class="fa fa-check"></i><b>3.5</b> The Datasaurus Dozen</a></li>
+<li class="chapter" data-level="3.6" data-path="day3.html"><a href="day3.html#exercises"><i class="fa fa-check"></i><b>3.6</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="3.6.1" data-path="day3.html"><a href="day3.html#inclusion-bodies"><i class="fa fa-check"></i><b>3.6.1</b> Inclusion Bodies</a></li>
+<li class="chapter" data-level="3.6.2" data-path="day2.html"><a href="day2.html#solutions"><i class="fa fa-check"></i><b>3.6.2</b> Solutions</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="day4.html"><a href="day4.html"><i class="fa fa-check"></i><b>4</b> Significance Tests and Power</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="day4.html"><a href="day4.html#the-central-limit-theorem-clt"><i class="fa fa-check"></i><b>4.1</b> The Central Limit Theorem (CLT)</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="day4.html"><a href="day4.html#reading-in-data"><i class="fa fa-check"></i><b>4.1.1</b> Reading in Data</a></li>
+<li class="chapter" data-level="4.1.2" data-path="day4.html"><a href="day4.html#programming-and-problem-solving"><i class="fa fa-check"></i><b>4.1.2</b> Programming and Problem Solving</a></li>
+<li class="chapter" data-level="4.1.3" data-path="day4.html"><a href="day4.html#population-distribution-vs.-distribution-of-means"><i class="fa fa-check"></i><b>4.1.3</b> Population Distribution vs. Distribution of Means</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="day4.html"><a href="day4.html#the-t-distribution"><i class="fa fa-check"></i><b>4.2</b> The T-Distribution</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="day4.html"><a href="day4.html#confidence-intervals-cis"><i class="fa fa-check"></i><b>4.2.1</b> Confidence Intervals (CIs)</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="day4.html"><a href="day4.html#significance-tests"><i class="fa fa-check"></i><b>4.3</b> Significance Tests</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="day4.html"><a href="day4.html#students-t-test"><i class="fa fa-check"></i><b>4.3.1</b> Students T-Test</a></li>
+<li class="chapter" data-level="4.3.2" data-path="day4.html"><a href="day4.html#wilcoxon-rank-sum-test"><i class="fa fa-check"></i><b>4.3.2</b> Wilcoxon Rank Sum Test</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="day4.html"><a href="day4.html#type-i-and-type-ii-errors"><i class="fa fa-check"></i><b>4.4</b> Type I and Type II Errors</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="day4.html"><a href="day4.html#type-i-false-positives"><i class="fa fa-check"></i><b>4.4.1</b> Type I: False Positives</a></li>
+<li class="chapter" data-level="4.4.2" data-path="day4.html"><a href="day4.html#type-ii-false-negatives"><i class="fa fa-check"></i><b>4.4.2</b> Type II: False Negatives</a></li>
+<li class="chapter" data-level="4.4.3" data-path="day4.html"><a href="day4.html#statistical-power"><i class="fa fa-check"></i><b>4.4.3</b> Statistical Power</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="day4.html"><a href="day4.html#problems"><i class="fa fa-check"></i><b>4.5</b> Problems</a>
+<ul>
+<li class="chapter" data-level="4.5.1" data-path="day4.html"><a href="day4.html#the-jelly-bean-problem-multiple-testing"><i class="fa fa-check"></i><b>4.5.1</b> The Jelly Bean Problem (Multiple Testing)</a></li>
+<li class="chapter" data-level="4.5.2" data-path="day4.html"><a href="day4.html#the-base-rate-fallacy"><i class="fa fa-check"></i><b>4.5.2</b> The Base Rate Fallacy</a></li>
+<li class="chapter" data-level="4.5.3" data-path="index.html"><a href="index.html#resources"><i class="fa fa-check"></i><b>4.5.3</b> Resources</a></li>
+</ul></li>
+<li class="chapter" data-level="4.6" data-path="day3.html"><a href="day3.html#exercises"><i class="fa fa-check"></i><b>4.6</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="4.6.1" data-path="day4.html"><a href="day4.html#show-the-following-statements-with-simulations-in-r"><i class="fa fa-check"></i><b>4.6.1</b> Show the following statements with simulations in R</a></li>
+<li class="chapter" data-level="4.6.2" data-path="day4.html"><a href="day4.html#show-the-following-concepts-with-simulations-in-r"><i class="fa fa-check"></i><b>4.6.2</b> Show the following concepts with simulations in R</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="day5.html"><a href="day5.html"><i class="fa fa-check"></i><b>5</b> Correlation and Regression</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="day5.html"><a href="day5.html#side-note-what-is-the-main-goal-of-this-course"><i class="fa fa-check"></i><b>5.1</b> Side note: What is the main goal of this course?</a></li>
+<li class="chapter" data-level="5.2" data-path="day5.html"><a href="day5.html#correlation-and-regression"><i class="fa fa-check"></i><b>5.2</b> Correlation and Regression</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="day5.html"><a href="day5.html#correlation"><i class="fa fa-check"></i><b>5.2.1</b> Correlation</a></li>
+<li class="chapter" data-level="5.2.2" data-path="day5.html"><a href="day5.html#regression"><i class="fa fa-check"></i><b>5.2.2</b> Regression</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="day5.html"><a href="day5.html#non-linear-regression"><i class="fa fa-check"></i><b>5.3</b> Non-Linear Regression</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="day5.html"><a href="day5.html#michaelis-menten-kinetics"><i class="fa fa-check"></i><b>5.3.1</b> Michaelis-Menten Kinetics</a></li>
+<li class="chapter" data-level="5.3.2" data-path="day5.html"><a href="day5.html#many-models"><i class="fa fa-check"></i><b>5.3.2</b> Many Models</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="day3.html"><a href="day3.html#exercises"><i class="fa fa-check"></i><b>5.4</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="5.4.1" data-path="day5.html"><a href="day5.html#with-the-datasaurus-dozen-data-sets"><i class="fa fa-check"></i><b>5.4.1</b> With the Datasaurus Dozen Data Sets</a></li>
+<li class="chapter" data-level="5.4.2" data-path="day5.html"><a href="day5.html#example-data-analysis"><i class="fa fa-check"></i><b>5.4.2</b> Example Data Analysis</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="day6.html"><a href="day6.html"><i class="fa fa-check"></i><b>6</b> Examples and Feedback</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="day6.html"><a href="day6.html#random-sidenotes"><i class="fa fa-check"></i><b>6.1</b> Random Sidenotes</a></li>
+<li class="chapter" data-level="6.2" data-path="day6.html"><a href="day6.html#lots-of-examples"><i class="fa fa-check"></i><b>6.2</b> Lot’s of Examples</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="day6.html"><a href="day6.html#tidytuesday-spotify"><i class="fa fa-check"></i><b>6.2.1</b> Tidytuesday: Spotify</a></li>
+<li class="chapter" data-level="6.2.2" data-path="day6.html"><a href="day6.html#shiny-app"><i class="fa fa-check"></i><b>6.2.2</b> Shiny App</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Introduction to Data Science with R for Biochemists</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="day4" class="section level1" number="4">
+<h1><span class="header-section-number">Day 4</span> Significance Tests and Power</h1>
+<div id="the-central-limit-theorem-clt" class="section level2" number="4.1">
+<h2><span class="header-section-number">4.1</span> The Central Limit Theorem (CLT)</h2>
+<p>From distributions of measurements
+to distributions of means.</p>
+<p>What if Johanna didn’t count as many cells?
+Say 30 instead of 300?</p>
+<p>To turn this into a demonstration, we assume
+that the 300 cells are completely representative
+of all WT and KO cells and thus call this
+our <strong>population</strong>.</p>
+<ul>
+<li>Now we draw a sample of 30 from the population</li>
+<li>We calculate the mean</li>
+<li>And repeat this procedure 1000 times</li>
+<li>What does the distribution of means look like?</li>
+</ul>
+<div id="reading-in-data" class="section level3" number="4.1.1">
+<h3><span class="header-section-number">4.1.1</span> Reading in Data</h3>
+<p>Firstly, we load the tidyverse and our data.</p>
+<div class="sourceCode" id="cb406"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb406-1"><a href="day4.html#cb406-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
+<pre><code>## ── Attaching packages ────────</code></pre>
+<pre><code>## ✓ ggplot2 3.3.2     ✓ purrr   0.3.4
+## ✓ tibble  3.0.3     ✓ dplyr   1.0.1
+## ✓ tidyr   1.1.1     ✓ stringr 1.4.0
+## ✓ readr   1.3.1     ✓ forcats 0.5.0</code></pre>
+<pre><code>## ── Conflicts ─────────────────
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()</code></pre>
+<div class="sourceCode" id="cb410"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb410-1"><a href="day4.html#cb410-1" aria-hidden="true" tabindex="-1"></a><span class="co"># import data for inclusion bodies</span></span>
+<span id="cb410-2"><a href="day4.html#cb410-2" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;data/03_inclusion_bodies.csv&quot;</span>)</span></code></pre></div>
+<pre><code>## Parsed with column specification:
+## cols(
+##   wt = col_double(),
+##   ko = col_double()
+## )</code></pre>
+<div class="sourceCode" id="cb412"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb412-1"><a href="day4.html#cb412-1" aria-hidden="true" tabindex="-1"></a><span class="co"># attach data, handle with CARE!</span></span>
+<span id="cb412-2"><a href="day4.html#cb412-2" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(data)</span></code></pre></div>
+<p><code>attach</code> makes the columns of a data sets (in our case <em>ko</em> and <em>wt</em>)
+globally available as vectors. This enables us to write
+<code>wt</code> instead of <code>data$wt</code> or <code>data["wt"]</code>.</p>
+<blockquote>
+<p>Use <code>attach</code> carefully and only in very few situations!
+The order of those two vectors is now independent of each
+other. Operations on the vectors <code>wt</code> and <code>ko</code> do not
+influence the other vector or the original column
+of the data frame <code>data</code>!</p>
+</blockquote>
+</div>
+<div id="programming-and-problem-solving" class="section level3" number="4.1.2">
+<h3><span class="header-section-number">4.1.2</span> Programming and Problem Solving</h3>
+<p>This approach will help you not only for this exercise
+but for all sorts of problems that come up in programming.
+First, find the smallest piece of the problem that we
+want to solve.</p>
+<div id="the-basic-case" class="section level4" number="4.1.2.1">
+<h4><span class="header-section-number">4.1.2.1</span> The basic Case</h4>
+<p>This is exactly the first part of our road map:</p>
+<ul>
+<li>Now we draw a sample of 30 from the population</li>
+<li>We calculate the mean</li>
+</ul>
+<div class="sourceCode" id="cb413"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb413-1"><a href="day4.html#cb413-1" aria-hidden="true" tabindex="-1"></a><span class="co"># sample n = 30 points from a vector</span></span>
+<span id="cb413-2"><a href="day4.html#cb413-2" aria-hidden="true" tabindex="-1"></a>draw <span class="ot">&lt;-</span> <span class="fu">sample</span>(wt, <span class="dv">30</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb413-3"><a href="day4.html#cb413-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb413-4"><a href="day4.html#cb413-4" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate mean</span></span>
+<span id="cb413-5"><a href="day4.html#cb413-5" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(draw)</span></code></pre></div>
+<pre><code>## [1] 3.633333</code></pre>
+</div>
+<div id="abstraction-for-many-cases" class="section level4" number="4.1.2.2">
+<h4><span class="header-section-number">4.1.2.2</span> Abstraction for many Cases</h4>
+<p>We do not want to type the above lines 1000 times.
+One way to solve this would be with a <code>for</code>-loop.
+But there is a more elegant way.
+This might seem daunting at first but will
+enable you to solve very complex problems
+faster in the long run.</p>
+<p>We turn the two lines of code above into a function.
+And while doing so also introduce a bit of abstraction
+(generalization)</p>
+<p>We create a function that takes a vector (<code>x</code>),
+draws <code>n</code> elements from it and returns the mean of those elements.</p>
+<div class="sourceCode" id="cb415"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb415-1"><a href="day4.html#cb415-1" aria-hidden="true" tabindex="-1"></a><span class="co"># getMeanOfSubset</span></span>
+<span id="cb415-2"><a href="day4.html#cb415-2" aria-hidden="true" tabindex="-1"></a>getMeanOfSubset <span class="ot">&lt;-</span> <span class="cf">function</span>(x, n) {</span>
+<span id="cb415-3"><a href="day4.html#cb415-3" aria-hidden="true" tabindex="-1"></a>  draw <span class="ot">&lt;-</span> <span class="fu">sample</span>(x, n, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb415-4"><a href="day4.html#cb415-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mean</span>(draw)</span>
+<span id="cb415-5"><a href="day4.html#cb415-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Now we can now test that the function is working.</p>
+<div class="sourceCode" id="cb416"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb416-1"><a href="day4.html#cb416-1" aria-hidden="true" tabindex="-1"></a><span class="co"># test getMeanOfSubset</span></span>
+<span id="cb416-2"><a href="day4.html#cb416-2" aria-hidden="true" tabindex="-1"></a><span class="fu">getMeanOfSubset</span>(wt, <span class="dv">30</span>)</span></code></pre></div>
+<pre><code>## [1] 2.5</code></pre>
+<p>Remember the higher order functions introduced
+in the chapter about anscombes quartet (<a href="day3.html#anscombe">3.3.1</a>)?</p>
+<p>We now use the <code>map</code> function from the <code>purrr</code>-package
+to call this function 1000 times and save the result
+in a list or vector (<code>map_dbl</code> for map <em>double</em>).</p>
+<div class="sourceCode" id="cb418"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb418-1"><a href="day4.html#cb418-1" aria-hidden="true" tabindex="-1"></a><span class="co"># define N</span></span>
+<span id="cb418-2"><a href="day4.html#cb418-2" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb418-3"><a href="day4.html#cb418-3" aria-hidden="true" tabindex="-1"></a><span class="co"># map over 1:N</span></span>
+<span id="cb418-4"><a href="day4.html#cb418-4" aria-hidden="true" tabindex="-1"></a>wtMeans <span class="ot">&lt;-</span> <span class="fu">map</span>(<span class="dv">1</span><span class="sc">:</span>N, <span class="sc">~</span> <span class="fu">getMeanOfSubset</span>(wt, <span class="dv">30</span>))</span></code></pre></div>
+<p>Now you might be asking yourselves: “What is this weird tilde
+symbol doing there?”</p>
+</div>
+<div id="excursion-lambda-functions" class="section level4" number="4.1.2.3">
+<h4><span class="header-section-number">4.1.2.3</span> Excursion: Lambda Functions</h4>
+<p><span class="math display">\[\lambda\]</span></p>
+<p>The <code>~</code> symbol (tilde) in the context
+of <code>map</code> functions creates a so called <em>lambda</em> function.
+<em>Lambda</em> functions are anonymous functions,
+functions without a name.
+So we generally use them whenever
+we need a function only once.</p>
+<p><code>function(x) x + 1</code> is equivalent to
+<code>~ .x + 1</code>. The argument passed to the lambda function is
+always called <code>.x</code> inside of the function.</p>
+<p>So in <code>map(1:N, ~ getMeanOfSubset(wt, 30))</code>,
+the lambda function <code>~ getMeanOfSubset(wt, 30)</code>
+takes the numbers from 1 to N (<code>1:N</code>) but completely
+ignores them (there is no mention of <code>.x</code>).
+The result is <code>getMeanOfSubset</code> being called
+1000 times with the same arguments (<code>wt</code> and <code>30</code>).</p>
+<p>We can explicitly request the results as a vector
+of numbers instead of a list with <code>map_dbl</code>.</p>
+<div class="sourceCode" id="cb419"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb419-1"><a href="day4.html#cb419-1" aria-hidden="true" tabindex="-1"></a>wtMeans <span class="ot">&lt;-</span> <span class="fu">map_dbl</span>(<span class="dv">1</span><span class="sc">:</span>N, <span class="sc">~</span> <span class="fu">getMeanOfSubset</span>(wt, <span class="dv">30</span>))</span></code></pre></div>
+</div>
+</div>
+<div id="population-distribution-vs.-distribution-of-means" class="section level3" number="4.1.3">
+<h3><span class="header-section-number">4.1.3</span> Population Distribution vs. Distribution of Means</h3>
+<p>With large enough n, the distribution of means
+follows a normal distribution, even though
+the values are not normally distributed.</p>
+<div class="sourceCode" id="cb420"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb420-1"><a href="day4.html#cb420-1" aria-hidden="true" tabindex="-1"></a>wtMeans <span class="ot">&lt;-</span> <span class="fu">map_dbl</span>(<span class="dv">1</span><span class="sc">:</span>N, <span class="sc">~</span> <span class="fu">getMeanOfSubset</span>(wt, <span class="dv">30</span>))</span>
+<span id="cb420-2"><a href="day4.html#cb420-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(wtMeans)</span>
+<span id="cb420-3"><a href="day4.html#cb420-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(wt)</span></code></pre></div>
+<p><img src="04-day4_files/figure-html/unnamed-chunk-7-1.svg" width="50%" /><img src="04-day4_files/figure-html/unnamed-chunk-7-2.svg" width="50%" /></p>
+<p>According to the Central Limit Theorem the means
+follow a normal distribution. We can show this.</p>
+<div class="sourceCode" id="cb421"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb421-1"><a href="day4.html#cb421-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(wtMeans)</span>
+<span id="cb421-2"><a href="day4.html#cb421-2" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(wtMeans, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<p><img src="04-day4_files/figure-html/unnamed-chunk-8-1.svg" width="672" /></p>
+<p>For another great visualization of the central limit
+theorem, check out this interactive tutorial by
+<a href="https://seeing-theory.brown.edu/probability-distributions/index.html#section3">Seeing Theory</a>.</p>
+</div>
+</div>
+<div id="the-t-distribution" class="section level2" number="4.2">
+<h2><span class="header-section-number">4.2</span> The T-Distribution</h2>
+<p>The CLT is only valid for large <em>sample sizes</em>.
+For smaller sample sizes, the distribution of
+means has fatter tails than a normal distribution</p>
+<p>This is why for most statistical tests,
+we use the t-distribution instead of the
+normal distribution.</p>
+<p>For 3 degrees of freedom (DF):</p>
+<div class="sourceCode" id="cb422"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb422-1"><a href="day4.html#cb422-1" aria-hidden="true" tabindex="-1"></a>tdist <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="fu">dt</span>(x, <span class="at">df =</span> <span class="dv">3</span>)</span>
+<span id="cb422-2"><a href="day4.html#cb422-2" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>(dnorm, <span class="sc">-</span><span class="dv">3</span>, <span class="dv">3</span>)</span>
+<span id="cb422-3"><a href="day4.html#cb422-3" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>(tdist, <span class="sc">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="at">add =</span> <span class="cn">TRUE</span>, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:tdist"></span>
+<img src="04-day4_files/figure-html/tdist-1.svg" alt="t-distribution in red, normal distribution in black." width="672" />
+<p class="caption">
+Figure 4.1: t-distribution in red, normal distribution in black.
+</p>
+</div>
+<p>For 30 DF:</p>
+<div class="sourceCode" id="cb423"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb423-1"><a href="day4.html#cb423-1" aria-hidden="true" tabindex="-1"></a>tdist <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="fu">dt</span>(x, <span class="at">df =</span> <span class="dv">30</span>)</span>
+<span id="cb423-2"><a href="day4.html#cb423-2" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>(dnorm, <span class="sc">-</span><span class="dv">3</span>, <span class="dv">3</span>)</span>
+<span id="cb423-3"><a href="day4.html#cb423-3" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>(tdist, <span class="sc">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="at">add =</span> <span class="cn">TRUE</span>, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:tdist2"></span>
+<img src="04-day4_files/figure-html/tdist2-1.svg" alt="t-distribution in red, normal distribution in black." width="672" />
+<p class="caption">
+Figure 4.2: t-distribution in red, normal distribution in black.
+</p>
+</div>
+<div id="confidence-intervals-cis" class="section level3" number="4.2.1">
+<h3><span class="header-section-number">4.2.1</span> Confidence Intervals (CIs)</h3>
+<p>We can use the t-distribution to
+calculate (95%-) confidence intervals.</p>
+<p>The 95% CI of a sample mean contains the
+true mean (the mean of the population)
+in 95% of cases (if you where to repeat the experiment
+infinitely often).</p>
+<div class="sourceCode" id="cb424"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb424-1"><a href="day4.html#cb424-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(wtMeans)</span>
+<span id="cb424-2"><a href="day4.html#cb424-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="fu">mean</span>(wt), <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:ci-vis"></span>
+<img src="04-day4_files/figure-html/ci-vis-1.svg" alt="True mean in red." width="672" />
+<p class="caption">
+Figure 4.3: True mean in red.
+</p>
+</div>
+<div class="sourceCode" id="cb425"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb425-1"><a href="day4.html#cb425-1" aria-hidden="true" tabindex="-1"></a>draw <span class="ot">&lt;-</span> <span class="fu">sample</span>(wt, <span class="dv">7</span>)</span>
+<span id="cb425-2"><a href="day4.html#cb425-2" aria-hidden="true" tabindex="-1"></a>CI <span class="ot">&lt;-</span> <span class="fu">t.test</span>(draw)<span class="sc">$</span>conf.int</span>
+<span id="cb425-3"><a href="day4.html#cb425-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(draw)</span>
+<span id="cb425-4"><a href="day4.html#cb425-4" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> CI[<span class="dv">1</span>], <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span>
+<span id="cb425-5"><a href="day4.html#cb425-5" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> CI[<span class="dv">2</span>], <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<p><img src="04-day4_files/figure-html/unnamed-chunk-9-1.svg" width="672" /></p>
+</div>
+</div>
+<div id="significance-tests" class="section level2" number="4.3">
+<h2><span class="header-section-number">4.3</span> Significance Tests</h2>
+<p>Significance tests answer the question:</p>
+<blockquote>
+<p><em>“Under the assumption of no difference
+between two (or more) groups (i.e. they
+are samples of the same population),
+what is the probability to find a difference
+as large as or more extreme than the
+difference observed.”</em></p>
+</blockquote>
+<div id="students-t-test" class="section level3" number="4.3.1">
+<h3><span class="header-section-number">4.3.1</span> Students T-Test</h3>
+<p>For normally distributed data,
+we would use students t-test.</p>
+<div class="sourceCode" id="cb426"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb426-1"><a href="day4.html#cb426-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(wt, ko)</span></code></pre></div>
+<pre><code>## 
+## 	Welch Two Sample t-test
+## 
+## data:  wt and ko
+## t = -26.929, df = 476.21, p-value &lt; 2.2e-16
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -13.19393 -11.39940
+## sample estimates:
+## mean of x mean of y 
+##  3.043333 15.340000</code></pre>
+<div class="sourceCode" id="cb428"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb428-1"><a href="day4.html#cb428-1" aria-hidden="true" tabindex="-1"></a>wtDraw <span class="ot">&lt;-</span> <span class="fu">sample</span>(wt, <span class="dv">3</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb428-2"><a href="day4.html#cb428-2" aria-hidden="true" tabindex="-1"></a>koDraw <span class="ot">&lt;-</span> <span class="fu">sample</span>(ko, <span class="dv">3</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb428-3"><a href="day4.html#cb428-3" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(wtDraw, koDraw)</span></code></pre></div>
+<pre><code>## 
+## 	Welch Two Sample t-test
+## 
+## data:  wtDraw and koDraw
+## t = -2.2283, df = 3.0218, p-value = 0.1115
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -19.378879   3.378879
+## sample estimates:
+## mean of x mean of y 
+##  5.666667 13.666667</code></pre>
+<p>But our data is not normally distributed!</p>
+<div class="sourceCode" id="cb430"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb430-1"><a href="day4.html#cb430-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">%&gt;%</span> </span>
+<span id="cb430-2"><a href="day4.html#cb430-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb430-3"><a href="day4.html#cb430-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(name, value, <span class="at">fill =</span> name)) <span class="sc">+</span></span>
+<span id="cb430-4"><a href="day4.html#cb430-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>()</span></code></pre></div>
+<p><img src="04-day4_files/figure-html/unnamed-chunk-12-1.svg" width="672" /></p>
+</div>
+<div id="wilcoxon-rank-sum-test" class="section level3" number="4.3.2">
+<h3><span class="header-section-number">4.3.2</span> Wilcoxon Rank Sum Test</h3>
+<p>With non-normal data, we need a so called
+<strong>non-parametric</strong> test. Those tests do not
+make the assumption of normality.</p>
+<p>The Wilcoxon Rank Sum test (also called Mann-Whitney U test)
+takes the values and converts them into “ranks”
+before comparing them.</p>
+<p>The rank of a value in our dataset answers the question:</p>
+<blockquote>
+<p>“When sorting the values from lowest to highest,
+what is the index of that value?”</p>
+</blockquote>
+<p>Example:</p>
+<div class="sourceCode" id="cb431"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb431-1"><a href="day4.html#cb431-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="fl">1.12312</span>, <span class="dv">4000000</span>, <span class="dv">42</span>)</span>
+<span id="cb431-2"><a href="day4.html#cb431-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rank</span>(x)</span></code></pre></div>
+<pre><code>## [1] 1 3 2 5 4</code></pre>
+<p>We run this test in R as follows:</p>
+<div class="sourceCode" id="cb433"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb433-1"><a href="day4.html#cb433-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wilcox.test</span>(wt, ko)</span></code></pre></div>
+<pre><code>## 
+## 	Wilcoxon rank sum test with continuity correction
+## 
+## data:  wt and ko
+## W = 4707.5, p-value &lt; 2.2e-16
+## alternative hypothesis: true location shift is not equal to 0</code></pre>
+</div>
+</div>
+<div id="type-i-and-type-ii-errors" class="section level2" number="4.4">
+<h2><span class="header-section-number">4.4</span> Type I and Type II Errors</h2>
+<ul>
+<li>Type I: False Positives (rejection of a true null hypothesis)</li>
+<li>Type II: False Negatives (non-rejection of false null hypothesis)</li>
+</ul>
+<div id="type-i-false-positives" class="section level3" number="4.4.1">
+<h3><span class="header-section-number">4.4.1</span> Type I: False Positives</h3>
+<p>A type I error means we find a difference between
+samples even though there is none (they are from
+the same population)</p>
+<p>We often define a p-value <span class="math inline">\(\leq\)</span> 0.05 (= 5 %) as
+a “statistically significant” result. Keep in mind,
+that this cutoff is arbitrary and has no physical
+meaning. This cutoff also means that by definition
+we are accepting a minimum of 5% false positives!
+This cutoff, the significance level is also called
+<span class="math inline">\(\alpha\)</span>.</p>
+<p><span class="math display">\[\alpha=\text{Type I error rate}\]</span></p>
+<div class="sourceCode" id="cb435"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb435-1"><a href="day4.html#cb435-1" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>(dnorm, <span class="sc">-</span><span class="dv">3</span>, <span class="dv">3</span>)</span></code></pre></div>
+<p><img src="04-day4_files/figure-html/unnamed-chunk-15-1.svg" width="672" /></p>
+<div class="sourceCode" id="cb436"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb436-1"><a href="day4.html#cb436-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb436-2"><a href="day4.html#cb436-2" aria-hidden="true" tabindex="-1"></a>draw1 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb436-3"><a href="day4.html#cb436-3" aria-hidden="true" tabindex="-1"></a>draw2 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)</span></code></pre></div>
+<div class="sourceCode" id="cb437"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb437-1"><a href="day4.html#cb437-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(draw1, draw2)</span></code></pre></div>
+<pre><code>## 
+## 	Welch Two Sample t-test
+## 
+## data:  draw1 and draw2
+## t = 0.85987, df = 7.9773, p-value = 0.415
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -0.9470132  2.0723043
+## sample estimates:
+##   mean of x   mean of y 
+## 0.571204782 0.008559254</code></pre>
+<div class="sourceCode" id="cb439"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb439-1"><a href="day4.html#cb439-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wilcox.test</span>(draw1, draw2)</span></code></pre></div>
+<pre><code>## 
+## 	Wilcoxon rank sum exact test
+## 
+## data:  draw1 and draw2
+## W = 16, p-value = 0.5476
+## alternative hypothesis: true location shift is not equal to 0</code></pre>
+<p>Test this code with different values of <code>n</code>.</p>
+</div>
+<div id="type-ii-false-negatives" class="section level3" number="4.4.2">
+<h3><span class="header-section-number">4.4.2</span> Type II: False Negatives</h3>
+<p>If there exists a true difference between samples
+(i.e. they come from a different population), but
+we do not detect that difference (“not statistically significant”),
+we commit a type II error.</p>
+<p>A type II error is thus a false negative result.
+the type II error rate is called <span class="math inline">\(\beta\)</span>
+(analogous to <span class="math inline">\(\alpha\)</span>).</p>
+<p><span class="math display">\[\beta=\text{Type II error rate}\]</span></p>
+<div class="sourceCode" id="cb441"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb441-1"><a href="day4.html#cb441-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb441-2"><a href="day4.html#cb441-2" aria-hidden="true" tabindex="-1"></a>draw1 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">0</span>)</span>
+<span id="cb441-3"><a href="day4.html#cb441-3" aria-hidden="true" tabindex="-1"></a>draw2 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb442"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb442-1"><a href="day4.html#cb442-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(draw1, draw2)</span></code></pre></div>
+<pre><code>## 
+## 	Welch Two Sample t-test
+## 
+## data:  draw1 and draw2
+## t = -0.93826, df = 7.8395, p-value = 0.3761
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -2.464869  1.042769
+## sample estimates:
+## mean of x mean of y 
+## 0.5616486 1.2726987</code></pre>
+<div class="sourceCode" id="cb444"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb444-1"><a href="day4.html#cb444-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wilcox.test</span>(draw1, draw2)</span></code></pre></div>
+<pre><code>## 
+## 	Wilcoxon rank sum exact test
+## 
+## data:  draw1 and draw2
+## W = 9, p-value = 0.5476
+## alternative hypothesis: true location shift is not equal to 0</code></pre>
+<p>Repeat with different values of <code>n</code>.</p>
+</div>
+<div id="statistical-power" class="section level3" number="4.4.3">
+<h3><span class="header-section-number">4.4.3</span> Statistical Power</h3>
+<p>The power of a statistical test is the probability
+to classify a real difference as statistically
+significant (with the chosen <span class="math inline">\(\alpha\)</span>).
+So it represents true positives.</p>
+<p><span class="math display">\[Power = 1-\beta\]</span></p>
+<p>In R, we have the function <code>power.t.test</code>, which
+can tell us the power (or any of the arguments left blank / set to NULL)</p>
+<div class="sourceCode" id="cb446"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb446-1"><a href="day4.html#cb446-1" aria-hidden="true" tabindex="-1"></a><span class="fu">power.t.test</span>(<span class="at">n =</span> <span class="cn">NULL</span>,</span>
+<span id="cb446-2"><a href="day4.html#cb446-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">delta =</span> <span class="dv">5</span>,</span>
+<span id="cb446-3"><a href="day4.html#cb446-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">sd =</span> <span class="dv">1</span>,</span>
+<span id="cb446-4"><a href="day4.html#cb446-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">sig.level =</span> <span class="fl">0.05</span>,</span>
+<span id="cb446-5"><a href="day4.html#cb446-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">power =</span> <span class="fl">0.9</span>)</span></code></pre></div>
+<pre><code>## 
+##      Two-sample t test power calculation 
+## 
+##               n = 2.328877
+##           delta = 5
+##              sd = 1
+##       sig.level = 0.05
+##           power = 0.9
+##     alternative = two.sided
+## 
+## NOTE: n is number in *each* group</code></pre>
+</div>
+</div>
+<div id="problems" class="section level2" number="4.5">
+<h2><span class="header-section-number">4.5</span> Problems</h2>
+<div id="the-jelly-bean-problem-multiple-testing" class="section level3" number="4.5.1">
+<h3><span class="header-section-number">4.5.1</span> The Jelly Bean Problem (Multiple Testing)</h3>
+<p>Controlling the False Discovery Rate (FDA):</p>
+<div id="bonferroni-correction" class="section level4" number="4.5.1.1">
+<h4><span class="header-section-number">4.5.1.1</span> Bonferroni correction</h4>
+<div class="sourceCode" id="cb448"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb448-1"><a href="day4.html#cb448-1" aria-hidden="true" tabindex="-1"></a>pValues <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.05</span>, <span class="fl">0.3</span>, <span class="fl">0.001</span>, <span class="fl">0.003</span>)</span>
+<span id="cb448-2"><a href="day4.html#cb448-2" aria-hidden="true" tabindex="-1"></a><span class="fu">p.adjust</span>(pValues, <span class="at">method =</span> <span class="st">&quot;bonferroni&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] 1.000 0.250 1.000 0.005 0.015</code></pre>
+</div>
+<div id="benjamini-hochberg-procedure" class="section level4" number="4.5.1.2">
+<h4><span class="header-section-number">4.5.1.2</span> Benjamini-Hochberg procedure</h4>
+<ul>
+<li>Sort all p-values in ascending order</li>
+<li>Choose a FDR <span class="math inline">\(q\)</span> and call the number of tests done <span class="math inline">\(m\)</span></li>
+<li>Find the largest p-value with:
+<span class="math inline">\(p \leq iq/m\)</span> with its index <span class="math inline">\(i\)</span>.</li>
+<li>This is your new threshold for significance</li>
+</ul>
+<div class="sourceCode" id="cb450"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb450-1"><a href="day4.html#cb450-1" aria-hidden="true" tabindex="-1"></a><span class="fu">p.adjust</span>(pValues, <span class="at">method =</span> <span class="st">&quot;BH&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] 0.50000000 0.08333333 0.37500000 0.00500000 0.00750000</code></pre>
+</div>
+</div>
+<div id="the-base-rate-fallacy" class="section level3" number="4.5.2">
+<h3><span class="header-section-number">4.5.2</span> The Base Rate Fallacy</h3>
+<p>Example: mammogram</p>
+<ul>
+<li>Sensitivity = Power = true positive rate</li>
+<li>Specificity = true negative rate = <span class="math inline">\(1-\alpha\)</span></li>
+</ul>
+<div class="sourceCode" id="cb452"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb452-1"><a href="day4.html#cb452-1" aria-hidden="true" tabindex="-1"></a>total <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb452-2"><a href="day4.html#cb452-2" aria-hidden="true" tabindex="-1"></a>positives <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb452-3"><a href="day4.html#cb452-3" aria-hidden="true" tabindex="-1"></a>negatives <span class="ot">&lt;-</span> total <span class="sc">-</span> positives</span>
+<span id="cb452-4"><a href="day4.html#cb452-4" aria-hidden="true" tabindex="-1"></a>sensitivity <span class="ot">&lt;-</span> <span class="fl">0.9</span></span>
+<span id="cb452-5"><a href="day4.html#cb452-5" aria-hidden="true" tabindex="-1"></a>specificity <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fl">0.08</span></span>
+<span id="cb452-6"><a href="day4.html#cb452-6" aria-hidden="true" tabindex="-1"></a>true_positives  <span class="ot">&lt;-</span> sensitivity <span class="sc">*</span> positives</span>
+<span id="cb452-7"><a href="day4.html#cb452-7" aria-hidden="true" tabindex="-1"></a>false_positives <span class="ot">&lt;-</span> (<span class="dv">1</span> <span class="sc">-</span> specificity) <span class="sc">*</span> negatives</span>
+<span id="cb452-8"><a href="day4.html#cb452-8" aria-hidden="true" tabindex="-1"></a>p_positive <span class="ot">&lt;-</span> true_positives <span class="sc">/</span> (true_positives <span class="sc">+</span> false_positives)</span></code></pre></div>
+<p><img src="04-day4_files/figure-html/unnamed-chunk-26-1.svg" width="672" /></p>
+<p><img src="04-day4_files/figure-html/unnamed-chunk-27-1.svg" width="672" /></p>
+<p><img src="04-day4_files/figure-html/unnamed-chunk-28-1.svg" width="672" /></p>
+<div class="sourceCode" id="cb453"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb453-1"><a href="day4.html#cb453-1" aria-hidden="true" tabindex="-1"></a>p_positive</span></code></pre></div>
+<pre><code>## [1] 0.1020408</code></pre>
+<p>Bayes Formula:</p>
+<p><span class="math display">\[P(A|B)=\frac{P(B|A)*P(A)}{P(B)}\]</span></p>
+<p>With <span class="math inline">\(P(X)\)</span> as the probability of <span class="math inline">\(X\)</span> and <span class="math inline">\(P(X|Y)\)</span> being the
+probability of <span class="math inline">\(X\)</span> given <span class="math inline">\(Y\)</span> (<em>conditional probability</em>).</p>
+<p>In terms of our example:</p>
+<p><span class="math display">\[P( Cancer | positive Test)=\frac{P(positive Test|Cancer)*P(Cancer)}{P(positive Test)}\]</span></p>
+<p>The probability of having the disease given a positive test result (<span class="math inline">\(P(A|B)\)</span>),
+is equal to the probability of testing positive while having the disease
+(the sensitivity!) times the probability of having the disease just based on
+the prevalence of the disease (this is also called the prior probability, <span class="math inline">\(P(A)\)</span>)
+divided by the probability of testing positive, no matter the condition.
+The latter part, the denominator, can be broken down further
+to be expressed in terms of our definitions from the beginning
+of this section:</p>
+<p><span class="math display">\[P( Cancer | positive Test)=\frac{P(positive Test|Cancer)*P(Cancer)}{P(positive Test | Cancer) *  P(Cancer) + P(positive Test | no Cancer) *  P(no Cancer)}\]</span></p>
+<p>So in other words:</p>
+<p><span class="math display">\[P( Cancer | positive~test)=\frac{Sensitivity*Prevalence}{Sensitivity *  Prevalence + (1-Specificity) *  (1-Prevalence)}\]</span></p>
+</div>
+<div id="resources" class="section level3" number="4.5.3">
+<h3><span class="header-section-number">4.5.3</span> Resources</h3>
+<ul>
+<li>Statistics Done Wrong: <a href="https://www.statisticsdonewrong.com/" class="uri">https://www.statisticsdonewrong.com/</a></li>
+<li>Intuitive Biostatistics, also in the Uni-Bib: <a href="https://katalog.ub.uni-heidelberg.de/cgi-bin/titel.cgi?katkey=68260114&amp;sess=050a1316767b181982c9bce94283e9ae&amp;query=Intuitive%20Biostatistics" class="uri">https://katalog.ub.uni-heidelberg.de/cgi-bin/titel.cgi?katkey=68260114&amp;sess=050a1316767b181982c9bce94283e9ae&amp;query=Intuitive%20Biostatistics</a></li>
+<li><a href="https://www.graphpad.com/guides/prism/8/statistics/index.htm" class="uri">https://www.graphpad.com/guides/prism/8/statistics/index.htm</a></li>
+</ul>
+</div>
+</div>
+<div id="exercises" class="section level2" number="4.6">
+<h2><span class="header-section-number">4.6</span> Exercises</h2>
+<div id="show-the-following-statements-with-simulations-in-r" class="section level3" number="4.6.1">
+<h3><span class="header-section-number">4.6.1</span> Show the following statements with simulations in R</h3>
+<div id="increasing-the-sample-size-n-reduces-the-standard-error-of-the-mean-with-the-square-root-of-n." class="section level4" number="4.6.1.1">
+<h4><span class="header-section-number">4.6.1.1</span> Increasing the sample size n reduces the standard error of the mean with the square root of n.</h4>
+<ul>
+<li>Draw 10 cells from the wt (or ko) vector</li>
+<li>calculate the mean</li>
+<li>write a function that does that</li>
+<li>run it 1000 times and save the result in a vector</li>
+<li>calculate the SD of the means</li>
+<li>now, draw 40 instead of 10 cells and repeat. How does the SD change?</li>
+<li>Write a function of n that does above steps</li>
+<li>Feed the numbers from 1 to 100 to the function and
+plot the resulting SDs</li>
+</ul>
+<div class="sourceCode" id="cb455"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb455-1"><a href="day4.html#cb455-1" aria-hidden="true" tabindex="-1"></a>getMeanOfSample <span class="ot">&lt;-</span> <span class="cf">function</span>(x, n) <span class="fu">sample</span>(x, n, <span class="at">replace =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> <span class="fu">mean</span>()</span>
+<span id="cb455-2"><a href="day4.html#cb455-2" aria-hidden="true" tabindex="-1"></a>getSdOfManyMeans <span class="ot">&lt;-</span> <span class="cf">function</span>(n, x) {</span>
+<span id="cb455-3"><a href="day4.html#cb455-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map_dbl</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, <span class="sc">~</span> <span class="fu">getMeanOfSample</span>(x, n) ) <span class="sc">%&gt;%</span> <span class="fu">sd</span>()</span>
+<span id="cb455-4"><a href="day4.html#cb455-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb455-5"><a href="day4.html#cb455-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb455-6"><a href="day4.html#cb455-6" aria-hidden="true" tabindex="-1"></a>sdByN <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">N =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb455-7"><a href="day4.html#cb455-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sd =</span> <span class="fu">map_dbl</span>(N, getSdOfManyMeans, <span class="at">x =</span> wt))</span>
+<span id="cb455-8"><a href="day4.html#cb455-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb455-9"><a href="day4.html#cb455-9" aria-hidden="true" tabindex="-1"></a>sdByN <span class="sc">%&gt;%</span> </span>
+<span id="cb455-10"><a href="day4.html#cb455-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(N, sd)) <span class="sc">+</span></span>
+<span id="cb455-11"><a href="day4.html#cb455-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
+<p><img src="04-day4_files/figure-html/unnamed-chunk-30-1.svg" width="672" /></p>
+</div>
+<div id="a-95-confidence-interval-of-a-sample-contains-the-true-mean-of-the-population-with-a-probability-of-95" class="section level4" number="4.6.1.2">
+<h4><span class="header-section-number">4.6.1.2</span> A 95% confidence interval of a sample contains the true mean (of the population) with a probability of 95%</h4>
+<ul>
+<li>draw 30 cells from the wt (or ko) vector</li>
+<li>Calculate the limits of the CI</li>
+<li>write a function that does that</li>
+<li>use <code>map</code> or <code>replicate</code> to get 1000 sets of limits</li>
+<li>Write a function that tests, if a set
+of limits contains the true mean</li>
+<li>Map this function over the list of limits</li>
+<li>How often to you obtain <code>TRUE</code>?</li>
+</ul>
+<div class="sourceCode" id="cb456"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb456-1"><a href="day4.html#cb456-1" aria-hidden="true" tabindex="-1"></a>calculateCIforSample <span class="ot">&lt;-</span> <span class="cf">function</span>(x, n) {</span>
+<span id="cb456-2"><a href="day4.html#cb456-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample</span>(x, n, <span class="at">replace =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb456-3"><a href="day4.html#cb456-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">t.test</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb456-4"><a href="day4.html#cb456-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pluck</span>(<span class="st">&quot;conf.int&quot;</span>)</span>
+<span id="cb456-5"><a href="day4.html#cb456-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb456-6"><a href="day4.html#cb456-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb456-7"><a href="day4.html#cb456-7" aria-hidden="true" tabindex="-1"></a>testLimitContainsMean <span class="ot">&lt;-</span> <span class="cf">function</span>(limit, M) {</span>
+<span id="cb456-8"><a href="day4.html#cb456-8" aria-hidden="true" tabindex="-1"></a>  limit[<span class="dv">1</span>] <span class="sc">&lt;=</span> M <span class="sc">&amp;&amp;</span> limit[<span class="dv">2</span>] <span class="sc">&gt;=</span> M</span>
+<span id="cb456-9"><a href="day4.html#cb456-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb456-10"><a href="day4.html#cb456-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb456-11"><a href="day4.html#cb456-11" aria-hidden="true" tabindex="-1"></a>manyCIs <span class="ot">&lt;-</span> <span class="fu">map</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, <span class="sc">~</span> <span class="fu">calculateCIforSample</span>(wt, <span class="dv">30</span>))</span>
+<span id="cb456-12"><a href="day4.html#cb456-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb456-13"><a href="day4.html#cb456-13" aria-hidden="true" tabindex="-1"></a><span class="fu">map_lgl</span>(manyCIs, testLimitContainsMean, <span class="at">M  =</span> <span class="fu">mean</span>(wt)) <span class="sc">%&gt;%</span> </span>
+<span id="cb456-14"><a href="day4.html#cb456-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mean</span>()</span></code></pre></div>
+<pre><code>## [1] 0.91</code></pre>
+<p>Optionally</p>
+<div class="sourceCode" id="cb458"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb458-1"><a href="day4.html#cb458-1" aria-hidden="true" tabindex="-1"></a>manyCIs <span class="sc">%&gt;%</span> </span>
+<span id="cb458-2"><a href="day4.html#cb458-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">enframe</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb458-3"><a href="day4.html#cb458-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest_wider</span>(value) <span class="sc">%&gt;%</span> </span>
+<span id="cb458-4"><a href="day4.html#cb458-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code></pre></div>
+<pre><code>## # A tibble: 6 x 3
+##    name  ...1  ...2
+##   &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1     1  1.10  2.77
+## 2     2  1.47  4.27
+## 3     3  1.59  4.88
+## 4     4  1.24  3.16
+## 5     5  2.00  5.20
+## 6     6  2.74  6.32</code></pre>
+</div>
+</div>
+<div id="show-the-following-concepts-with-simulations-in-r" class="section level3" number="4.6.2">
+<h3><span class="header-section-number">4.6.2</span> Show the following concepts with simulations in R</h3>
+<div id="sensitivity-with-a-true-difference-existing-how-large-is-the-probability-to-detect-it-i.e.-get-a-p-value-0.05-with-a-wilcoxon-rank-sum-test" class="section level4" number="4.6.2.1">
+<h4><span class="header-section-number">4.6.2.1</span> Sensitivity: With a true difference existing, how large is the probability to detect it (i.e. get a p-value &lt;= 0.05) with a wilcoxon rank sum test?</h4>
+<ul>
+<li>Draw a sample of 30 from the wt and the ko vector and test
+for a statistically significant difference</li>
+<li>Do this 1000 times. How many are statistically significant?</li>
+<li>What changes when you draw 10 instead of 30? Or 5?</li>
+</ul>
+<div class="sourceCode" id="cb460"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb460-1"><a href="day4.html#cb460-1" aria-hidden="true" tabindex="-1"></a>runWilcoxOnSample <span class="ot">&lt;-</span> <span class="cf">function</span>(n, x1, x2) {</span>
+<span id="cb460-2"><a href="day4.html#cb460-2" aria-hidden="true" tabindex="-1"></a>  draw1 <span class="ot">&lt;-</span> <span class="fu">sample</span>(x1, n, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb460-3"><a href="day4.html#cb460-3" aria-hidden="true" tabindex="-1"></a>  draw2 <span class="ot">&lt;-</span> <span class="fu">sample</span>(x2, n, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb460-4"><a href="day4.html#cb460-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wilcox.test</span>(draw1, draw2, <span class="at">exact =</span> <span class="cn">FALSE</span>)<span class="sc">$</span>p.value</span>
+<span id="cb460-5"><a href="day4.html#cb460-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb460-6"><a href="day4.html#cb460-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb460-7"><a href="day4.html#cb460-7" aria-hidden="true" tabindex="-1"></a>pValues <span class="ot">&lt;-</span> <span class="fu">map_dbl</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>, <span class="sc">~</span> <span class="fu">runWilcoxOnSample</span>(<span class="dv">9</span>, wt, ko))</span>
+<span id="cb460-8"><a href="day4.html#cb460-8" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(pValues <span class="sc">&lt;=</span> <span class="fl">0.05</span>)</span></code></pre></div>
+<pre><code>## [1] 0.993</code></pre>
+<div class="sourceCode" id="cb462"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb462-1"><a href="day4.html#cb462-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(pValues)</span></code></pre></div>
+<p><img src="04-day4_files/figure-html/unnamed-chunk-33-1.svg" width="672" /></p>
+<div class="sourceCode" id="cb463"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb463-1"><a href="day4.html#cb463-1" aria-hidden="true" tabindex="-1"></a>?wilcox.test</span></code></pre></div>
+</div>
+<div id="specificity-with-no-difference-existing-what-is-the-probability-to-detect-one-nonetheless" class="section level4" number="4.6.2.2">
+<h4><span class="header-section-number">4.6.2.2</span> Specificity: With <strong>no</strong> difference existing, what is the probability to detect one nonetheless?</h4>
+<ul>
+<li>Imagine all cells are wt-cells</li>
+<li>Draw two samples of n = 30 from the wt-cells (i.e. the same population)
+and run a wilcoxon rank sum test</li>
+<li>Repeat 1000 times</li>
+<li>How are the p-values distributed?</li>
+<li>How often is the result statistically significant?</li>
+</ul>
+<div class="sourceCode" id="cb464"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb464-1"><a href="day4.html#cb464-1" aria-hidden="true" tabindex="-1"></a>pValues <span class="ot">&lt;-</span> <span class="fu">map_dbl</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>, <span class="sc">~</span> <span class="fu">runWilcoxOnSample</span>(<span class="dv">10</span>, wt, wt))</span>
+<span id="cb464-2"><a href="day4.html#cb464-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(pValues <span class="sc">&lt;=</span> <span class="fl">0.05</span>)</span></code></pre></div>
+<pre><code>## [1] 0.049</code></pre>
+<div class="sourceCode" id="cb466"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb466-1"><a href="day4.html#cb466-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(pValues)</span></code></pre></div>
+<p><img src="04-day4_files/figure-html/unnamed-chunk-35-1.svg" width="672" /></p>
+</div>
+<div id="resource-for-p-value-histograms" class="section level4" number="4.6.2.3">
+<h4><span class="header-section-number">4.6.2.3</span> Resource for p-value Histograms</h4>
+<p><a href="http://varianceexplained.org/statistics/interpreting-pvalue-histogram/" class="uri">http://varianceexplained.org/statistics/interpreting-pvalue-histogram/</a></p>
+</div>
+<div id="further-notes" class="section level4" number="4.6.2.4">
+<h4><span class="header-section-number">4.6.2.4</span> Further notes</h4>
+<div class="sourceCode" id="cb467"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb467-1"><a href="day4.html#cb467-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;usefullFunctions.R&quot;</span>)</span></code></pre></div>
+<p>Note: I showed you a lot of map functions, but
+often, you don’t need a map function because
+a lot of the basic operations in R are
+vectorised by default (so they operate on
+elements of vectors).</p>
+<p>With two vectors <code>x</code> and <code>y</code></p>
+<div class="sourceCode" id="cb468"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb468-1"><a href="day4.html#cb468-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span></span>
+<span id="cb468-2"><a href="day4.html#cb468-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span></span></code></pre></div>
+<p>We can just write</p>
+<div class="sourceCode" id="cb469"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb469-1"><a href="day4.html#cb469-1" aria-hidden="true" tabindex="-1"></a>x <span class="sc">+</span> y</span></code></pre></div>
+<pre><code>## [1]  2  4  6  8 10</code></pre>
+<p>Instead of</p>
+<div class="sourceCode" id="cb471"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb471-1"><a href="day4.html#cb471-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map2_dbl</span>(x,y, <span class="st">`</span><span class="at">+</span><span class="st">`</span>)</span></code></pre></div>
+<pre><code>## [1]  2  4  6  8 10</code></pre>
+
+</div>
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="day3.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="day5.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

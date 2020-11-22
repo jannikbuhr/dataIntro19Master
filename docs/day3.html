@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Day 3 Tidy Data, Visualization and Distributions | Introduction to Data Science with R for Biochemists</title>
+  <meta name="description" content="Day 3 Tidy Data, Visualization and Distributions | Introduction to Data Science with R for Biochemists" />
+  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Day 3 Tidy Data, Visualization and Distributions | Introduction to Data Science with R for Biochemists" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Day 3 Tidy Data, Visualization and Distributions | Introduction to Data Science with R for Biochemists" />
+  <meta name="github-repo" content="jannikbuhr/dataIntro19Master" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Day 3 Tidy Data, Visualization and Distributions | Introduction to Data Science with R for Biochemists" />
+  
+  <meta name="twitter:description" content="Day 3 Tidy Data, Visualization and Distributions | Introduction to Data Science with R for Biochemists" />
+  
+
+<meta name="author" content="Jannik Buhr" />
+
+
+<meta name="date" content="2020-11-22" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="day2.html"/>
+<link rel="next" href="day4.html"/>
+<script src="libs/header-attrs-2.5/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.9.2.1/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-1.52.2/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-1.52.2/plotly-latest.min.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="https://jmbuhr.de/dataIntro19Master/">Introduction to data analysis with R</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Prologue</a>
+<ul>
+<li class="chapter" data-level="0.1" data-path="index.html"><a href="index.html#preparation-for-the-course"><i class="fa fa-check"></i><b>0.1</b> Preparation for the Course</a></li>
+<li class="chapter" data-level="0.2" data-path="index.html"><a href="index.html#structure-of-the-course"><i class="fa fa-check"></i><b>0.2</b> Structure of the Course</a></li>
+<li class="chapter" data-level="0.3" data-path="index.html"><a href="index.html#content"><i class="fa fa-check"></i><b>0.3</b> Content</a></li>
+<li class="chapter" data-level="0.4" data-path="index.html"><a href="index.html#resources"><i class="fa fa-check"></i><b>0.4</b> Resources</a>
+<ul>
+<li class="chapter" data-level="0.4.1" data-path="index.html"><a href="index.html#tidyverse"><i class="fa fa-check"></i><b>0.4.1</b> Tidyverse</a></li>
+<li class="chapter" data-level="0.4.2" data-path="index.html"><a href="index.html#r-in-general"><i class="fa fa-check"></i><b>0.4.2</b> R in general</a></li>
+<li class="chapter" data-level="0.4.3" data-path="index.html"><a href="index.html#statistics"><i class="fa fa-check"></i><b>0.4.3</b> Statistics</a></li>
+<li class="chapter" data-level="0.4.4" data-path="index.html"><a href="index.html#talks-podcasts-blogs"><i class="fa fa-check"></i><b>0.4.4</b> Talks, Podcasts, Blogs</a></li>
+<li class="chapter" data-level="0.4.5" data-path="index.html"><a href="index.html#misc"><i class="fa fa-check"></i><b>0.4.5</b> Misc</a></li>
+</ul></li>
+<li class="chapter" data-level="0.5" data-path="index.html"><a href="index.html#other-resources"><i class="fa fa-check"></i><b>0.5</b> Other Resources</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="day1.html"><a href="day1.html"><i class="fa fa-check"></i><b>1</b> And Go!</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="day1.html"><a href="day1.html#basic-datastructures-in-r"><i class="fa fa-check"></i><b>1.1</b> Basic Datastructures in R</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="day1.html"><a href="day1.html#executing-code-in-r"><i class="fa fa-check"></i><b>1.1.1</b> Executing Code in R</a></li>
+<li class="chapter" data-level="1.1.2" data-path="day1.html"><a href="day1.html#basic-datatypes"><i class="fa fa-check"></i><b>1.1.2</b> Basic Datatypes</a></li>
+<li class="chapter" data-level="1.1.3" data-path="day1.html"><a href="day1.html#variables"><i class="fa fa-check"></i><b>1.1.3</b> Variables</a></li>
+<li class="chapter" data-level="1.1.4" data-path="day1.html"><a href="day1.html#math-operators"><i class="fa fa-check"></i><b>1.1.4</b> Math Operators</a></li>
+<li class="chapter" data-level="1.1.5" data-path="day1.html"><a href="day1.html#functions-and-vectors"><i class="fa fa-check"></i><b>1.1.5</b> Functions and Vectors</a></li>
+<li class="chapter" data-level="1.1.6" data-path="day1.html"><a href="day1.html#datastructures"><i class="fa fa-check"></i><b>1.1.6</b> Datastructures</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="day1.html"><a href="day1.html#the-first-plots"><i class="fa fa-check"></i><b>1.2</b> The first Plots</a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="day1.html"><a href="day1.html#scatterplot"><i class="fa fa-check"></i><b>1.2.1</b> Scatterplot</a></li>
+<li class="chapter" data-level="1.2.2" data-path="day1.html"><a href="day1.html#curve"><i class="fa fa-check"></i><b>1.2.2</b> Curve</a></li>
+<li class="chapter" data-level="1.2.3" data-path="day1.html"><a href="day1.html#histogram"><i class="fa fa-check"></i><b>1.2.3</b> Histogram</a></li>
+<li class="chapter" data-level="1.2.4" data-path="day1.html"><a href="day1.html#the-last-piechart-you-will-ever-need."><i class="fa fa-check"></i><b>1.2.4</b> The last piechart you will ever need.</a></li>
+<li class="chapter" data-level="1.2.5" data-path="day1.html"><a href="day1.html#saving-plots"><i class="fa fa-check"></i><b>1.2.5</b> Saving Plots</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="day2.html"><a href="day2.html"><i class="fa fa-check"></i><b>2</b> Bring on the Data!</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="day2.html"><a href="day2.html#project-based-workflow"><i class="fa fa-check"></i><b>2.1</b> Project-based Workflow</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="day2.html"><a href="day2.html#workflow-of-a-data-analysis"><i class="fa fa-check"></i><b>2.1.1</b> Workflow of a Data Analysis</a></li>
+<li class="chapter" data-level="2.1.2" data-path="day2.html"><a href="day2.html#communication"><i class="fa fa-check"></i><b>2.1.2</b> Communication!</a></li>
+<li class="chapter" data-level="2.1.3" data-path="day2.html"><a href="day2.html#important-rstudio-settings"><i class="fa fa-check"></i><b>2.1.3</b> Important RStudio-Settings</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="day2.html"><a href="day2.html#packages-the-tidyverse"><i class="fa fa-check"></i><b>2.2</b> Packages: The Tidyverse</a></li>
+<li class="chapter" data-level="2.3" data-path="day2.html"><a href="day2.html#exercise-from-day-1"><i class="fa fa-check"></i><b>2.3</b> Exercise from day 1</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="day2.html"><a href="day2.html#questions"><i class="fa fa-check"></i><b>2.3.1</b> Questions</a></li>
+<li class="chapter" data-level="2.3.2" data-path="day2.html"><a href="day2.html#answers"><i class="fa fa-check"></i><b>2.3.2</b> Answers</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="day2.html"><a href="day2.html#reading-data"><i class="fa fa-check"></i><b>2.4</b> Reading data</a></li>
+<li class="chapter" data-level="2.5" data-path="day2.html"><a href="day2.html#the-pipe-and-dplyr-verbs"><i class="fa fa-check"></i><b>2.5</b> The Pipe and dplyr Verbs</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="day2.html"><a href="day2.html#the-pipe"><i class="fa fa-check"></i><b>2.5.1</b> The Pipe</a></li>
+<li class="chapter" data-level="2.5.2" data-path="day2.html"><a href="day2.html#overview-of-the-dplyr-verbs"><i class="fa fa-check"></i><b>2.5.2</b> Overview of the dplyr Verbs</a></li>
+<li class="chapter" data-level="2.5.3" data-path="day2.html"><a href="day2.html#select"><i class="fa fa-check"></i><b>2.5.3</b> select</a></li>
+<li class="chapter" data-level="2.5.4" data-path="day2.html"><a href="day2.html#filter"><i class="fa fa-check"></i><b>2.5.4</b> filter</a></li>
+<li class="chapter" data-level="2.5.5" data-path="day2.html"><a href="day2.html#mutate"><i class="fa fa-check"></i><b>2.5.5</b> mutate</a></li>
+<li class="chapter" data-level="2.5.6" data-path="day2.html"><a href="day2.html#arrange"><i class="fa fa-check"></i><b>2.5.6</b> arrange</a></li>
+<li class="chapter" data-level="2.5.7" data-path="day2.html"><a href="day2.html#count"><i class="fa fa-check"></i><b>2.5.7</b> count</a></li>
+<li class="chapter" data-level="2.5.8" data-path="day2.html"><a href="day2.html#summarise"><i class="fa fa-check"></i><b>2.5.8</b> summarise</a></li>
+<li class="chapter" data-level="2.5.9" data-path="day2.html"><a href="day2.html#group_by-und-summarise"><i class="fa fa-check"></i><b>2.5.9</b> group_by und summarise</a></li>
+<li class="chapter" data-level="2.5.10" data-path="day2.html"><a href="day2.html#moving-on-to-probability"><i class="fa fa-check"></i><b>2.5.10</b> Moving on to Probability</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="day2.html"><a href="day2.html#but-what-is-probability"><i class="fa fa-check"></i><b>2.6</b> But what is Probability?</a>
+<ul>
+<li class="chapter" data-level="2.6.1" data-path="day2.html"><a href="day2.html#example"><i class="fa fa-check"></i><b>2.6.1</b> Example:</a></li>
+<li class="chapter" data-level="2.6.2" data-path="day2.html"><a href="day2.html#p-values"><i class="fa fa-check"></i><b>2.6.2</b> P-Values</a></li>
+</ul></li>
+<li class="chapter" data-level="2.7" data-path="day2.html"><a href="day2.html#exercise-transfer-to-new-data"><i class="fa fa-check"></i><b>2.7</b> Exercise: Transfer to new Data</a>
+<ul>
+<li class="chapter" data-level="2.7.1" data-path="day2.html"><a href="day2.html#solutions"><i class="fa fa-check"></i><b>2.7.1</b> Solutions</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="day3.html"><a href="day3.html"><i class="fa fa-check"></i><b>3</b> Tidy Data, Visualization and Distributions</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="day3.html"><a href="day3.html#recap-of-day-2"><i class="fa fa-check"></i><b>3.1</b> Recap of day 2</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="day2.html"><a href="day2.html#questions"><i class="fa fa-check"></i><b>3.1.1</b> Questions</a></li>
+<li class="chapter" data-level="3.1.2" data-path="day2.html"><a href="day2.html#answers"><i class="fa fa-check"></i><b>3.1.2</b> Answers</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="day3.html"><a href="day3.html#visualization-with-ggplot2"><i class="fa fa-check"></i><b>3.2</b> Visualization with ggplot2</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="day3.html"><a href="day3.html#the-grammar-of-graphics"><i class="fa fa-check"></i><b>3.2.1</b> The Grammar of Graphics</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="day3.html"><a href="day3.html#visualization-is-key"><i class="fa fa-check"></i><b>3.3</b> Visualization is Key</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="day3.html"><a href="day3.html#anscombe"><i class="fa fa-check"></i><b>3.3.1</b> Anscombes Quartet</a></li>
+<li class="chapter" data-level="3.3.2" data-path="day3.html"><a href="day3.html#excursion-tidy-data"><i class="fa fa-check"></i><b>3.3.2</b> Excursion Tidy Data</a></li>
+<li class="chapter" data-level="3.3.3" data-path="day3.html"><a href="day3.html#summary-statistics"><i class="fa fa-check"></i><b>3.3.3</b> Summary Statistics</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="day3.html"><a href="day3.html#distributions"><i class="fa fa-check"></i><b>3.4</b> Distributions</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="day3.html"><a href="day3.html#from-distributions-to-quantiles"><i class="fa fa-check"></i><b>3.4.1</b> From Distributions to Quantiles</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="day3.html"><a href="day3.html#the-datasaurus-dozen"><i class="fa fa-check"></i><b>3.5</b> The Datasaurus Dozen</a></li>
+<li class="chapter" data-level="3.6" data-path="day3.html"><a href="day3.html#exercises"><i class="fa fa-check"></i><b>3.6</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="3.6.1" data-path="day3.html"><a href="day3.html#inclusion-bodies"><i class="fa fa-check"></i><b>3.6.1</b> Inclusion Bodies</a></li>
+<li class="chapter" data-level="3.6.2" data-path="day2.html"><a href="day2.html#solutions"><i class="fa fa-check"></i><b>3.6.2</b> Solutions</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="day4.html"><a href="day4.html"><i class="fa fa-check"></i><b>4</b> Significance Tests and Power</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="day4.html"><a href="day4.html#the-central-limit-theorem-clt"><i class="fa fa-check"></i><b>4.1</b> The Central Limit Theorem (CLT)</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="day4.html"><a href="day4.html#reading-in-data"><i class="fa fa-check"></i><b>4.1.1</b> Reading in Data</a></li>
+<li class="chapter" data-level="4.1.2" data-path="day4.html"><a href="day4.html#programming-and-problem-solving"><i class="fa fa-check"></i><b>4.1.2</b> Programming and Problem Solving</a></li>
+<li class="chapter" data-level="4.1.3" data-path="day4.html"><a href="day4.html#population-distribution-vs.-distribution-of-means"><i class="fa fa-check"></i><b>4.1.3</b> Population Distribution vs. Distribution of Means</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="day4.html"><a href="day4.html#the-t-distribution"><i class="fa fa-check"></i><b>4.2</b> The T-Distribution</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="day4.html"><a href="day4.html#confidence-intervals-cis"><i class="fa fa-check"></i><b>4.2.1</b> Confidence Intervals (CIs)</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="day4.html"><a href="day4.html#significance-tests"><i class="fa fa-check"></i><b>4.3</b> Significance Tests</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="day4.html"><a href="day4.html#students-t-test"><i class="fa fa-check"></i><b>4.3.1</b> Students T-Test</a></li>
+<li class="chapter" data-level="4.3.2" data-path="day4.html"><a href="day4.html#wilcoxon-rank-sum-test"><i class="fa fa-check"></i><b>4.3.2</b> Wilcoxon Rank Sum Test</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="day4.html"><a href="day4.html#type-i-and-type-ii-errors"><i class="fa fa-check"></i><b>4.4</b> Type I and Type II Errors</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="day4.html"><a href="day4.html#type-i-false-positives"><i class="fa fa-check"></i><b>4.4.1</b> Type I: False Positives</a></li>
+<li class="chapter" data-level="4.4.2" data-path="day4.html"><a href="day4.html#type-ii-false-negatives"><i class="fa fa-check"></i><b>4.4.2</b> Type II: False Negatives</a></li>
+<li class="chapter" data-level="4.4.3" data-path="day4.html"><a href="day4.html#statistical-power"><i class="fa fa-check"></i><b>4.4.3</b> Statistical Power</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="day4.html"><a href="day4.html#problems"><i class="fa fa-check"></i><b>4.5</b> Problems</a>
+<ul>
+<li class="chapter" data-level="4.5.1" data-path="day4.html"><a href="day4.html#the-jelly-bean-problem-multiple-testing"><i class="fa fa-check"></i><b>4.5.1</b> The Jelly Bean Problem (Multiple Testing)</a></li>
+<li class="chapter" data-level="4.5.2" data-path="day4.html"><a href="day4.html#the-base-rate-fallacy"><i class="fa fa-check"></i><b>4.5.2</b> The Base Rate Fallacy</a></li>
+<li class="chapter" data-level="4.5.3" data-path="index.html"><a href="index.html#resources"><i class="fa fa-check"></i><b>4.5.3</b> Resources</a></li>
+</ul></li>
+<li class="chapter" data-level="4.6" data-path="day3.html"><a href="day3.html#exercises"><i class="fa fa-check"></i><b>4.6</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="4.6.1" data-path="day4.html"><a href="day4.html#show-the-following-statements-with-simulations-in-r"><i class="fa fa-check"></i><b>4.6.1</b> Show the following statements with simulations in R</a></li>
+<li class="chapter" data-level="4.6.2" data-path="day4.html"><a href="day4.html#show-the-following-concepts-with-simulations-in-r"><i class="fa fa-check"></i><b>4.6.2</b> Show the following concepts with simulations in R</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="day5.html"><a href="day5.html"><i class="fa fa-check"></i><b>5</b> Correlation and Regression</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="day5.html"><a href="day5.html#side-note-what-is-the-main-goal-of-this-course"><i class="fa fa-check"></i><b>5.1</b> Side note: What is the main goal of this course?</a></li>
+<li class="chapter" data-level="5.2" data-path="day5.html"><a href="day5.html#correlation-and-regression"><i class="fa fa-check"></i><b>5.2</b> Correlation and Regression</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="day5.html"><a href="day5.html#correlation"><i class="fa fa-check"></i><b>5.2.1</b> Correlation</a></li>
+<li class="chapter" data-level="5.2.2" data-path="day5.html"><a href="day5.html#regression"><i class="fa fa-check"></i><b>5.2.2</b> Regression</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="day5.html"><a href="day5.html#non-linear-regression"><i class="fa fa-check"></i><b>5.3</b> Non-Linear Regression</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="day5.html"><a href="day5.html#michaelis-menten-kinetics"><i class="fa fa-check"></i><b>5.3.1</b> Michaelis-Menten Kinetics</a></li>
+<li class="chapter" data-level="5.3.2" data-path="day5.html"><a href="day5.html#many-models"><i class="fa fa-check"></i><b>5.3.2</b> Many Models</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="day3.html"><a href="day3.html#exercises"><i class="fa fa-check"></i><b>5.4</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="5.4.1" data-path="day5.html"><a href="day5.html#with-the-datasaurus-dozen-data-sets"><i class="fa fa-check"></i><b>5.4.1</b> With the Datasaurus Dozen Data Sets</a></li>
+<li class="chapter" data-level="5.4.2" data-path="day5.html"><a href="day5.html#example-data-analysis"><i class="fa fa-check"></i><b>5.4.2</b> Example Data Analysis</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="day6.html"><a href="day6.html"><i class="fa fa-check"></i><b>6</b> Examples and Feedback</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="day6.html"><a href="day6.html#random-sidenotes"><i class="fa fa-check"></i><b>6.1</b> Random Sidenotes</a></li>
+<li class="chapter" data-level="6.2" data-path="day6.html"><a href="day6.html#lots-of-examples"><i class="fa fa-check"></i><b>6.2</b> Lot’s of Examples</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="day6.html"><a href="day6.html#tidytuesday-spotify"><i class="fa fa-check"></i><b>6.2.1</b> Tidytuesday: Spotify</a></li>
+<li class="chapter" data-level="6.2.2" data-path="day6.html"><a href="day6.html#shiny-app"><i class="fa fa-check"></i><b>6.2.2</b> Shiny App</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Introduction to Data Science with R for Biochemists</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="day3" class="section level1" number="3">
+<h1><span class="header-section-number">Day 3</span> Tidy Data, Visualization and Distributions</h1>
+<p>We will be using functions and data from the
+<code>tidyverse</code> today, so lets load it.
+It is good practice to have all library loading
+and data import steps at the beginning of your
+document.</p>
+<div class="sourceCode" id="cb317"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb317-1"><a href="day3.html#cb317-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
+<pre><code>## ── Attaching packages ────────</code></pre>
+<pre><code>## ✓ ggplot2 3.3.2     ✓ purrr   0.3.4
+## ✓ tibble  3.0.3     ✓ dplyr   1.0.1
+## ✓ tidyr   1.1.1     ✓ stringr 1.4.0
+## ✓ readr   1.3.1     ✓ forcats 0.5.0</code></pre>
+<pre><code>## ── Conflicts ─────────────────
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()</code></pre>
+<div id="recap-of-day-2" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Recap of day 2</h2>
+<div id="questions" class="section level3" number="3.1.1">
+<h3><span class="header-section-number">3.1.1</span> Questions</h3>
+<ul>
+<li>What is the <code>tidyverse</code>?</li>
+<li>What are the most important <code>dplyr</code> verbs and their function?</li>
+<li>Transfer: What do the following lines do?</li>
+</ul>
+<div class="sourceCode" id="cb321"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb321-1"><a href="day3.html#cb321-1" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">%&gt;%</span></span>
+<span id="cb321-2"><a href="day3.html#cb321-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(homeworld) <span class="sc">%&gt;%</span> </span>
+<span id="cb321-3"><a href="day3.html#cb321-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">mass =</span> mass <span class="sc">/</span> <span class="fu">max</span>(mass, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb321-4"><a href="day3.html#cb321-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(homeworld <span class="sc">==</span> <span class="st">&quot;Tatooine&quot;</span>)</span></code></pre></div>
+<ul>
+<li>What is a p-value?</li>
+<li>What is the difference between
+<em>binomially</em> and <em>hypergeometrically</em> distributed data?</li>
+</ul>
+</div>
+<div id="answers" class="section level3" number="3.1.2">
+<h3><span class="header-section-number">3.1.2</span> Answers</h3>
+<div id="dplyr" class="section level4" number="3.1.2.1">
+<h4><span class="header-section-number">3.1.2.1</span> dplyr</h4>
+<p>We use the <code>starwars</code> dataset to demonstrate the answers.</p>
+<p><code>select</code> to select columns!</p>
+<div class="sourceCode" id="cb322"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb322-1"><a href="day3.html#cb322-1" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(starwars, name, height)</span></code></pre></div>
+<p><code>filter</code> to ask for specific rows based on a condition.</p>
+<div class="sourceCode" id="cb323"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb323-1"><a href="day3.html#cb323-1" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(starwars, mass <span class="sc">&gt;</span> <span class="dv">100</span>)</span></code></pre></div>
+<p><code>mutate</code> to add columns or modify existing columns.</p>
+<div class="sourceCode" id="cb324"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb324-1"><a href="day3.html#cb324-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mutate</span>(starwars, <span class="at">NewHeight =</span> height <span class="sc">*</span> <span class="dv">2</span>)</span></code></pre></div>
+<p>Renaming columns works with <code>rename</code> but also inside
+of <code>select</code>.</p>
+<div class="sourceCode" id="cb325"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb325-1"><a href="day3.html#cb325-1" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">%&gt;%</span></span>
+<span id="cb325-2"><a href="day3.html#cb325-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">character =</span> name) <span class="sc">%&gt;%</span> </span>
+<span id="cb325-3"><a href="day3.html#cb325-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="at">biggness =</span> mass, character, height) <span class="sc">%&gt;%</span> </span>
+<span id="cb325-4"><a href="day3.html#cb325-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">1</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 1 x 3
+##   biggness character      height
+##      &lt;dbl&gt; &lt;chr&gt;           &lt;int&gt;
+## 1       77 Luke Skywalker    172</code></pre>
+<p><code>arrange</code> to sort based on a column.</p>
+<div class="sourceCode" id="cb327"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb327-1"><a href="day3.html#cb327-1" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(mass)</span></code></pre></div>
+<p><code>summarize</code> to summarize columns down to
+a single value per column (note, that the tidyverse accepts
+American and British English, both functions exist).</p>
+<div class="sourceCode" id="cb328"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb328-1"><a href="day3.html#cb328-1" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">%&gt;%</span> <span class="fu">summarize</span>(<span class="fu">max</span>(height, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb328-2"><a href="day3.html#cb328-2" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">min</span>(mass, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code></pre></div>
+<pre><code>## # A tibble: 1 x 2
+##   `max(height, na.rm = TRUE)` `min(mass, na.rm = TRUE)`
+##                         &lt;int&gt;                     &lt;dbl&gt;
+## 1                         264                        15</code></pre>
+<p>It is best to give names to the arguments, so we write it
+as:</p>
+<div class="sourceCode" id="cb330"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb330-1"><a href="day3.html#cb330-1" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">%&gt;%</span> <span class="fu">summarize</span>(<span class="at">MaxHeight =</span> <span class="fu">max</span>(height, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb330-2"><a href="day3.html#cb330-2" aria-hidden="true" tabindex="-1"></a>                       <span class="at">MinMass   =</span>  <span class="fu">min</span>(mass, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code></pre></div>
+<pre><code>## # A tibble: 1 x 2
+##   MaxHeight MinMass
+##       &lt;int&gt;   &lt;dbl&gt;
+## 1       264      15</code></pre>
+<p><code>group_by</code> and <code>summarise</code> to summarise <strong>within</strong>
+each group in the grouping column(s):</p>
+<div class="sourceCode" id="cb332"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb332-1"><a href="day3.html#cb332-1" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">%&gt;%</span> </span>
+<span id="cb332-2"><a href="day3.html#cb332-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(homeworld) <span class="sc">%&gt;%</span> </span>
+<span id="cb332-3"><a href="day3.html#cb332-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mass =</span> <span class="fu">mean</span>(mass, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb332-4"><a href="day3.html#cb332-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">3</span>)</span></code></pre></div>
+<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<pre><code>## # A tibble: 3 x 2
+##   homeworld    mass
+##   &lt;chr&gt;       &lt;dbl&gt;
+## 1 Alderaan       64
+## 2 Aleen Minor    15
+## 3 Bespin         79</code></pre>
+<p>Running the code in the first question
+thus demonstrates, how to normalize
+the mass to the maximum mass in each homeworld.
+For example, <em>Luke Skywalker</em> weights 56% as much
+as the heaviest person from his planet, while
+<em>Darth Vader</em> is the heaviest person on his planet
+(that made it into this dataset).</p>
+<div class="sourceCode" id="cb335"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb335-1"><a href="day3.html#cb335-1" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">%&gt;%</span> </span>
+<span id="cb335-2"><a href="day3.html#cb335-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(mass)) <span class="sc">%&gt;%</span> </span>
+<span id="cb335-3"><a href="day3.html#cb335-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(homeworld) <span class="sc">%&gt;%</span> </span>
+<span id="cb335-4"><a href="day3.html#cb335-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">mass =</span> mass <span class="sc">/</span> <span class="fu">max</span>(mass) ) <span class="sc">%&gt;%</span> </span>
+<span id="cb335-5"><a href="day3.html#cb335-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(name, height, mass, homeworld) <span class="sc">%&gt;%</span> </span>
+<span id="cb335-6"><a href="day3.html#cb335-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">4</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 4 x 4
+##   name           height  mass homeworld
+##   &lt;chr&gt;           &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;    
+## 1 Luke Skywalker    172 0.566 Tatooine 
+## 2 C-3PO             167 0.551 Tatooine 
+## 3 R2-D2              96 0.376 Naboo    
+## 4 Darth Vader       202 1     Tatooine</code></pre>
+</div>
+<div id="statistics" class="section level4" number="3.1.2.2">
+<h4><span class="header-section-number">3.1.2.2</span> Statistics</h4>
+<p>For the definition of p-values, check out chapter <a href="day2.html#p-values">2.6.2</a>.</p>
+<p>The hypergeometric distribution is for sampling without replacement.</p>
+<div class="sourceCode" id="cb337"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb337-1"><a href="day3.html#cb337-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rhyper</span>(<span class="dv">10000</span>, <span class="at">m =</span> <span class="dv">50</span>, <span class="at">n =</span>  <span class="dv">50</span>, <span class="at">k =</span>  <span class="dv">80</span>)</span>
+<span id="cb337-2"><a href="day3.html#cb337-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(x)</span></code></pre></div>
+<p><img src="03-day3_files/figure-html/unnamed-chunk-12-1.svg" width="672" /></p>
+<p>The binomial distribution is for sampling <strong>with</strong> replacement
+(Like tossing a coin to your witcher).</p>
+<div class="sourceCode" id="cb338"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb338-1"><a href="day3.html#cb338-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="at">n =</span> <span class="dv">10000</span>, <span class="at">size =</span> <span class="dv">10</span>, <span class="at">prob =</span> <span class="fl">0.5</span>)</span>
+<span id="cb338-2"><a href="day3.html#cb338-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(x, <span class="at">breaks =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">10</span>)</span></code></pre></div>
+<p><img src="03-day3_files/figure-html/unnamed-chunk-13-1.svg" width="672" /></p>
+</div>
+</div>
+</div>
+<div id="visualization-with-ggplot2" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Visualization with ggplot2</h2>
+<div id="the-grammar-of-graphics" class="section level3" number="3.2.1">
+<h3><span class="header-section-number">3.2.1</span> The Grammar of Graphics</h3>
+<p>The idea of a “grammar of graphics” was
+first introduced by Leland Wilkinson <span class="citation">(<a href="references.html#ref-wilkinsonGrammarGraphics2005" role="doc-biblioref">Wilkinson u. a. 2005</a>)</span>.
+It enables us to describe graphics (data visualizations)
+in terms of relatively simple building blocks.</p>
+<p>Hadley Wickham took this idea and translated
+it with slight modifications into an R package
+<span class="citation">(<a href="references.html#ref-wickhamLayeredGrammarGraphics2010" role="doc-biblioref">Wickham 2010</a>)</span>.
+Understanding the individual building blocks
+and their grammar (how they connect) allows
+us to create intricate visualizations that
+can be iterated on with great speed
+without learning a different set of rules
+for each type of visualization.</p>
+<p>So, what makes up a graph?</p>
+<div class="sourceCode" id="cb339"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb339-1"><a href="day3.html#cb339-1" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">%&gt;%</span> </span>
+<span id="cb339-2"><a href="day3.html#cb339-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(mass <span class="sc">&lt;</span> <span class="dv">500</span>, <span class="sc">!</span><span class="fu">is.na</span>(birth_year)) <span class="sc">%&gt;%</span> </span>
+<span id="cb339-3"><a href="day3.html#cb339-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> height,</span>
+<span id="cb339-4"><a href="day3.html#cb339-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> mass,</span>
+<span id="cb339-5"><a href="day3.html#cb339-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> gender)) <span class="sc">+</span></span>
+<span id="cb339-6"><a href="day3.html#cb339-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">size =</span> birth_year))</span></code></pre></div>
+<p><img src="03-day3_files/figure-html/unnamed-chunk-14-1.svg" width="672" /></p>
+<p>The building ground for our visualization is data.
+We then decide on some features in the data (like height,
+mass, gender and birth year) and map them to an aesthetic property.
+This is what happens inside the <code>aes</code> function as the
+<code>mapping</code> argument to <code>ggplot</code>. Height for example is mapped
+to the x-axis whereas gender is mapped to the color.
+“The color of what?”, you might ask, and rightfully so.
+There is no visualization without geometric objects
+to represent those aesthetics. This is where the functions
+starting with <code>geom_</code> come into play. We add them
+to our plot with the <code>+</code> operator. Here, we use <code>geom_point()</code>
+to add points to our plot. This is a good fit
+because one point can represent several dimensions
+of our data at the same time (like, height as the x position,
+mass as the y position etc.). Other pieces of the grammar
+of graphics are not handled explicitly in the code above
+because the defaults work just fine. But they are handled
+nonetheless in the background: Scales define
+how exactly the data is mapped to aesthetics and can be modified
+with functions starting with <code>scale_</code> (like
+<code>scale_color_...</code> to change the colors used in the color
+aesthetic, or <code>scale_x_log10()</code> to apply a logarithmic scale
+to the x-axis). Lastly, the objects with their
+scales need to placed on a coordinate system, like
+the default cartesian coordinates in the above example.</p>
+<blockquote>
+<p>Data =&gt; Aesthetic Mapping =&gt;
+Scales =&gt; (Statistical Transformation) =&gt;
+Geometric Objects =&gt; Coordinate System =&gt;</p>
+</blockquote>
+<p>Instead of displaying the plot straight away, we
+can save it to a variable:</p>
+<div class="sourceCode" id="cb340"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb340-1"><a href="day3.html#cb340-1" aria-hidden="true" tabindex="-1"></a>plt1 <span class="ot">&lt;-</span> starwars <span class="sc">%&gt;%</span> </span>
+<span id="cb340-2"><a href="day3.html#cb340-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(mass <span class="sc">&lt;</span> <span class="dv">500</span>, <span class="sc">!</span><span class="fu">is.na</span>(birth_year)) <span class="sc">%&gt;%</span> </span>
+<span id="cb340-3"><a href="day3.html#cb340-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> height,</span>
+<span id="cb340-4"><a href="day3.html#cb340-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> mass,</span>
+<span id="cb340-5"><a href="day3.html#cb340-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> gender,</span>
+<span id="cb340-6"><a href="day3.html#cb340-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">label =</span> name)) <span class="sc">+</span></span>
+<span id="cb340-7"><a href="day3.html#cb340-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">size =</span> birth_year))</span></code></pre></div>
+<p>And then display it later</p>
+<div class="sourceCode" id="cb341"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb341-1"><a href="day3.html#cb341-1" aria-hidden="true" tabindex="-1"></a>plt1 <span class="co"># not run</span></span></code></pre></div>
+<p>Or pass it to other functions,
+like the handy <code>ggplotly</code> function
+from the <code>plotly</code> package, that creates
+and interactive java script visualization
+from a normal ggplot object:</p>
+<div class="sourceCode" id="cb342"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb342-1"><a href="day3.html#cb342-1" aria-hidden="true" tabindex="-1"></a>plotly<span class="sc">::</span><span class="fu">ggplotly</span>(plt1)</span></code></pre></div>
+<div id="htmlwidget-82b5c2d25939284de40e" style="width:672px;height:480px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-82b5c2d25939284de40e">{"x":{"data":[{"x":[150,165,178,170,166,165],"y":[49,75,55,56.2,50,45],"text":["birth_year:  19.0<br />height: 150<br />mass:  49.0<br />gender: feminine<br />name: Leia Organa","birth_year:  47.0<br />height: 165<br />mass:  75.0<br />gender: feminine<br />name: Beru Whitesun lars","birth_year:  48.0<br />height: 178<br />mass:  55.0<br />gender: feminine<br />name: Ayla Secura","birth_year:  58.0<br />height: 170<br />mass:  56.2<br />gender: feminine<br />name: Luminara Unduli","birth_year:  40.0<br />height: 166<br />mass:  50.0<br />gender: feminine<br />name: Barriss Offee","birth_year:  46.0<br />height: 165<br />mass:  45.0<br />gender: feminine<br />name: Padmé Amidala"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","opacity":1,"size":[5.88280895519997,7.7398754848106,7.79032781081583,8.26373856261023,7.36689636189921,7.68877208025709],"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(248,118,109,1)"}},"hoveron":"points","name":"feminine","legendgroup":"feminine","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[172,167,96,202,178,183,182,188,228,180,173,170,66,170,183,200,190,177,175,180,88,193,196,175,188,198,188,193,183],"y":[77,75,32,136,120,84,77,84,112,80,74,77,17,75,78.2,140,113,79,79,83,20,89,66,80,84,82,80,80,79],"text":["birth_year:  19.0<br />height: 172<br />mass:  77.0<br />gender: masculine<br />name: Luke Skywalker","birth_year: 112.0<br />height: 167<br />mass:  75.0<br />gender: masculine<br />name: C-3PO","birth_year:  33.0<br />height:  96<br />mass:  32.0<br />gender: masculine<br />name: R2-D2","birth_year:  41.9<br />height: 202<br />mass: 136.0<br />gender: masculine<br />name: Darth Vader","birth_year:  52.0<br />height: 178<br />mass: 120.0<br />gender: masculine<br />name: Owen Lars","birth_year:  24.0<br />height: 183<br />mass:  84.0<br />gender: masculine<br />name: Biggs Darklighter","birth_year:  57.0<br />height: 182<br />mass:  77.0<br />gender: masculine<br />name: Obi-Wan Kenobi","birth_year:  41.9<br />height: 188<br />mass:  84.0<br />gender: masculine<br />name: Anakin Skywalker","birth_year: 200.0<br />height: 228<br />mass: 112.0<br />gender: masculine<br />name: Chewbacca","birth_year:  29.0<br />height: 180<br />mass:  80.0<br />gender: masculine<br />name: Han Solo","birth_year:  44.0<br />height: 173<br />mass:  74.0<br />gender: masculine<br />name: Greedo","birth_year:  21.0<br />height: 170<br />mass:  77.0<br />gender: masculine<br />name: Wedge Antilles","birth_year: 896.0<br />height:  66<br />mass:  17.0<br />gender: masculine<br />name: Yoda","birth_year:  82.0<br />height: 170<br />mass:  75.0<br />gender: masculine<br />name: Palpatine","birth_year:  31.5<br />height: 183<br />mass:  78.2<br />gender: masculine<br />name: Boba Fett","birth_year:  15.0<br />height: 200<br />mass: 140.0<br />gender: masculine<br />name: IG-88","birth_year:  53.0<br />height: 190<br />mass: 113.0<br />gender: masculine<br />name: Bossk","birth_year:  31.0<br />height: 177<br />mass:  79.0<br />gender: masculine<br />name: Lando Calrissian","birth_year:  37.0<br />height: 175<br />mass:  79.0<br />gender: masculine<br />name: Lobot","birth_year:  41.0<br />height: 180<br />mass:  83.0<br />gender: masculine<br />name: Ackbar","birth_year:   8.0<br />height:  88<br />mass:  20.0<br />gender: masculine<br />name: Wicket Systri Warrick","birth_year:  92.0<br />height: 193<br />mass:  89.0<br />gender: masculine<br />name: Qui-Gon Jinn","birth_year:  52.0<br />height: 196<br />mass:  66.0<br />gender: masculine<br />name: Jar Jar Binks","birth_year:  54.0<br />height: 175<br />mass:  80.0<br />gender: masculine<br />name: Darth Maul","birth_year:  72.0<br />height: 188<br />mass:  84.0<br />gender: masculine<br />name: Mace Windu","birth_year:  92.0<br />height: 198<br />mass:  82.0<br />gender: masculine<br />name: Ki-Adi-Mundi","birth_year:  22.0<br />height: 188<br />mass:  80.0<br />gender: masculine<br />name: Plo Koon","birth_year: 102.0<br />height: 193<br />mass:  80.0<br />gender: masculine<br />name: Dooku","birth_year:  66.0<br />height: 183<br />mass:  79.0<br />gender: masculine<br />name: Jango Fett"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":1,"size":[5.88280895519997,10.2467486403822,6.95034356794027,7.47186077315517,7.98609035134483,6.31618036616324,8.21866997149434,7.47186077315517,12.5667506452021,6.68562843415392,7.5845067697173,6.06603550007462,22.6771653543307,9.23480569313032,6.85374773862428,5.45736568158562,8.03362364306219,6.82086743306233,7.19460091524452,7.42251779979241,3.77952755905512,9.59172930925271,7.98609035134483,8.08063165666219,8.85283317327137,9.59172930925271,6.15234898740436,9.92796791819344,8.60917061587718],"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(0,191,196,1)"}},"hoveron":"points","name":"masculine","legendgroup":"masculine","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":26.2283105022831,"r":7.30593607305936,"b":40.1826484018265,"l":43.1050228310502},"plot_bgcolor":"rgba(235,235,235,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[57.9,236.1],"tickmode":"array","ticktext":["100","150","200"],"tickvals":[100,150,200],"categoryorder":"array","categoryarray":["100","150","200"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"y","title":{"text":"height","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[10.85,146.15],"tickmode":"array","ticktext":["50","100"],"tickvals":[50,100],"categoryorder":"array","categoryarray":["50","100"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"x","title":{"text":"mass","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.88976377952756,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.689497716895},"y":0.826771653543307},"annotations":[{"text":"gender<br />birth_year","x":1.02,"y":1,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"left","yanchor":"bottom","legendTitle":true}],"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","showSendToCloud":false},"source":"A","attrs":{"53fc431c2745":{"size":{},"x":{},"y":{},"colour":{},"label":{},"type":"scatter"}},"cur_data":"53fc431c2745","visdat":{"53fc431c2745":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<p>We can also use this object to pass it to the
+<code>ggsave</code> function to, well…, save it to a file.</p>
+<div class="sourceCode" id="cb343"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb343-1"><a href="day3.html#cb343-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">&quot;myGGplot.png&quot;</span>, plt2)</span></code></pre></div>
+<p>A cool little R-package that comes with a RStudio addin
+is the <code>colourpicker</code>. This makes it easier to
+choose the colors for our plot.</p>
+<div class="sourceCode" id="cb344"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb344-1"><a href="day3.html#cb344-1" aria-hidden="true" tabindex="-1"></a>plt1 <span class="sc">+</span></span>
+<span id="cb344-2"><a href="day3.html#cb344-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span>  <span class="fu">c</span>(<span class="st">&quot;#1f78b4&quot;</span>, <span class="st">&quot;#D10808&quot;</span>, <span class="st">&quot;#139E99&quot;</span>, <span class="st">&quot;#59807A&quot;</span>))</span></code></pre></div>
+<p><img src="03-day3_files/figure-html/unnamed-chunk-19-1.svg" width="672" /></p>
+<div class="sourceCode" id="cb345"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb345-1"><a href="day3.html#cb345-1" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">%&gt;%</span> </span>
+<span id="cb345-2"><a href="day3.html#cb345-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(gender) <span class="sc">%&gt;%</span> </span>
+<span id="cb345-3"><a href="day3.html#cb345-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(gender, n, <span class="at">fill =</span> gender)) <span class="sc">+</span></span>
+<span id="cb345-4"><a href="day3.html#cb345-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>()</span></code></pre></div>
+<p><img src="03-day3_files/figure-html/unnamed-chunk-20-1.svg" width="672" /></p>
+<p>A shortcut for this is <code>geom_bar()</code> (it does the counting
+for us, similar to <code>geom_histogram()</code>).</p>
+<div class="sourceCode" id="cb346"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb346-1"><a href="day3.html#cb346-1" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">%&gt;%</span> </span>
+<span id="cb346-2"><a href="day3.html#cb346-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(gender, <span class="at">fill =</span> gender)) <span class="sc">+</span></span>
+<span id="cb346-3"><a href="day3.html#cb346-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>()</span></code></pre></div>
+<p><img src="03-day3_files/figure-html/unnamed-chunk-21-1.svg" width="672" /></p>
+<p>We can also pass different data to individual
+geometric layers e.g. to highlight certain
+parts in our data. The other geoms inherit
+the data passed into <code>ggplot</code>. The
+same holds true for aesthetics. <code>aes</code> defined
+in <code>ggplot()</code> are passed on to all geoms,
+but individual geoms can have their
+own <code>aes</code>, adding or overwriting the global aesthetics
+of the whole plot.</p>
+<div class="sourceCode" id="cb347"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb347-1"><a href="day3.html#cb347-1" aria-hidden="true" tabindex="-1"></a>justLuke <span class="ot">&lt;-</span> starwars <span class="sc">%&gt;%</span> </span>
+<span id="cb347-2"><a href="day3.html#cb347-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(name <span class="sc">==</span> <span class="st">&quot;Luke Skywalker&quot;</span>)</span>
+<span id="cb347-3"><a href="day3.html#cb347-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb347-4"><a href="day3.html#cb347-4" aria-hidden="true" tabindex="-1"></a>plt2 <span class="ot">&lt;-</span> starwars <span class="sc">%&gt;%</span> </span>
+<span id="cb347-5"><a href="day3.html#cb347-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(mass <span class="sc">&lt;</span> <span class="dv">500</span>, birth_year <span class="sc">&lt;</span> <span class="dv">500</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb347-6"><a href="day3.html#cb347-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(birth_year, mass)) <span class="sc">+</span></span>
+<span id="cb347-7"><a href="day3.html#cb347-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb347-8"><a href="day3.html#cb347-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb347-9"><a href="day3.html#cb347-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x        =</span> <span class="st">&quot;birth year&quot;</span>,</span>
+<span id="cb347-10"><a href="day3.html#cb347-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">y        =</span> <span class="st">&quot;mass [kg]&quot;</span>,</span>
+<span id="cb347-11"><a href="day3.html#cb347-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">title    =</span> <span class="st">&quot;Awesome Plot 1&quot;</span>,</span>
+<span id="cb347-12"><a href="day3.html#cb347-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption  =</span> <span class="st">&quot;Data from Starwars&quot;</span>,</span>
+<span id="cb347-13"><a href="day3.html#cb347-13" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">&quot;This is my subtitle&quot;</span>,</span>
+<span id="cb347-14"><a href="day3.html#cb347-14" aria-hidden="true" tabindex="-1"></a>       <span class="at">tag      =</span> <span class="st">&quot;A&quot;</span>) <span class="sc">+</span></span>
+<span id="cb347-15"><a href="day3.html#cb347-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> justLuke, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb347-16"><a href="day3.html#cb347-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> justLuke, <span class="fu">aes</span>(<span class="at">label =</span> name), <span class="at">vjust =</span> <span class="dv">1</span>, <span class="at">hjust  =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb347-17"><a href="day3.html#cb347-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb347-18"><a href="day3.html#cb347-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">&quot;bold&quot;</span>))</span>
+<span id="cb347-19"><a href="day3.html#cb347-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb347-20"><a href="day3.html#cb347-20" aria-hidden="true" tabindex="-1"></a>plt2</span></code></pre></div>
+<p><img src="03-day3_files/figure-html/unnamed-chunk-22-1.svg" width="672" /></p>
+<p>While saving this plot, we can also decide on
+the dimensions (in inch), pixel density (dots per inch, dpi)
+and other properties of the plot:</p>
+<div class="sourceCode" id="cb348"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb348-1"><a href="day3.html#cb348-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="at">filename =</span> <span class="st">&quot;plots/myFirstGggplot.png&quot;</span>, plt2,</span>
+<span id="cb348-2"><a href="day3.html#cb348-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">width =</span> <span class="dv">12</span>,</span>
+<span id="cb348-3"><a href="day3.html#cb348-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">height =</span> <span class="dv">12</span>)</span></code></pre></div>
+<p>Inside of rmarkdown documents, this is handled
+by the chunk options. E.g. <code>{r, fig.width=5}</code>
+leads to a differently sized plot.</p>
+<div class="sourceCode" id="cb349"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb349-1"><a href="day3.html#cb349-1" aria-hidden="true" tabindex="-1"></a>plt2</span></code></pre></div>
+<p><img src="03-day3_files/figure-html/unnamed-chunk-24-1.svg" width="480" /></p>
+</div>
+</div>
+<div id="visualization-is-key" class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> Visualization is Key</h2>
+<p>Because visualization is so important,
+we dive into one example here:</p>
+<div id="anscombe" class="section level3" number="3.3.1">
+<h3><span class="header-section-number">3.3.1</span> Anscombes Quartet</h3>
+<blockquote>
+<p>And a note on <em>Tidy Data</em> and the <code>tidyr</code> package.</p>
+</blockquote>
+<div class="sourceCode" id="cb350"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb350-1"><a href="day3.html#cb350-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(anscombe)</span></code></pre></div>
+<pre><code>## # A tibble: 6 x 8
+##      x1    x2    x3    x4    y1    y2    y3    y4
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1    10    10    10     8  8.04  9.14  7.46  6.58
+## 2     8     8     8     8  6.95  8.14  6.77  5.76
+## 3    13    13    13     8  7.58  8.74 12.7   7.71
+## 4     9     9     9     8  8.81  8.77  7.11  8.84
+## 5    11    11    11     8  8.33  9.26  7.81  8.47
+## 6    14    14    14     8  9.96  8.1   8.84  7.04</code></pre>
+<p>Anscombes quartet is special because the datasets 1 to 4
+look quite different but have the same x-mean, y-mean
+and simple linear regression (down to a couple of decimal digits)!</p>
+<div class="sourceCode" id="cb352"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb352-1"><a href="day3.html#cb352-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste</span>(</span>
+<span id="cb352-2"><a href="day3.html#cb352-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(anscombe<span class="sc">$</span>x1),</span>
+<span id="cb352-3"><a href="day3.html#cb352-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(anscombe<span class="sc">$</span>x2),</span>
+<span id="cb352-4"><a href="day3.html#cb352-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(anscombe<span class="sc">$</span>x1),</span>
+<span id="cb352-5"><a href="day3.html#cb352-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(anscombe<span class="sc">$</span>x2)</span>
+<span id="cb352-6"><a href="day3.html#cb352-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>## [1] &quot;9 9 3.3166247903554 3.3166247903554&quot;</code></pre>
+<p>A cool trick from functional programming:
+<strong>Higher order functions</strong>.
+Higher order functions are functions that take
+other functions as arguments. They enable us
+to express ideas and instructions to the computer
+in a concise yet powerful manner.</p>
+<p>E.g. the <code>map</code>-family. Map functions apply a function
+to every element of a vector or list.</p>
+<div class="sourceCode" id="cb354"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb354-1"><a href="day3.html#cb354-1" aria-hidden="true" tabindex="-1"></a>addOne <span class="ot">&lt;-</span> <span class="cf">function</span>(x) x <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb354-2"><a href="day3.html#cb354-2" aria-hidden="true" tabindex="-1"></a><span class="fu">map</span>(<span class="fu">list</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>), addOne)</span></code></pre></div>
+<pre><code>## [[1]]
+## [1] 2
+## 
+## [[2]]
+## [1] 3
+## 
+## [[3]]
+## [1] 4</code></pre>
+<p>For all the datatypes (e.g. <em>integer</em> or <em>double</em>)
+there is a special version of map named <code>map_&lt;datatype&gt;</code>,
+which will always return this type
+and is thus safer to program with.</p>
+<div class="sourceCode" id="cb356"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb356-1"><a href="day3.html#cb356-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map</span>(anscombe, mean)</span></code></pre></div>
+<pre><code>## $x1
+## [1] 9
+## 
+## $x2
+## [1] 9
+## 
+## $x3
+## [1] 9
+## 
+## $x4
+## [1] 9
+## 
+## $y1
+## [1] 7.500909
+## 
+## $y2
+## [1] 7.500909
+## 
+## $y3
+## [1] 7.5
+## 
+## $y4
+## [1] 7.500909</code></pre>
+<div class="sourceCode" id="cb358"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb358-1"><a href="day3.html#cb358-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map_dbl</span>(anscombe, mean)</span></code></pre></div>
+<pre><code>##       x1       x2       x3       x4       y1       y2       y3       y4 
+## 9.000000 9.000000 9.000000 9.000000 7.500909 7.500909 7.500000 7.500909</code></pre>
+<div class="sourceCode" id="cb360"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb360-1"><a href="day3.html#cb360-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map_dbl</span>(anscombe, sd)</span></code></pre></div>
+<pre><code>##       x1       x2       x3       x4       y1       y2       y3       y4 
+## 3.316625 3.316625 3.316625 3.316625 2.031568 2.031657 2.030424 2.030579</code></pre>
+</div>
+<div id="excursion-tidy-data" class="section level3" number="3.3.2">
+<h3><span class="header-section-number">3.3.2</span> Excursion Tidy Data</h3>
+<p>Tidy Data means:</p>
+<blockquote>
+<p>Every row is an observation, every column is a feature.</p>
+</blockquote>
+<div class="figure"><span id="fig:tidy-data"></span>
+<img src="img/tidy-1.png" alt="Following three rules makes a dataset tidy: variables are in columns, observations are in rows, and values are in cells. (Source: R4DS, Hadley Wickham)"  />
+<p class="caption">
+Figure 3.1: Following three rules makes a dataset tidy: variables are in columns, observations are in rows, and values are in cells. (Source: R4DS, Hadley Wickham)
+</p>
+</div>
+<p>But this is not always straightforward because…</p>
+<blockquote>
+<p>“Happy families are all alike;
+every unhappy family is unhappy in its own way.”
+<span class="math inline">\(-\)</span> Leo Tolstoy</p>
+</blockquote>
+<blockquote>
+<p>Tidy datasets are all alike,
+but every messy dataset is messy in its own way."
+<span class="math inline">\(-\)</span> Hadley Wickham</p>
+</blockquote>
+<div id="anscombe-1" class="section level4" number="3.3.2.1">
+<h4><span class="header-section-number">3.3.2.1</span> Anscombe</h4>
+<p>The <code>anscombe</code> dataset actually hides a feature
+in its column names! The <code>tidyr</code> package helps us,
+to extract it into it’s own column.</p>
+<div class="sourceCode" id="cb362"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb362-1"><a href="day3.html#cb362-1" aria-hidden="true" tabindex="-1"></a>anscombe <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">3</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 3 x 8
+##      x1    x2    x3    x4    y1    y2    y3    y4
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1    10    10    10     8  8.04  9.14  7.46  6.58
+## 2     8     8     8     8  6.95  8.14  6.77  5.76
+## 3    13    13    13     8  7.58  8.74 12.7   7.71</code></pre>
+<p>The feature hidden in the column names is the dataset (1 to 4).
+Belonging to a dataset is actually a property
+of each value.</p>
+<div class="sourceCode" id="cb364"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb364-1"><a href="day3.html#cb364-1" aria-hidden="true" tabindex="-1"></a>anscombe_long <span class="ot">&lt;-</span> anscombe <span class="sc">%&gt;%</span></span>
+<span id="cb364-2"><a href="day3.html#cb364-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">pivot_longer</span>(<span class="fu">everything</span>(),</span>
+<span id="cb364-3"><a href="day3.html#cb364-3" aria-hidden="true" tabindex="-1"></a>   <span class="at">names_pattern =</span> <span class="st">&quot;(.)(.)&quot;</span>,</span>
+<span id="cb364-4"><a href="day3.html#cb364-4" aria-hidden="true" tabindex="-1"></a>   <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">&quot;.value&quot;</span>, <span class="st">&quot;set&quot;</span>)</span>
+<span id="cb364-5"><a href="day3.html#cb364-5" aria-hidden="true" tabindex="-1"></a> )</span></code></pre></div>
+<p>Now, each row represents one point (one observational unit),
+while every column represents a property / feature
+of said points.</p>
+<div class="sourceCode" id="cb365"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb365-1"><a href="day3.html#cb365-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(anscombe_long)</span></code></pre></div>
+<pre><code>## # A tibble: 6 x 3
+##   set       x     y
+##   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 1        10  8.04
+## 2 2        10  9.14
+## 3 3        10  7.46
+## 4 4         8  6.58
+## 5 1         8  6.95
+## 6 2         8  8.14</code></pre>
+<p>Now our dataset plays better with the rest of the tidyverse,
+especially ggplot:</p>
+<div class="sourceCode" id="cb367"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb367-1"><a href="day3.html#cb367-1" aria-hidden="true" tabindex="-1"></a>anscombe_long <span class="sc">%&gt;%</span> </span>
+<span id="cb367-2"><a href="day3.html#cb367-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
+<span id="cb367-3"><a href="day3.html#cb367-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb367-4"><a href="day3.html#cb367-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> set)</span></code></pre></div>
+<p><img src="03-day3_files/figure-html/unnamed-chunk-34-1.svg" width="672" /></p>
+<div class="sourceCode" id="cb368"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb368-1"><a href="day3.html#cb368-1" aria-hidden="true" tabindex="-1"></a>anscombe_long <span class="sc">%&gt;%</span> </span>
+<span id="cb368-2"><a href="day3.html#cb368-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(set) <span class="sc">%&gt;%</span> </span>
+<span id="cb368-3"><a href="day3.html#cb368-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_x =</span> <span class="fu">mean</span>(x),</span>
+<span id="cb368-4"><a href="day3.html#cb368-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_y =</span> <span class="fu">mean</span>(y) )</span></code></pre></div>
+<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<pre><code>## # A tibble: 4 x 3
+##   set   mean_x mean_y
+##   &lt;chr&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+## 1 1          9   7.50
+## 2 2          9   7.50
+## 3 3          9   7.5 
+## 4 4          9   7.50</code></pre>
+<p>Or, to showcase a more functional style
+of programming:</p>
+<div class="sourceCode" id="cb371"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb371-1"><a href="day3.html#cb371-1" aria-hidden="true" tabindex="-1"></a>anscombe_long <span class="sc">%&gt;%</span> </span>
+<span id="cb371-2"><a href="day3.html#cb371-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(set) <span class="sc">%&gt;%</span> </span>
+<span id="cb371-3"><a href="day3.html#cb371-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise_at</span>(<span class="fu">vars</span>(x,y), <span class="fu">list</span>(<span class="at">mean =</span> mean, <span class="at">sd =</span> sd)) <span class="sc">%&gt;%</span> </span>
+<span id="cb371-4"><a href="day3.html#cb371-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="fu">vars</span>(<span class="sc">-</span>set), round, <span class="dv">2</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 4 x 5
+##   set   x_mean y_mean  x_sd  y_sd
+##   &lt;chr&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 1          9    7.5  3.32  2.03
+## 2 2          9    7.5  3.32  2.03
+## 3 3          9    7.5  3.32  2.03
+## 4 4          9    7.5  3.32  2.03</code></pre>
+</div>
+<div id="plate-reader-example" class="section level4" number="3.3.2.2">
+<h4><span class="header-section-number">3.3.2.2</span> Plate Reader Example</h4>
+<div class="figure"><span id="fig:plate-reader-img"></span>
+<img src="img/plate-reader.jpg" alt="(Quelle: https://www.stellarscientific.com/accuris-smartreader-96-microplate-absorbance-plate-reader/"  />
+<p class="caption">
+Figure 3.2: (Quelle: <a href="https://www.stellarscientific.com/accuris-smartreader-96-microplate-absorbance-plate-reader/" class="uri">https://www.stellarscientific.com/accuris-smartreader-96-microplate-absorbance-plate-reader/</a>
+</p>
+</div>
+<p>Sometimes, we end up with variable- / column-names that are not readily
+allowed. “Forbidden” names only work when they are encompassed
+by backticks (`). Thus, wrapping a variable name in backticks
+allows us to even have spaces and symbols in the name.
+But try to avoid this if possible! You will nevertheless
+encounter forbidden variable names when you read in data from
+a spreadsheet that has those names for its columns.
+Use <code>rename</code> to assign a better name or install the
+<code>janitor</code> package for the handy function <code>janitor::clean_names()</code>.</p>
+<div class="sourceCode" id="cb373"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb373-1"><a href="day3.html#cb373-1" aria-hidden="true" tabindex="-1"></a>rawData <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb373-2"><a href="day3.html#cb373-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">this is a &quot;forbidden&quot; name! #</span><span class="st">`</span> <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>,</span>
+<span id="cb373-3"><a href="day3.html#cb373-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">column 2</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">rep</span>(<span class="st">&quot;hi&quot;</span>, <span class="dv">5</span>)</span>
+<span id="cb373-4"><a href="day3.html#cb373-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb373-5"><a href="day3.html#cb373-5" aria-hidden="true" tabindex="-1"></a>rawData</span></code></pre></div>
+<pre><code>## # A tibble: 5 x 2
+##   `this is a &quot;forbidden&quot; name! #` `column 2`
+##                             &lt;int&gt; &lt;chr&gt;     
+## 1                               1 hi        
+## 2                               2 hi        
+## 3                               3 hi        
+## 4                               4 hi        
+## 5                               5 hi</code></pre>
+<p>Turns into</p>
+<div class="sourceCode" id="cb375"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb375-1"><a href="day3.html#cb375-1" aria-hidden="true" tabindex="-1"></a>rawData <span class="sc">%&gt;%</span> janitor<span class="sc">::</span><span class="fu">clean_names</span>()</span></code></pre></div>
+<pre><code>## # A tibble: 5 x 2
+##   this_is_a_forbidden_name_number column_2
+##                             &lt;int&gt; &lt;chr&gt;   
+## 1                               1 hi      
+## 2                               2 hi      
+## 3                               3 hi      
+## 4                               4 hi      
+## 5                               5 hi</code></pre>
+<p>Reading in the example data from a plate reader,
+we end up with:</p>
+<div class="sourceCode" id="cb377"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb377-1"><a href="day3.html#cb377-1" aria-hidden="true" tabindex="-1"></a>raw_atpase <span class="ot">&lt;-</span> readxl<span class="sc">::</span><span class="fu">read_xlsx</span>(<span class="st">&quot;data/04_ATPase_assay.xlsx&quot;</span>, <span class="at">skip =</span> <span class="dv">10</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb377-2"><a href="day3.html#cb377-2" aria-hidden="true" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">clean_names</span>()</span>
+<span id="cb377-3"><a href="day3.html#cb377-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb377-4"><a href="day3.html#cb377-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(raw_atpase[,<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>])</span></code></pre></div>
+<pre><code>## # A tibble: 6 x 6
+##   content        time_s sample_x1 sample_x2 sample_x3 sample_x4
+##   &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 Raw Data (340)      0     0.737      1.33      1.71      1.81
+## 2 Raw Data (340)     60     0.789      1.35      1.65      1.71
+## 3 Raw Data (340)    120     0.656      1.29      1.66      1.70
+## 4 Raw Data (340)    180     0.531      1.23      1.66      1.70
+## 5 Raw Data (340)    240     0.49       1.18      1.67      1.72
+## 6 Raw Data (340)    300     0.486      1.12      1.67      1.74</code></pre>
+<p>Note that if you do not have the <code>janitor</code> package,
+you can also use the <code>.name_repair</code> argument to
+<code>read_xlsx</code> to repair the names while reading the data,
+but the names produced in doing so are not as pretty.</p>
+<div class="sourceCode" id="cb379"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb379-1"><a href="day3.html#cb379-1" aria-hidden="true" tabindex="-1"></a>readxl<span class="sc">::</span><span class="fu">read_xlsx</span>(<span class="st">&quot;data/04_ATPase_assay.xlsx&quot;</span>,</span>
+<span id="cb379-2"><a href="day3.html#cb379-2" aria-hidden="true" tabindex="-1"></a>                                <span class="at">skip =</span> <span class="dv">10</span>,</span>
+<span id="cb379-3"><a href="day3.html#cb379-3" aria-hidden="true" tabindex="-1"></a>                                <span class="at">.name_repair =</span> <span class="st">&quot;universal&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb379-4"><a href="day3.html#cb379-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">1</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 1 x 14
+##   Content Time..s. Sample.X1 Sample.X2 Sample.X3 Sample.X4 Sample.X5 Sample.X6
+##   &lt;chr&gt;      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 Raw Da…        0     0.737      1.33      1.71      1.81      1.01      1.44
+## # … with 6 more variables: Sample.X7 &lt;dbl&gt;, Sample.X8 &lt;dbl&gt;, Sample.X9 &lt;dbl&gt;,
+## #   Sample.X10 &lt;dbl&gt;, Sample.X11 &lt;dbl&gt;, Sample.X12 &lt;dbl&gt;</code></pre>
+<blockquote>
+<p>New names:
+* <code>Time [s]</code> -&gt; Time..s.
+* …</p>
+</blockquote>
+<p>Clean the data, make it tidy</p>
+<div class="sourceCode" id="cb381"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb381-1"><a href="day3.html#cb381-1" aria-hidden="true" tabindex="-1"></a>tidy_atpase <span class="ot">&lt;-</span> raw_atpase <span class="sc">%&gt;%</span> </span>
+<span id="cb381-2"><a href="day3.html#cb381-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>content) <span class="sc">%&gt;%</span> </span>
+<span id="cb381-3"><a href="day3.html#cb381-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb381-4"><a href="day3.html#cb381-4" aria-hidden="true" tabindex="-1"></a>    <span class="sc">-</span>time_s,</span>
+<span id="cb381-5"><a href="day3.html#cb381-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to  =</span> <span class="st">&quot;sample&quot;</span>,</span>
+<span id="cb381-6"><a href="day3.html#cb381-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">&quot;absorbance&quot;</span></span>
+<span id="cb381-7"><a href="day3.html#cb381-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb381-8"><a href="day3.html#cb381-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">time =</span> time_s)</span></code></pre></div>
+<p>Visualize data</p>
+<div class="sourceCode" id="cb382"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb382-1"><a href="day3.html#cb382-1" aria-hidden="true" tabindex="-1"></a>tidy_atpase <span class="sc">%&gt;%</span> </span>
+<span id="cb382-2"><a href="day3.html#cb382-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(time, absorbance, <span class="at">color =</span> sample)) <span class="sc">+</span></span>
+<span id="cb382-3"><a href="day3.html#cb382-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()</span></code></pre></div>
+<p><img src="03-day3_files/figure-html/unnamed-chunk-42-1.svg" width="672" /></p>
+<p>Normalize data</p>
+<div class="sourceCode" id="cb383"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb383-1"><a href="day3.html#cb383-1" aria-hidden="true" tabindex="-1"></a>normalized_atpase <span class="ot">&lt;-</span> tidy_atpase <span class="sc">%&gt;%</span> </span>
+<span id="cb383-2"><a href="day3.html#cb383-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sample) <span class="sc">%&gt;%</span> </span>
+<span id="cb383-3"><a href="day3.html#cb383-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">absorbance =</span> absorbance <span class="sc">/</span> <span class="fu">max</span>(absorbance)) <span class="sc">%&gt;%</span> </span>
+<span id="cb383-4"><a href="day3.html#cb383-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb383-5"><a href="day3.html#cb383-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb383-6"><a href="day3.html#cb383-6" aria-hidden="true" tabindex="-1"></a>normalized_atpase <span class="sc">%&gt;%</span></span>
+<span id="cb383-7"><a href="day3.html#cb383-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(time, absorbance, <span class="at">color =</span> sample)) <span class="sc">+</span></span>
+<span id="cb383-8"><a href="day3.html#cb383-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb383-9"><a href="day3.html#cb383-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()</span></code></pre></div>
+<p><img src="03-day3_files/figure-html/unnamed-chunk-43-1.svg" width="672" /></p>
+</div>
+</div>
+<div id="summary-statistics" class="section level3" number="3.3.3">
+<h3><span class="header-section-number">3.3.3</span> Summary Statistics</h3>
+<div id="standard-deviation" class="section level4" number="3.3.3.1">
+<h4><span class="header-section-number">3.3.3.1</span> Standard Deviation</h4>
+<p><span class="math display">\[sd = \sqrt{\frac{\sum_{i=0}^{n}{(x_i-\bar x)^2}}{(n-1)} }\]</span></p>
+<p>Why n-1? The degrees of freedom are n reduced by 1 because
+if we know the mean of a sample, once we know all but 1
+of the individual values, the last value is automatically
+known and thus doesn’t count towards the degrees of freedom.</p>
+</div>
+<div id="variance" class="section level4" number="3.3.3.2">
+<h4><span class="header-section-number">3.3.3.2</span> Variance</h4>
+<p>The variance is the squared standard deviation.</p>
+<p><span class="math display">\[var = \sigma^2\]</span></p>
+</div>
+<div id="standard-error-of-the-mean" class="section level4" number="3.3.3.3">
+<h4><span class="header-section-number">3.3.3.3</span> Standard Error of the Mean</h4>
+<p>Often called SEM or SE.</p>
+<p><span class="math display">\[SEM=\sigma / \sqrt{n}\]</span></p>
+</div>
+</div>
+</div>
+<div id="distributions" class="section level2" number="3.4">
+<h2><span class="header-section-number">3.4</span> Distributions</h2>
+<div class="sourceCode" id="cb384"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb384-1"><a href="day3.html#cb384-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">1000</span>)</span>
+<span id="cb384-2"><a href="day3.html#cb384-2" aria-hidden="true" tabindex="-1"></a>SD <span class="ot">&lt;-</span> <span class="fu">sd</span>(x)</span>
+<span id="cb384-3"><a href="day3.html#cb384-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb384-4"><a href="day3.html#cb384-4" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(x, <span class="at">probability =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb384-5"><a href="day3.html#cb384-5" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>(dnorm, <span class="at">add =</span> <span class="cn">TRUE</span>, <span class="at">col  =</span> <span class="st">&quot;red&quot;</span>)</span>
+<span id="cb384-6"><a href="day3.html#cb384-6" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> SD, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span>
+<span id="cb384-7"><a href="day3.html#cb384-7" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="sc">-</span>SD, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<p><img src="03-day3_files/figure-html/unnamed-chunk-44-1.svg" width="672" /></p>
+<p>SEM</p>
+<div class="sourceCode" id="cb385"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb385-1"><a href="day3.html#cb385-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(x) <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="fu">length</span>(x))</span></code></pre></div>
+<pre><code>## [1] 0.03077073</code></pre>
+<div id="from-distributions-to-quantiles" class="section level3" number="3.4.1">
+<h3><span class="header-section-number">3.4.1</span> From Distributions to Quantiles</h3>
+<p><code>d</code> stands for density i.e. the probability density
+function of a distribution.</p>
+<div class="sourceCode" id="cb387"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb387-1"><a href="day3.html#cb387-1" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>(dnorm, <span class="sc">-</span><span class="dv">4</span>, <span class="dv">4</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:dnorm1"></span>
+<img src="03-day3_files/figure-html/dnorm1-1.svg" alt="Probability density function for the normal distribution." width="672" />
+<p class="caption">
+Figure 3.3: Probability density function for the normal distribution.
+</p>
+</div>
+<p><code>p</code> stands for probability. And it represents
+the cumulative probability i.e. the integral
+of the density function from <span class="math inline">\(-\infty\)</span> to <span class="math inline">\(x\)</span>.</p>
+<div class="sourceCode" id="cb388"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb388-1"><a href="day3.html#cb388-1" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>(pnorm, <span class="sc">-</span><span class="dv">4</span>, <span class="dv">4</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:pnorm1"></span>
+<img src="03-day3_files/figure-html/pnorm1-1.svg" alt="pnorm of x is the probability to draw a value less than or equal than x from a normal distribution." width="672" />
+<p class="caption">
+Figure 3.4: pnorm of x is the probability to draw a value less than or equal than x from a normal distribution.
+</p>
+</div>
+<p><code>q</code> stands for quantile. It is the inverse of
+the probability density function (so the axis are swapped).</p>
+<div class="sourceCode" id="cb389"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb389-1"><a href="day3.html#cb389-1" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>(qnorm)</span></code></pre></div>
+<p><img src="03-day3_files/figure-html/unnamed-chunk-46-1.svg" width="672" /></p>
+<p>Quantiles!</p>
+<div id="quantile-quantile-plots" class="section level4" number="3.4.1.1">
+<h4><span class="header-section-number">3.4.1.1</span> Quantile-Quantile Plots</h4>
+<p>Quantile-Quantile plots can answer the question</p>
+<blockquote>
+<p>“Does my data follow a certain distribution?”</p>
+</blockquote>
+<p>In this case: “Is my data normally distributed?”</p>
+<div class="sourceCode" id="cb390"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb390-1"><a href="day3.html#cb390-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(x)</span>
+<span id="cb390-2"><a href="day3.html#cb390-2" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(x, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<p><img src="03-day3_files/figure-html/unnamed-chunk-47-1.svg" width="672" /></p>
+</div>
+</div>
+</div>
+<div id="the-datasaurus-dozen" class="section level2" number="3.5">
+<h2><span class="header-section-number">3.5</span> The Datasaurus Dozen</h2>
+<p>The Datasaurus Dozen is a great dataset,
+showcasing similar properties
+to anscombes quartet (but in a more
+impressive way).</p>
+<div class="sourceCode" id="cb391"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb391-1"><a href="day3.html#cb391-1" aria-hidden="true" tabindex="-1"></a>datasauRus<span class="sc">::</span>datasaurus_dozen <span class="sc">%&gt;%</span> </span>
+<span id="cb391-2"><a href="day3.html#cb391-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(x,y)) <span class="sc">+</span></span>
+<span id="cb391-3"><a href="day3.html#cb391-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">0.9</span>) <span class="sc">+</span></span>
+<span id="cb391-4"><a href="day3.html#cb391-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>dataset) <span class="sc">+</span></span>
+<span id="cb391-5"><a href="day3.html#cb391-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_equal</span>() <span class="sc">+</span></span>
+<span id="cb391-6"><a href="day3.html#cb391-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code></pre></div>
+<p><img src="03-day3_files/figure-html/unnamed-chunk-48-1.svg" width="672" /></p>
+<p>You can find the research paper <a href="https://www.autodeskresearch.com/publications/samestats">here</a>
+<span class="citation">(<a href="#ref-matejka2017a" role="doc-biblioref"><strong>matejka2017a?</strong></a>)</span>.</p>
+<p>But not only does it highlight the importance
+of not relying solely on summary statistics,
+it also comes with additional datasets.</p>
+<p>One of them is designed to show the potential
+problems of so called box-plots:</p>
+<div class="sourceCode" id="cb392"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb392-1"><a href="day3.html#cb392-1" aria-hidden="true" tabindex="-1"></a>dinos <span class="ot">&lt;-</span> datasauRus<span class="sc">::</span>box_plots</span>
+<span id="cb392-2"><a href="day3.html#cb392-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dinos)</span></code></pre></div>
+<pre><code>## # A tibble: 6 x 5
+##    left lines normal right split
+##   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 -9.77 -9.77  -9.76 -9.76 -9.77
+## 2 -9.76 -9.74  -9.72 -9.05 -9.77
+## 3 -9.75 -9.77  -9.68 -8.51 -9.77
+## 4 -9.77 -9.77  -9.64 -8.24 -9.77
+## 5 -9.76 -9.77  -9.6  -8.82 -9.77
+## 6 -9.77 -9.76  -9.56 -8.07 -9.76</code></pre>
+<p>This data is not in the tidy format but this can
+easily be fixed:</p>
+<div class="sourceCode" id="cb394"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb394-1"><a href="day3.html#cb394-1" aria-hidden="true" tabindex="-1"></a>tidy_dinos <span class="ot">&lt;-</span> dinos <span class="sc">%&gt;%</span></span>
+<span id="cb394-2"><a href="day3.html#cb394-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">everything</span>(), <span class="at">names_to =</span>  <span class="st">&quot;set&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;value&quot;</span>)</span>
+<span id="cb394-3"><a href="day3.html#cb394-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb394-4"><a href="day3.html#cb394-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(tidy_dinos)</span></code></pre></div>
+<pre><code>## # A tibble: 6 x 2
+##   set    value
+##   &lt;chr&gt;  &lt;dbl&gt;
+## 1 left   -9.77
+## 2 lines  -9.77
+## 3 normal -9.76
+## 4 right  -9.76
+## 5 split  -9.77
+## 6 left   -9.76</code></pre>
+<p>Boxplots!</p>
+<div class="sourceCode" id="cb396"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb396-1"><a href="day3.html#cb396-1" aria-hidden="true" tabindex="-1"></a>tidy_dinos <span class="sc">%&gt;%</span> </span>
+<span id="cb396-2"><a href="day3.html#cb396-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(set, value)) <span class="sc">+</span></span>
+<span id="cb396-3"><a href="day3.html#cb396-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span></code></pre></div>
+<p><img src="03-day3_files/figure-html/unnamed-chunk-51-1.svg" width="672" /></p>
+<p>A Boxplot shows the median (50th percentile) as a black
+line, the 25th and 75th percentile (= first and third quartile)
+as lower and upper limits of the box,
+as well as whiskers.
+The upper whisker extends from the hinge to the largest value no further than 1.5 * IQR from the hinge (where IQR is the inter-quartile range, or distance between the first and third quartiles). […]
+Data beyond the end of the whiskers are called “outlying” points
+and are plotted individually (from <code>?geom_boxplot</code>).</p>
+<p>However, this type of plot ignores the
+underlying distribution of datapoints.
+And if we look at the actual points,
+the full range of what the boxplot didn’t
+tell us can be seen:</p>
+<div class="sourceCode" id="cb397"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb397-1"><a href="day3.html#cb397-1" aria-hidden="true" tabindex="-1"></a> tidy_dinos <span class="sc">%&gt;%</span> </span>
+<span id="cb397-2"><a href="day3.html#cb397-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(set, value)) <span class="sc">+</span></span>
+<span id="cb397-3"><a href="day3.html#cb397-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb397-4"><a href="day3.html#cb397-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">alpha =</span> <span class="fl">0.1</span>)</span></code></pre></div>
+<p><img src="03-day3_files/figure-html/unnamed-chunk-52-1.svg" width="672" /></p>
+<div class="sourceCode" id="cb398"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb398-1"><a href="day3.html#cb398-1" aria-hidden="true" tabindex="-1"></a>tidy_dinos <span class="sc">%&gt;%</span> </span>
+<span id="cb398-2"><a href="day3.html#cb398-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="at">dataset =</span> set) <span class="sc">%&gt;%</span> </span>
+<span id="cb398-3"><a href="day3.html#cb398-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Median =</span> <span class="fu">median</span>(value) <span class="sc">%&gt;%</span> <span class="fu">round</span>(<span class="dv">2</span>))</span></code></pre></div>
+<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<pre><code>## # A tibble: 5 x 2
+##   dataset Median
+##   &lt;chr&gt;    &lt;dbl&gt;
+## 1 left     -0.01
+## 2 lines    -0.01
+## 3 normal    0   
+## 4 right     0   
+## 5 split     0</code></pre>
+<p>Plotting the points individually with <code>geom_point</code>
+doesn’t quite work here because they overlap too much.
+<code>geom_jitter</code> helps us out by distributing the points
+an the x-axis. We are allowed to move the points
+on the x-axis a bit because it is a categorical
+axis, not a continuous. Shifting the points
+within their categories does not change the data.
+We could not have moved the points on the y-axis
+because that would have falsified the data.</p>
+<div class="sourceCode" id="cb401"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb401-1"><a href="day3.html#cb401-1" aria-hidden="true" tabindex="-1"></a>tidy_dinos <span class="sc">%&gt;%</span> </span>
+<span id="cb401-2"><a href="day3.html#cb401-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(set, value)) <span class="sc">+</span></span>
+<span id="cb401-3"><a href="day3.html#cb401-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.01</span>)</span></code></pre></div>
+<p><img src="03-day3_files/figure-html/unnamed-chunk-54-1.svg" width="672" /></p>
+<div class="sourceCode" id="cb402"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb402-1"><a href="day3.html#cb402-1" aria-hidden="true" tabindex="-1"></a>tidy_dinos <span class="sc">%&gt;%</span></span>
+<span id="cb402-2"><a href="day3.html#cb402-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(set, value)) <span class="sc">+</span></span>
+<span id="cb402-3"><a href="day3.html#cb402-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>()</span></code></pre></div>
+<p><img src="03-day3_files/figure-html/unnamed-chunk-55-1.svg" width="672" /></p>
+<p>An even more problematic visualization would have been
+to display the data with a barplot of means
+and error bars for the SD or SEM.
+Friends don’t let friends make barplots!</p>
+<p>Histograms or density plots on the other hand
+tell us about the distribution, not just
+summary statistics, while at the same
+time not overloading the plot like
+the points do in some cases.</p>
+<div class="sourceCode" id="cb403"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb403-1"><a href="day3.html#cb403-1" aria-hidden="true" tabindex="-1"></a>tidy_dinos <span class="sc">%&gt;%</span> </span>
+<span id="cb403-2"><a href="day3.html#cb403-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(value, <span class="at">fill =</span> set)) <span class="sc">+</span></span>
+<span id="cb403-3"><a href="day3.html#cb403-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">50</span>) <span class="sc">+</span></span>
+<span id="cb403-4"><a href="day3.html#cb403-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> set)</span></code></pre></div>
+<p><img src="03-day3_files/figure-html/unnamed-chunk-56-1.svg" width="672" /></p>
+<div class="sourceCode" id="cb404"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb404-1"><a href="day3.html#cb404-1" aria-hidden="true" tabindex="-1"></a>tidy_dinos <span class="sc">%&gt;%</span> </span>
+<span id="cb404-2"><a href="day3.html#cb404-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(value, <span class="at">fill =</span> set)) <span class="sc">+</span></span>
+<span id="cb404-3"><a href="day3.html#cb404-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>() <span class="sc">+</span></span>
+<span id="cb404-4"><a href="day3.html#cb404-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> set)</span></code></pre></div>
+<p><img src="03-day3_files/figure-html/unnamed-chunk-57-1.svg" width="672" /></p>
+<p>The <code>ggbeeswarm</code>-package gives us even more
+possibilities to display all those points
+in an orderly fashion.</p>
+<div class="sourceCode" id="cb405"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb405-1"><a href="day3.html#cb405-1" aria-hidden="true" tabindex="-1"></a>tidy_dinos <span class="sc">%&gt;%</span> </span>
+<span id="cb405-2"><a href="day3.html#cb405-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(set, value, <span class="at">fill =</span> set)) <span class="sc">+</span></span>
+<span id="cb405-3"><a href="day3.html#cb405-3" aria-hidden="true" tabindex="-1"></a>  ggbeeswarm<span class="sc">::</span><span class="fu">geom_quasirandom</span>(<span class="at">method =</span> <span class="st">&quot;smiley&quot;</span>)</span></code></pre></div>
+<p><img src="03-day3_files/figure-html/unnamed-chunk-58-1.svg" width="672" /></p>
+</div>
+<div id="exercises" class="section level2" number="3.6">
+<h2><span class="header-section-number">3.6</span> Exercises</h2>
+<div id="inclusion-bodies" class="section level3" number="3.6.1">
+<h3><span class="header-section-number">3.6.1</span> Inclusion Bodies</h3>
+<p>You can get the dataset from my Github Repository.</p>
+<p><em>Disclaimer</em>: This is real biological data but
+the explanation and context are changed.</p>
+<ul>
+<li>If you want to impress me, do all the exercises
+in an Rmarkdown document, add your conclusions and thoughts
+along with the data analysis process and structure it
+with meaningful headlines using <code>#</code>.</li>
+<li>Read the csv-file <code>data/03_inclusion_bodies.csv</code>.</li>
+<li>Make it tidy</li>
+<li>Visualize the data with ggplot as:
+<ul>
+<li>Jittered point plot</li>
+<li>Boxplot</li>
+<li>Two overlaid histograms
+(<em>Hint</em>: use <code>position = "identity"</code>
+so that R doesn’t stack the bars)</li>
+<li>Two overlaid density plots
+(<em>Hint</em>: use the parameter <code>alpha</code>
+to make both of them visible at the same time)</li>
+<li>A Barplot with the mean and error bars, <em>hints</em>:
+<ul>
+<li>Create a summary tibble first</li>
+<li>Use <code>geom_col</code>, <strong>not</strong> <code>geom_bar</code></li>
+</ul></li>
+<li>BONUS: Make the plots pretty with ggplot theme options</li>
+</ul></li>
+</ul>
+</div>
+<div id="solutions" class="section level3" number="3.6.2">
+<h3><span class="header-section-number">3.6.2</span> Solutions</h3>
+<p>From the last course:</p>
+<ul>
+<li><a href="/misc/dataIntro19_day03/analysis.rmd">Rmarkdown document</a></li>
+<li><a href="/misc/dataIntro19_day03/analysis.html">Result as html document</a></li>
+<li><a href="/misc/dataIntro19_day03/analysis.pdf">Result as pdf document</a></li>
+</ul>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="day2.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="day4.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

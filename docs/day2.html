@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Day 2 Bring on the Data! | Introduction to Data Science with R for Biochemists</title>
+  <meta name="description" content="Day 2 Bring on the Data! | Introduction to Data Science with R for Biochemists" />
+  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Day 2 Bring on the Data! | Introduction to Data Science with R for Biochemists" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Day 2 Bring on the Data! | Introduction to Data Science with R for Biochemists" />
+  <meta name="github-repo" content="jannikbuhr/dataIntro19Master" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Day 2 Bring on the Data! | Introduction to Data Science with R for Biochemists" />
+  
+  <meta name="twitter:description" content="Day 2 Bring on the Data! | Introduction to Data Science with R for Biochemists" />
+  
+
+<meta name="author" content="Jannik Buhr" />
+
+
+<meta name="date" content="2020-11-22" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="day1.html"/>
+<link rel="next" href="day3.html"/>
+<script src="libs/header-attrs-2.5/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.9.2.1/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-1.52.2/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-1.52.2/plotly-latest.min.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="https://jmbuhr.de/dataIntro19Master/">Introduction to data analysis with R</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Prologue</a>
+<ul>
+<li class="chapter" data-level="0.1" data-path="index.html"><a href="index.html#preparation-for-the-course"><i class="fa fa-check"></i><b>0.1</b> Preparation for the Course</a></li>
+<li class="chapter" data-level="0.2" data-path="index.html"><a href="index.html#structure-of-the-course"><i class="fa fa-check"></i><b>0.2</b> Structure of the Course</a></li>
+<li class="chapter" data-level="0.3" data-path="index.html"><a href="index.html#content"><i class="fa fa-check"></i><b>0.3</b> Content</a></li>
+<li class="chapter" data-level="0.4" data-path="index.html"><a href="index.html#resources"><i class="fa fa-check"></i><b>0.4</b> Resources</a>
+<ul>
+<li class="chapter" data-level="0.4.1" data-path="index.html"><a href="index.html#tidyverse"><i class="fa fa-check"></i><b>0.4.1</b> Tidyverse</a></li>
+<li class="chapter" data-level="0.4.2" data-path="index.html"><a href="index.html#r-in-general"><i class="fa fa-check"></i><b>0.4.2</b> R in general</a></li>
+<li class="chapter" data-level="0.4.3" data-path="index.html"><a href="index.html#statistics"><i class="fa fa-check"></i><b>0.4.3</b> Statistics</a></li>
+<li class="chapter" data-level="0.4.4" data-path="index.html"><a href="index.html#talks-podcasts-blogs"><i class="fa fa-check"></i><b>0.4.4</b> Talks, Podcasts, Blogs</a></li>
+<li class="chapter" data-level="0.4.5" data-path="index.html"><a href="index.html#misc"><i class="fa fa-check"></i><b>0.4.5</b> Misc</a></li>
+</ul></li>
+<li class="chapter" data-level="0.5" data-path="index.html"><a href="index.html#other-resources"><i class="fa fa-check"></i><b>0.5</b> Other Resources</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="day1.html"><a href="day1.html"><i class="fa fa-check"></i><b>1</b> And Go!</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="day1.html"><a href="day1.html#basic-datastructures-in-r"><i class="fa fa-check"></i><b>1.1</b> Basic Datastructures in R</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="day1.html"><a href="day1.html#executing-code-in-r"><i class="fa fa-check"></i><b>1.1.1</b> Executing Code in R</a></li>
+<li class="chapter" data-level="1.1.2" data-path="day1.html"><a href="day1.html#basic-datatypes"><i class="fa fa-check"></i><b>1.1.2</b> Basic Datatypes</a></li>
+<li class="chapter" data-level="1.1.3" data-path="day1.html"><a href="day1.html#variables"><i class="fa fa-check"></i><b>1.1.3</b> Variables</a></li>
+<li class="chapter" data-level="1.1.4" data-path="day1.html"><a href="day1.html#math-operators"><i class="fa fa-check"></i><b>1.1.4</b> Math Operators</a></li>
+<li class="chapter" data-level="1.1.5" data-path="day1.html"><a href="day1.html#functions-and-vectors"><i class="fa fa-check"></i><b>1.1.5</b> Functions and Vectors</a></li>
+<li class="chapter" data-level="1.1.6" data-path="day1.html"><a href="day1.html#datastructures"><i class="fa fa-check"></i><b>1.1.6</b> Datastructures</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="day1.html"><a href="day1.html#the-first-plots"><i class="fa fa-check"></i><b>1.2</b> The first Plots</a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="day1.html"><a href="day1.html#scatterplot"><i class="fa fa-check"></i><b>1.2.1</b> Scatterplot</a></li>
+<li class="chapter" data-level="1.2.2" data-path="day1.html"><a href="day1.html#curve"><i class="fa fa-check"></i><b>1.2.2</b> Curve</a></li>
+<li class="chapter" data-level="1.2.3" data-path="day1.html"><a href="day1.html#histogram"><i class="fa fa-check"></i><b>1.2.3</b> Histogram</a></li>
+<li class="chapter" data-level="1.2.4" data-path="day1.html"><a href="day1.html#the-last-piechart-you-will-ever-need."><i class="fa fa-check"></i><b>1.2.4</b> The last piechart you will ever need.</a></li>
+<li class="chapter" data-level="1.2.5" data-path="day1.html"><a href="day1.html#saving-plots"><i class="fa fa-check"></i><b>1.2.5</b> Saving Plots</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="day2.html"><a href="day2.html"><i class="fa fa-check"></i><b>2</b> Bring on the Data!</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="day2.html"><a href="day2.html#project-based-workflow"><i class="fa fa-check"></i><b>2.1</b> Project-based Workflow</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="day2.html"><a href="day2.html#workflow-of-a-data-analysis"><i class="fa fa-check"></i><b>2.1.1</b> Workflow of a Data Analysis</a></li>
+<li class="chapter" data-level="2.1.2" data-path="day2.html"><a href="day2.html#communication"><i class="fa fa-check"></i><b>2.1.2</b> Communication!</a></li>
+<li class="chapter" data-level="2.1.3" data-path="day2.html"><a href="day2.html#important-rstudio-settings"><i class="fa fa-check"></i><b>2.1.3</b> Important RStudio-Settings</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="day2.html"><a href="day2.html#packages-the-tidyverse"><i class="fa fa-check"></i><b>2.2</b> Packages: The Tidyverse</a></li>
+<li class="chapter" data-level="2.3" data-path="day2.html"><a href="day2.html#exercise-from-day-1"><i class="fa fa-check"></i><b>2.3</b> Exercise from day 1</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="day2.html"><a href="day2.html#questions"><i class="fa fa-check"></i><b>2.3.1</b> Questions</a></li>
+<li class="chapter" data-level="2.3.2" data-path="day2.html"><a href="day2.html#answers"><i class="fa fa-check"></i><b>2.3.2</b> Answers</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="day2.html"><a href="day2.html#reading-data"><i class="fa fa-check"></i><b>2.4</b> Reading data</a></li>
+<li class="chapter" data-level="2.5" data-path="day2.html"><a href="day2.html#the-pipe-and-dplyr-verbs"><i class="fa fa-check"></i><b>2.5</b> The Pipe and dplyr Verbs</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="day2.html"><a href="day2.html#the-pipe"><i class="fa fa-check"></i><b>2.5.1</b> The Pipe</a></li>
+<li class="chapter" data-level="2.5.2" data-path="day2.html"><a href="day2.html#overview-of-the-dplyr-verbs"><i class="fa fa-check"></i><b>2.5.2</b> Overview of the dplyr Verbs</a></li>
+<li class="chapter" data-level="2.5.3" data-path="day2.html"><a href="day2.html#select"><i class="fa fa-check"></i><b>2.5.3</b> select</a></li>
+<li class="chapter" data-level="2.5.4" data-path="day2.html"><a href="day2.html#filter"><i class="fa fa-check"></i><b>2.5.4</b> filter</a></li>
+<li class="chapter" data-level="2.5.5" data-path="day2.html"><a href="day2.html#mutate"><i class="fa fa-check"></i><b>2.5.5</b> mutate</a></li>
+<li class="chapter" data-level="2.5.6" data-path="day2.html"><a href="day2.html#arrange"><i class="fa fa-check"></i><b>2.5.6</b> arrange</a></li>
+<li class="chapter" data-level="2.5.7" data-path="day2.html"><a href="day2.html#count"><i class="fa fa-check"></i><b>2.5.7</b> count</a></li>
+<li class="chapter" data-level="2.5.8" data-path="day2.html"><a href="day2.html#summarise"><i class="fa fa-check"></i><b>2.5.8</b> summarise</a></li>
+<li class="chapter" data-level="2.5.9" data-path="day2.html"><a href="day2.html#group_by-und-summarise"><i class="fa fa-check"></i><b>2.5.9</b> group_by und summarise</a></li>
+<li class="chapter" data-level="2.5.10" data-path="day2.html"><a href="day2.html#moving-on-to-probability"><i class="fa fa-check"></i><b>2.5.10</b> Moving on to Probability</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="day2.html"><a href="day2.html#but-what-is-probability"><i class="fa fa-check"></i><b>2.6</b> But what is Probability?</a>
+<ul>
+<li class="chapter" data-level="2.6.1" data-path="day2.html"><a href="day2.html#example"><i class="fa fa-check"></i><b>2.6.1</b> Example:</a></li>
+<li class="chapter" data-level="2.6.2" data-path="day2.html"><a href="day2.html#p-values"><i class="fa fa-check"></i><b>2.6.2</b> P-Values</a></li>
+</ul></li>
+<li class="chapter" data-level="2.7" data-path="day2.html"><a href="day2.html#exercise-transfer-to-new-data"><i class="fa fa-check"></i><b>2.7</b> Exercise: Transfer to new Data</a>
+<ul>
+<li class="chapter" data-level="2.7.1" data-path="day2.html"><a href="day2.html#solutions"><i class="fa fa-check"></i><b>2.7.1</b> Solutions</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="day3.html"><a href="day3.html"><i class="fa fa-check"></i><b>3</b> Tidy Data, Visualization and Distributions</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="day3.html"><a href="day3.html#recap-of-day-2"><i class="fa fa-check"></i><b>3.1</b> Recap of day 2</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="day2.html"><a href="day2.html#questions"><i class="fa fa-check"></i><b>3.1.1</b> Questions</a></li>
+<li class="chapter" data-level="3.1.2" data-path="day2.html"><a href="day2.html#answers"><i class="fa fa-check"></i><b>3.1.2</b> Answers</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="day3.html"><a href="day3.html#visualization-with-ggplot2"><i class="fa fa-check"></i><b>3.2</b> Visualization with ggplot2</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="day3.html"><a href="day3.html#the-grammar-of-graphics"><i class="fa fa-check"></i><b>3.2.1</b> The Grammar of Graphics</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="day3.html"><a href="day3.html#visualization-is-key"><i class="fa fa-check"></i><b>3.3</b> Visualization is Key</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="day3.html"><a href="day3.html#anscombe"><i class="fa fa-check"></i><b>3.3.1</b> Anscombes Quartet</a></li>
+<li class="chapter" data-level="3.3.2" data-path="day3.html"><a href="day3.html#excursion-tidy-data"><i class="fa fa-check"></i><b>3.3.2</b> Excursion Tidy Data</a></li>
+<li class="chapter" data-level="3.3.3" data-path="day3.html"><a href="day3.html#summary-statistics"><i class="fa fa-check"></i><b>3.3.3</b> Summary Statistics</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="day3.html"><a href="day3.html#distributions"><i class="fa fa-check"></i><b>3.4</b> Distributions</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="day3.html"><a href="day3.html#from-distributions-to-quantiles"><i class="fa fa-check"></i><b>3.4.1</b> From Distributions to Quantiles</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="day3.html"><a href="day3.html#the-datasaurus-dozen"><i class="fa fa-check"></i><b>3.5</b> The Datasaurus Dozen</a></li>
+<li class="chapter" data-level="3.6" data-path="day3.html"><a href="day3.html#exercises"><i class="fa fa-check"></i><b>3.6</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="3.6.1" data-path="day3.html"><a href="day3.html#inclusion-bodies"><i class="fa fa-check"></i><b>3.6.1</b> Inclusion Bodies</a></li>
+<li class="chapter" data-level="3.6.2" data-path="day2.html"><a href="day2.html#solutions"><i class="fa fa-check"></i><b>3.6.2</b> Solutions</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="day4.html"><a href="day4.html"><i class="fa fa-check"></i><b>4</b> Significance Tests and Power</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="day4.html"><a href="day4.html#the-central-limit-theorem-clt"><i class="fa fa-check"></i><b>4.1</b> The Central Limit Theorem (CLT)</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="day4.html"><a href="day4.html#reading-in-data"><i class="fa fa-check"></i><b>4.1.1</b> Reading in Data</a></li>
+<li class="chapter" data-level="4.1.2" data-path="day4.html"><a href="day4.html#programming-and-problem-solving"><i class="fa fa-check"></i><b>4.1.2</b> Programming and Problem Solving</a></li>
+<li class="chapter" data-level="4.1.3" data-path="day4.html"><a href="day4.html#population-distribution-vs.-distribution-of-means"><i class="fa fa-check"></i><b>4.1.3</b> Population Distribution vs. Distribution of Means</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="day4.html"><a href="day4.html#the-t-distribution"><i class="fa fa-check"></i><b>4.2</b> The T-Distribution</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="day4.html"><a href="day4.html#confidence-intervals-cis"><i class="fa fa-check"></i><b>4.2.1</b> Confidence Intervals (CIs)</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="day4.html"><a href="day4.html#significance-tests"><i class="fa fa-check"></i><b>4.3</b> Significance Tests</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="day4.html"><a href="day4.html#students-t-test"><i class="fa fa-check"></i><b>4.3.1</b> Students T-Test</a></li>
+<li class="chapter" data-level="4.3.2" data-path="day4.html"><a href="day4.html#wilcoxon-rank-sum-test"><i class="fa fa-check"></i><b>4.3.2</b> Wilcoxon Rank Sum Test</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="day4.html"><a href="day4.html#type-i-and-type-ii-errors"><i class="fa fa-check"></i><b>4.4</b> Type I and Type II Errors</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="day4.html"><a href="day4.html#type-i-false-positives"><i class="fa fa-check"></i><b>4.4.1</b> Type I: False Positives</a></li>
+<li class="chapter" data-level="4.4.2" data-path="day4.html"><a href="day4.html#type-ii-false-negatives"><i class="fa fa-check"></i><b>4.4.2</b> Type II: False Negatives</a></li>
+<li class="chapter" data-level="4.4.3" data-path="day4.html"><a href="day4.html#statistical-power"><i class="fa fa-check"></i><b>4.4.3</b> Statistical Power</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="day4.html"><a href="day4.html#problems"><i class="fa fa-check"></i><b>4.5</b> Problems</a>
+<ul>
+<li class="chapter" data-level="4.5.1" data-path="day4.html"><a href="day4.html#the-jelly-bean-problem-multiple-testing"><i class="fa fa-check"></i><b>4.5.1</b> The Jelly Bean Problem (Multiple Testing)</a></li>
+<li class="chapter" data-level="4.5.2" data-path="day4.html"><a href="day4.html#the-base-rate-fallacy"><i class="fa fa-check"></i><b>4.5.2</b> The Base Rate Fallacy</a></li>
+<li class="chapter" data-level="4.5.3" data-path="index.html"><a href="index.html#resources"><i class="fa fa-check"></i><b>4.5.3</b> Resources</a></li>
+</ul></li>
+<li class="chapter" data-level="4.6" data-path="day3.html"><a href="day3.html#exercises"><i class="fa fa-check"></i><b>4.6</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="4.6.1" data-path="day4.html"><a href="day4.html#show-the-following-statements-with-simulations-in-r"><i class="fa fa-check"></i><b>4.6.1</b> Show the following statements with simulations in R</a></li>
+<li class="chapter" data-level="4.6.2" data-path="day4.html"><a href="day4.html#show-the-following-concepts-with-simulations-in-r"><i class="fa fa-check"></i><b>4.6.2</b> Show the following concepts with simulations in R</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="day5.html"><a href="day5.html"><i class="fa fa-check"></i><b>5</b> Correlation and Regression</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="day5.html"><a href="day5.html#side-note-what-is-the-main-goal-of-this-course"><i class="fa fa-check"></i><b>5.1</b> Side note: What is the main goal of this course?</a></li>
+<li class="chapter" data-level="5.2" data-path="day5.html"><a href="day5.html#correlation-and-regression"><i class="fa fa-check"></i><b>5.2</b> Correlation and Regression</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="day5.html"><a href="day5.html#correlation"><i class="fa fa-check"></i><b>5.2.1</b> Correlation</a></li>
+<li class="chapter" data-level="5.2.2" data-path="day5.html"><a href="day5.html#regression"><i class="fa fa-check"></i><b>5.2.2</b> Regression</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="day5.html"><a href="day5.html#non-linear-regression"><i class="fa fa-check"></i><b>5.3</b> Non-Linear Regression</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="day5.html"><a href="day5.html#michaelis-menten-kinetics"><i class="fa fa-check"></i><b>5.3.1</b> Michaelis-Menten Kinetics</a></li>
+<li class="chapter" data-level="5.3.2" data-path="day5.html"><a href="day5.html#many-models"><i class="fa fa-check"></i><b>5.3.2</b> Many Models</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="day3.html"><a href="day3.html#exercises"><i class="fa fa-check"></i><b>5.4</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="5.4.1" data-path="day5.html"><a href="day5.html#with-the-datasaurus-dozen-data-sets"><i class="fa fa-check"></i><b>5.4.1</b> With the Datasaurus Dozen Data Sets</a></li>
+<li class="chapter" data-level="5.4.2" data-path="day5.html"><a href="day5.html#example-data-analysis"><i class="fa fa-check"></i><b>5.4.2</b> Example Data Analysis</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="day6.html"><a href="day6.html"><i class="fa fa-check"></i><b>6</b> Examples and Feedback</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="day6.html"><a href="day6.html#random-sidenotes"><i class="fa fa-check"></i><b>6.1</b> Random Sidenotes</a></li>
+<li class="chapter" data-level="6.2" data-path="day6.html"><a href="day6.html#lots-of-examples"><i class="fa fa-check"></i><b>6.2</b> Lot’s of Examples</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="day6.html"><a href="day6.html#tidytuesday-spotify"><i class="fa fa-check"></i><b>6.2.1</b> Tidytuesday: Spotify</a></li>
+<li class="chapter" data-level="6.2.2" data-path="day6.html"><a href="day6.html#shiny-app"><i class="fa fa-check"></i><b>6.2.2</b> Shiny App</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Introduction to Data Science with R for Biochemists</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="day2" class="section level1" number="2">
+<h1><span class="header-section-number">Day 2</span> Bring on the Data!</h1>
+<div id="project-based-workflow" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> Project-based Workflow</h2>
+<p>Whenever you work on a new project (like a lab analysis),
+create a new RStudio Project. You can find the quick menu
+for this in the top right corner of RStudio.</p>
+<p>Projects automatically set your so-called <code>working directory</code>
+to this project folder. This is where R will search for
+files and save files to. Every file path should be relative
+to this working directory. This also enables the RStudio autocompletion
+to help you find your files. Inserting a pair of quotations marks (<code>"</code>)
+into your code and pressing Tab or Ctrl+Space shows you the files
+and folders in your working directory.</p>
+<div id="workflow-of-a-data-analysis" class="section level3" number="2.1.1">
+<h3><span class="header-section-number">2.1.1</span> Workflow of a Data Analysis</h3>
+<p>A typical workflow according to Hadley Wickam, Chief Scientist at
+RStudio:</p>
+<div class="figure"><span id="fig:workflow-img"></span>
+<img src="img/workflow.png" alt="Source: @wickhamDataScienceImport2017"  />
+<p class="caption">
+Figure 2.1: Source: <span class="citation"><a href="references.html#ref-wickhamDataScienceImport2017" role="doc-biblioref">Wickham und Grolemund</a> (<a href="references.html#ref-wickhamDataScienceImport2017" role="doc-biblioref">2017</a>)</span>
+</p>
+</div>
+</div>
+<div id="communication" class="section level3" number="2.1.2">
+<h3><span class="header-section-number">2.1.2</span> Communication!</h3>
+<p>Your thoughts during data analysis matter (To future-you and others)!</p>
+<p>This is one of the main reasons I use Rmarkdown
+instead of R scripts for teaching, as well
+as regular data analysis. This <code>.Rmd</code> format mixes
+text with code <em>chunks</em>. You can create your own
+in the top left corner of RStudio. Choose “R markdown” and press OK.</p>
+<p><img src="img/newrmd.png" /><!-- --></p>
+<p>This will present you with an example document showcasing
+some of the possibilities. A plethora of information can be found
+in the official
+<a href="https://bookdown.org/yihui/rmarkdown/">Rmarkdown guide</a> <span class="citation">(<a href="references.html#ref-R-rmarkdown" role="doc-biblioref">Allaire u. a. 2019</a>)</span>.</p>
+<p>Text is interpreted as markdown, with special characters to mark
+text as bold, italics, a heading etc. and text in so called
+code chunks is interpreted as (R) code. You can insert R code chunks
+with the shortcut Ctrl+Alt+I or the button in the upper right corner
+of the code editor window. To execute (= send to the console) a piece
+of code in a chunk hit the familiar Ctrl+Enter. To Execute</p>
+<p>Hitting the <strong>knit</strong> button will run the whole document and produce
+a report in the specified format (html, docx, pdf and many others).</p>
+<p><img src="img/knit.png" /><!-- --></p>
+</div>
+<div id="important-rstudio-settings" class="section level3" number="2.1.3">
+<h3><span class="header-section-number">2.1.3</span> Important RStudio-Settings</h3>
+<p>For the sake of reproducibility, please set these settings
+(Tools -&gt; Global Options) in your RStudio.</p>
+<div class="figure"><span id="fig:unnamed-chunk-3"></span>
+<img src="img/RS_settings.png" alt="RStudio Settings" width="50%" /><img src="img/RS_settings2.png" alt="RStudio Settings" width="50%" />
+<p class="caption">
+Figure 2.2: RStudio Settings
+</p>
+</div>
+</div>
+</div>
+<div id="packages-the-tidyverse" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Packages: The Tidyverse</h2>
+<p>This is where a lot of the power of R comes from.</p>
+<p>Packages are…</p>
+<p>Installing packages</p>
+<div class="sourceCode" id="cb200"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb200-1"><a href="day2.html#cb200-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install tidyverse</span></span>
+<span id="cb200-2"><a href="day2.html#cb200-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;tidyverse&quot;</span>)</span></code></pre></div>
+<p>Load packages:</p>
+<div class="sourceCode" id="cb201"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb201-1"><a href="day2.html#cb201-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load tidyverse</span></span>
+<span id="cb201-2"><a href="day2.html#cb201-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
+<pre><code>## ── Attaching packages ────────</code></pre>
+<pre><code>## ✓ ggplot2 3.3.2     ✓ purrr   0.3.4
+## ✓ tibble  3.0.3     ✓ dplyr   1.0.1
+## ✓ tidyr   1.1.1     ✓ stringr 1.4.0
+## ✓ readr   1.3.1     ✓ forcats 0.5.0</code></pre>
+<pre><code>## ── Conflicts ─────────────────
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()</code></pre>
+<p>The tidyverse is</p>
+</div>
+<div id="exercise-from-day-1" class="section level2" number="2.3">
+<h2><span class="header-section-number">2.3</span> Exercise from day 1</h2>
+<div id="questions" class="section level3" number="2.3.1">
+<h3><span class="header-section-number">2.3.1</span> Questions</h3>
+<ul>
+<li>What do we get when we execute <code>c("12", 13, 14)[2] + 1</code>?
+<ul>
+<li>Try do predict what will happen before executing the code.</li>
+<li>Why does it happen that way?</li>
+</ul></li>
+<li>Make a vector x with the numbers from 1 to 10</li>
+<li>Make a vector y with the same content as x</li>
+<li>Plot both vectors as points (y ~ x)
+<ul>
+<li>hint: use the <code>plot</code> function</li>
+</ul></li>
+<li>Do a linear regression and add it as a line to the plot</li>
+<li>How can we find out more about the linear regression object?</li>
+</ul>
+</div>
+<div id="answers" class="section level3" number="2.3.2">
+<h3><span class="header-section-number">2.3.2</span> Answers</h3>
+<div class="sourceCode" id="cb205"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb205-1"><a href="day2.html#cb205-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="st">&quot;12&quot;</span>, <span class="dv">13</span>, <span class="dv">14</span>)[<span class="dv">2</span>] <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb205-2"><a href="day2.html#cb205-2" aria-hidden="true" tabindex="-1"></a>vec <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;12&quot;</span>, <span class="dv">13</span>, <span class="dv">14</span>)</span>
+<span id="cb205-3"><a href="day2.html#cb205-3" aria-hidden="true" tabindex="-1"></a>vec[<span class="dv">2</span>]</span>
+<span id="cb205-4"><a href="day2.html#cb205-4" aria-hidden="true" tabindex="-1"></a>vec[<span class="dv">2</span>] <span class="sc">+</span> <span class="dv">1</span></span></code></pre></div>
+<p>Ctrl+Shift+Enter to run the whole chunk</p>
+<div class="sourceCode" id="cb206"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb206-1"><a href="day2.html#cb206-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span></span>
+<span id="cb206-2"><a href="day2.html#cb206-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> x</span>
+<span id="cb206-3"><a href="day2.html#cb206-3" aria-hidden="true" tabindex="-1"></a><span class="co"># plot(x, y)</span></span>
+<span id="cb206-4"><a href="day2.html#cb206-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(y <span class="sc">~</span> x)</span>
+<span id="cb206-5"><a href="day2.html#cb206-5" aria-hidden="true" tabindex="-1"></a>linearModel <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x)</span>
+<span id="cb206-6"><a href="day2.html#cb206-6" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(linearModel)</span></code></pre></div>
+<p><img src="02-day2_files/figure-html/unnamed-chunk-7-1.svg" width="672" /></p>
+</div>
+</div>
+<div id="reading-data" class="section level2" number="2.4">
+<h2><span class="header-section-number">2.4</span> Reading data</h2>
+<p>The <code>readr</code>-package is part of the <code>tidyverse</code>,
+which we already loaded above with <code>library(tidyverse)</code>.</p>
+<p>Take your favourite table calculation program (Excel, Libre Office).
+We create a list of course participants and at the same
+time note the row in which they are sitting and their hair length.</p>
+<p>We can save the file as <code>.csv</code> (Comma Separated Values),
+which is a plain text file and can be opened
+with any text editor. As a destination we
+create a folder in our project called <code>data</code>,
+to keep everything organized.</p>
+<div class="sourceCode" id="cb207"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb207-1"><a href="day2.html#cb207-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv</span>(<span class="st">&quot;data/students.csv&quot;</span>)</span></code></pre></div>
+<p>You might have a German Excel version…
+Because the German language uses
+the comma as a decimal separator, it can’t use
+the comma to separate entries in a table as well.
+This is why the German version of a “csv” produced
+by Excel is actually semicolon (<code>;</code>) separated.
+But there is an easy fix for that:</p>
+<div class="sourceCode" id="cb208"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb208-1"><a href="day2.html#cb208-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv2</span>(<span class="st">&quot;data/students.csv&quot;</span>)</span></code></pre></div>
+<p>Both <code>read_csv...</code> functions are just special
+cased of <code>read_delim</code>, where any character can
+be specified to separate entries, not just commata
+or semicolons:</p>
+<div class="sourceCode" id="cb209"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb209-1"><a href="day2.html#cb209-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read_csv equals</span></span>
+<span id="cb209-2"><a href="day2.html#cb209-2" aria-hidden="true" tabindex="-1"></a><span class="fu">read_delim</span>(<span class="st">&quot;data/students.csv&quot;</span>, <span class="at">delim =</span> <span class="st">&quot;,&quot;</span>)</span>
+<span id="cb209-3"><a href="day2.html#cb209-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb209-4"><a href="day2.html#cb209-4" aria-hidden="true" tabindex="-1"></a><span class="co"># read_csv2 equals</span></span>
+<span id="cb209-5"><a href="day2.html#cb209-5" aria-hidden="true" tabindex="-1"></a><span class="fu">read_delim</span>(<span class="st">&quot;data/students.csv&quot;</span>, <span class="at">delim =</span> <span class="st">&quot;;&quot;</span>)</span></code></pre></div>
+<p>If you are not sure what function to use, open the file
+in a regular text editor like notepad and have a look.</p>
+<p>You can also read straight from excel files.</p>
+<div class="sourceCode" id="cb210"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb210-1"><a href="day2.html#cb210-1" aria-hidden="true" tabindex="-1"></a>readxl<span class="sc">::</span><span class="fu">read_excel</span>(<span class="st">&quot;data/students.xlsx&quot;</span>)</span></code></pre></div>
+<p>Up until now we only looked at the results of
+calling the read-functions but we didn’t assign
+the data to a variable so that we can use it.
+Let us do so now:</p>
+<div class="sourceCode" id="cb211"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb211-1"><a href="day2.html#cb211-1" aria-hidden="true" tabindex="-1"></a>students <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;data/students.csv&quot;</span>)</span></code></pre></div>
+<pre><code>## Parsed with column specification:
+## cols(
+##   name = col_character(),
+##   row = col_double(),
+##   hairlength = col_character()
+## )</code></pre>
+<p>You can view your data in a new tab in RStudio.</p>
+<div class="sourceCode" id="cb213"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb213-1"><a href="day2.html#cb213-1" aria-hidden="true" tabindex="-1"></a><span class="fu">View</span>(students)</span></code></pre></div>
+<p>Or simply look at the content of our variable students:</p>
+<div class="sourceCode" id="cb214"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb214-1"><a href="day2.html#cb214-1" aria-hidden="true" tabindex="-1"></a>students</span></code></pre></div>
+<pre><code>## # A tibble: 10 x 3
+##    name        row hairlength
+##    &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;     
+##  1 jannik        0 s         
+##  2 ulrich        1 s         
+##  3 lea           1 l         
+##  4 melanie       1 l         
+##  5 judith        1 l         
+##  6 maria         1 l         
+##  7 alex          2 s         
+##  8 christina     2 l         
+##  9 jan           2 s         
+## 10 pamina        2 l</code></pre>
+<p>Writing data works analogous to that.</p>
+<div class="sourceCode" id="cb216"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb216-1"><a href="day2.html#cb216-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(students, <span class="at">path =</span> <span class="st">&quot;data/students2.csv&quot;</span>)</span></code></pre></div>
+<p>Now what do we do with the data?</p>
+</div>
+<div id="the-pipe-and-dplyr-verbs" class="section level2" number="2.5">
+<h2><span class="header-section-number">2.5</span> The Pipe and dplyr Verbs</h2>
+<p>The <code>dplyr</code> package and the pipe (<code>%&gt;%</code>)</p>
+<div id="the-pipe" class="section level3" number="2.5.1">
+<h3><span class="header-section-number">2.5.1</span> The Pipe</h3>
+<p>Data needs to be processed.
+Functions that process data are used sequentially.
+The common way (in other languages) to write this
+looks about like this:</p>
+<p>First we define some toy functions.</p>
+<div class="sourceCode" id="cb217"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb217-1"><a href="day2.html#cb217-1" aria-hidden="true" tabindex="-1"></a>addOne <span class="ot">&lt;-</span> <span class="cf">function</span>(x) x <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb217-2"><a href="day2.html#cb217-2" aria-hidden="true" tabindex="-1"></a>standardize <span class="ot">&lt;-</span> <span class="cf">function</span>(x) x <span class="sc">/</span> <span class="fu">max</span>(x)</span>
+<span id="cb217-3"><a href="day2.html#cb217-3" aria-hidden="true" tabindex="-1"></a>callOutResult <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="fu">paste</span>(<span class="st">&quot;Your result is&quot;</span>, x)</span></code></pre></div>
+<p>Then we use them with our example data,
+which is just the numbers from 1 to 5.</p>
+<div class="sourceCode" id="cb218"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb218-1"><a href="day2.html#cb218-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span></span>
+<span id="cb218-2"><a href="day2.html#cb218-2" aria-hidden="true" tabindex="-1"></a>newData <span class="ot">&lt;-</span> <span class="fu">addOne</span>(data)</span>
+<span id="cb218-3"><a href="day2.html#cb218-3" aria-hidden="true" tabindex="-1"></a>evenNewerData <span class="ot">&lt;-</span> <span class="fu">standardize</span>(newData)</span>
+<span id="cb218-4"><a href="day2.html#cb218-4" aria-hidden="true" tabindex="-1"></a><span class="fu">callOutResult</span>(evenNewerData)</span></code></pre></div>
+<pre><code>## [1] &quot;Your result is 0.333333333333333&quot; &quot;Your result is 0.5&quot;              
+## [3] &quot;Your result is 0.666666666666667&quot; &quot;Your result is 0.833333333333333&quot;
+## [5] &quot;Your result is 1&quot;</code></pre>
+<p>This is not fun to write! We might want to
+overwrite our original data instead of
+creating a new variable for every step.</p>
+<div class="sourceCode" id="cb220"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb220-1"><a href="day2.html#cb220-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span></span>
+<span id="cb220-2"><a href="day2.html#cb220-2" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">addOne</span>(data)</span>
+<span id="cb220-3"><a href="day2.html#cb220-3" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">standardize</span>(data)</span>
+<span id="cb220-4"><a href="day2.html#cb220-4" aria-hidden="true" tabindex="-1"></a><span class="fu">callOutResult</span>(data)</span></code></pre></div>
+<pre><code>## [1] &quot;Your result is 0.333333333333333&quot; &quot;Your result is 0.5&quot;              
+## [3] &quot;Your result is 0.666666666666667&quot; &quot;Your result is 0.833333333333333&quot;
+## [5] &quot;Your result is 1&quot;</code></pre>
+<p>This is a lot of repetition!
+Who wants to type <code>data</code> that often?
+Maybe we turn to math notation with brackets?</p>
+<div class="sourceCode" id="cb222"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb222-1"><a href="day2.html#cb222-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span></span>
+<span id="cb222-2"><a href="day2.html#cb222-2" aria-hidden="true" tabindex="-1"></a><span class="fu">callOutResult</span>(<span class="fu">standardize</span>(<span class="fu">addOne</span>(data)))</span></code></pre></div>
+<pre><code>## [1] &quot;Your result is 0.333333333333333&quot; &quot;Your result is 0.5&quot;              
+## [3] &quot;Your result is 0.666666666666667&quot; &quot;Your result is 0.833333333333333&quot;
+## [5] &quot;Your result is 1&quot;</code></pre>
+<p>This is certainly not pretty. Enter: The pipe <code>%&gt;%</code>.</p>
+<blockquote>
+<p>Insert a pipe with Ctrl+Shift+M
+(Or manually type it out)</p>
+</blockquote>
+<p>The pipe enables us to pass the result of one function
+on to the next function.
+With pure functions <code>g</code> and <code>f</code>, the following
+semi-mathematical equation holds true:</p>
+<p><code>f(g(x)) = x %&gt;% g() %&gt;% f()</code></p>
+<div class="sourceCode" id="cb224"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb224-1"><a href="day2.html#cb224-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span></span>
+<span id="cb224-2"><a href="day2.html#cb224-2" aria-hidden="true" tabindex="-1"></a>data <span class="sc">%&gt;%</span> <span class="fu">addOne</span>() <span class="sc">%&gt;%</span> <span class="fu">standardize</span>() <span class="sc">%&gt;%</span> <span class="fu">callOutResult</span>()</span></code></pre></div>
+<pre><code>## [1] &quot;Your result is 0.333333333333333&quot; &quot;Your result is 0.5&quot;              
+## [3] &quot;Your result is 0.666666666666667&quot; &quot;Your result is 0.833333333333333&quot;
+## [5] &quot;Your result is 1&quot;</code></pre>
+<p>We can also write each step on a new line
+(because R doesn’t care about new lines).</p>
+<div class="sourceCode" id="cb226"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb226-1"><a href="day2.html#cb226-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">%&gt;%</span> </span>
+<span id="cb226-2"><a href="day2.html#cb226-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">addOne</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb226-3"><a href="day2.html#cb226-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">standardize</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb226-4"><a href="day2.html#cb226-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">callOutResult</span>()</span></code></pre></div>
+<pre><code>## [1] &quot;Your result is 0.333333333333333&quot; &quot;Your result is 0.5&quot;              
+## [3] &quot;Your result is 0.666666666666667&quot; &quot;Your result is 0.833333333333333&quot;
+## [5] &quot;Your result is 1&quot;</code></pre>
+<p>For functions with more than one argument,
+the pipe inserts the <em>stuff</em> from the left hand side (LHS)
+as the first argument to the function!</p>
+<div class="sourceCode" id="cb228"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb228-1"><a href="day2.html#cb228-1" aria-hidden="true" tabindex="-1"></a>addNumber <span class="ot">&lt;-</span> <span class="cf">function</span>(x, number) x <span class="sc">+</span> number</span></code></pre></div>
+<div class="sourceCode" id="cb229"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb229-1"><a href="day2.html#cb229-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">%&gt;%</span> <span class="fu">addNumber</span>(<span class="dv">3</span>)</span></code></pre></div>
+<pre><code>## [1] 4 5 6 7 8</code></pre>
+</div>
+<div id="overview-of-the-dplyr-verbs" class="section level3" number="2.5.2">
+<h3><span class="header-section-number">2.5.2</span> Overview of the dplyr Verbs</h3>
+<p>These are the main functions we use to
+transform and process our data after
+we brought it into R with the <code>readr</code> package.</p>
+<p>These functions work on <code>data.frames</code>, or
+the slightly more modern version of the <code>data.frame</code>
+that the <code>tidyverse</code> calls a <code>tibble</code> (like table).</p>
+<p>These functions are:</p>
+<ul>
+<li><code>select</code></li>
+<li><code>filter</code></li>
+<li><code>arrange</code></li>
+<li><code>mutate</code></li>
+<li><code>summarise</code></li>
+<li><code>count</code></li>
+<li>And additionally the adverb: <code>group_by</code></li>
+</ul>
+</div>
+<div id="select" class="section level3" number="2.5.3">
+<h3><span class="header-section-number">2.5.3</span> select</h3>
+<p>Select columns of a <code>data.frame</code> (or <code>tibble</code>).</p>
+<p>Remember the “base-R” way to select columns?</p>
+<div class="sourceCode" id="cb231"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb231-1"><a href="day2.html#cb231-1" aria-hidden="true" tabindex="-1"></a>students[, <span class="fu">c</span>(<span class="st">&quot;name&quot;</span>, <span class="st">&quot;row&quot;</span>)]</span></code></pre></div>
+<p>The <code>select</code> function replaces this:</p>
+<div class="sourceCode" id="cb232"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb232-1"><a href="day2.html#cb232-1" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(students, name, row)</span>
+<span id="cb232-2"><a href="day2.html#cb232-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb232-3"><a href="day2.html#cb232-3" aria-hidden="true" tabindex="-1"></a><span class="co"># or in a pipe</span></span>
+<span id="cb232-4"><a href="day2.html#cb232-4" aria-hidden="true" tabindex="-1"></a>students <span class="sc">%&gt;%</span> <span class="fu">select</span>(name, row)</span></code></pre></div>
+</div>
+<div id="filter" class="section level3" number="2.5.4">
+<h3><span class="header-section-number">2.5.4</span> filter</h3>
+<p>Filter a <code>tibble</code> based on conditions applied to columns.</p>
+<p>Remember the old way to subset?</p>
+<div class="sourceCode" id="cb233"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb233-1"><a href="day2.html#cb233-1" aria-hidden="true" tabindex="-1"></a>students[students<span class="sc">$</span>row <span class="sc">==</span> <span class="dv">1</span>, ]</span></code></pre></div>
+<p>The new syntax is more straightforward:</p>
+<div class="sourceCode" id="cb234"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb234-1"><a href="day2.html#cb234-1" aria-hidden="true" tabindex="-1"></a>students <span class="sc">%&gt;%</span> </span>
+<span id="cb234-2"><a href="day2.html#cb234-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(row <span class="sc">==</span> <span class="dv">1</span>)</span></code></pre></div>
+<p>And can be combined in pipes:</p>
+<div class="sourceCode" id="cb235"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb235-1"><a href="day2.html#cb235-1" aria-hidden="true" tabindex="-1"></a>students <span class="sc">%&gt;%</span> </span>
+<span id="cb235-2"><a href="day2.html#cb235-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(row <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb235-3"><a href="day2.html#cb235-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(name)</span></code></pre></div>
+<p>This new expression gives the same result as the base-R way
+of writing <code>students[students$row == 1, 1]</code> but is easier to read.</p>
+<p>The conditions in filter stack.</p>
+<div class="sourceCode" id="cb236"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb236-1"><a href="day2.html#cb236-1" aria-hidden="true" tabindex="-1"></a>students <span class="sc">%&gt;%</span> </span>
+<span id="cb236-2"><a href="day2.html#cb236-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(row <span class="sc">==</span> <span class="dv">2</span>, hairlength <span class="sc">==</span> <span class="st">&quot;l&quot;</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 2 x 3
+##   name        row hairlength
+##   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;     
+## 1 christina     2 l         
+## 2 pamina        2 l</code></pre>
+<p>We can also combine conditions with or ( | )</p>
+<div class="sourceCode" id="cb238"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb238-1"><a href="day2.html#cb238-1" aria-hidden="true" tabindex="-1"></a>students <span class="sc">%&gt;%</span></span>
+<span id="cb238-2"><a href="day2.html#cb238-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(row <span class="sc">==</span> <span class="dv">2</span> <span class="sc">|</span> hairlength <span class="sc">==</span> <span class="st">&quot;l&quot;</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 8 x 3
+##   name        row hairlength
+##   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;     
+## 1 lea           1 l         
+## 2 melanie       1 l         
+## 3 judith        1 l         
+## 4 maria         1 l         
+## 5 alex          2 s         
+## 6 christina     2 l         
+## 7 jan           2 s         
+## 8 pamina        2 l</code></pre>
+<blockquote>
+<p>One thing to note: As of now, we have not changed the students data!
+because we only looked at the output of the functions in the console
+and did not assign anything (with &lt;- ).</p>
+</blockquote>
+</div>
+<div id="mutate" class="section level3" number="2.5.5">
+<h3><span class="header-section-number">2.5.5</span> mutate</h3>
+<p>To Change a column or add a new one e.g. the length of your names.
+Last week in base R, adding a column worked
+like that:</p>
+<div class="sourceCode" id="cb240"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb240-1"><a href="day2.html#cb240-1" aria-hidden="true" tabindex="-1"></a>students<span class="sc">$</span>nameLength <span class="ot">&lt;-</span> <span class="fu">str_length</span>(students<span class="sc">$</span>name)</span></code></pre></div>
+<p>But with the <code>mutate</code> function, it gets more
+readable. Note, that we do not refer to
+<code>students$name</code> explicitly inside of <code>mutate</code>.
+<code>mutate</code> knows that <code>name</code> is referring to a column of
+the tibble passed into the function from the left.
+Furthermore, there is an equal sign (<code>=</code>) in there,
+because everything inside of mutate is a parameter
+to the function, it is <strong>not</strong> an assignment (<code>&lt;-</code>).</p>
+<div class="sourceCode" id="cb241"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb241-1"><a href="day2.html#cb241-1" aria-hidden="true" tabindex="-1"></a>students <span class="sc">%&gt;%</span> </span>
+<span id="cb241-2"><a href="day2.html#cb241-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">nameLength =</span> <span class="fu">str_length</span>(name))</span></code></pre></div>
+<p>We might need this modified/enhanced data later,
+so let’s overwrite the variable <code>students</code>:</p>
+<div class="sourceCode" id="cb242"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb242-1"><a href="day2.html#cb242-1" aria-hidden="true" tabindex="-1"></a>students <span class="ot">&lt;-</span> students <span class="sc">%&gt;%</span>  </span>
+<span id="cb242-2"><a href="day2.html#cb242-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">nameLength =</span> <span class="fu">str_length</span>(name))</span></code></pre></div>
+<div class="sourceCode" id="cb243"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb243-1"><a href="day2.html#cb243-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(students)</span></code></pre></div>
+<pre><code>## # A tibble: 6 x 4
+##   name      row hairlength nameLength
+##   &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;           &lt;int&gt;
+## 1 jannik      0 s                   6
+## 2 ulrich      1 s                   6
+## 3 lea         1 l                   3
+## 4 melanie     1 l                   7
+## 5 judith      1 l                   6
+## 6 maria       1 l                   5</code></pre>
+</div>
+<div id="arrange" class="section level3" number="2.5.6">
+<h3><span class="header-section-number">2.5.6</span> arrange</h3>
+<blockquote>
+<p>Who has the longest name?</p>
+</blockquote>
+<div class="sourceCode" id="cb245"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb245-1"><a href="day2.html#cb245-1" aria-hidden="true" tabindex="-1"></a>students <span class="sc">%&gt;%</span> </span>
+<span id="cb245-2"><a href="day2.html#cb245-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(nameLength)) <span class="sc">%&gt;%</span> </span>
+<span id="cb245-3"><a href="day2.html#cb245-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code></pre></div>
+<pre><code>## # A tibble: 6 x 4
+##   name        row hairlength nameLength
+##   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;           &lt;int&gt;
+## 1 christina     2 l                   9
+## 2 melanie       1 l                   7
+## 3 jannik        0 s                   6
+## 4 ulrich        1 s                   6
+## 5 judith        1 l                   6
+## 6 pamina        2 l                   6</code></pre>
+<p>This could have been achieved with <code>filter</code> as well:</p>
+<div class="sourceCode" id="cb247"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb247-1"><a href="day2.html#cb247-1" aria-hidden="true" tabindex="-1"></a>students <span class="sc">%&gt;%</span> </span>
+<span id="cb247-2"><a href="day2.html#cb247-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(nameLength <span class="sc">==</span> <span class="fu">max</span>(nameLength))</span></code></pre></div>
+<pre><code>## # A tibble: 1 x 4
+##   name        row hairlength nameLength
+##   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;           &lt;int&gt;
+## 1 christina     2 l                   9</code></pre>
+<p>Note that the <code>dplyr</code> functions always return tibbles,
+not the raw vectors. But we can pull out a tibble
+column as a vector:</p>
+<div class="sourceCode" id="cb249"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb249-1"><a href="day2.html#cb249-1" aria-hidden="true" tabindex="-1"></a>students <span class="sc">%&gt;%</span> </span>
+<span id="cb249-2"><a href="day2.html#cb249-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(nameLength <span class="sc">==</span> <span class="fu">max</span>(nameLength)) <span class="sc">%&gt;%</span> </span>
+<span id="cb249-3"><a href="day2.html#cb249-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(name)</span></code></pre></div>
+<pre><code>## [1] &quot;christina&quot;</code></pre>
+</div>
+<div id="count" class="section level3" number="2.5.7">
+<h3><span class="header-section-number">2.5.7</span> count</h3>
+<blockquote>
+<p>How many are in the first row?</p>
+</blockquote>
+<div class="sourceCode" id="cb251"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb251-1"><a href="day2.html#cb251-1" aria-hidden="true" tabindex="-1"></a>students <span class="sc">%&gt;%</span> <span class="fu">count</span>(row)</span></code></pre></div>
+<pre><code>## # A tibble: 3 x 2
+##     row     n
+##   &lt;dbl&gt; &lt;int&gt;
+## 1     0     1
+## 2     1     5
+## 3     2     4</code></pre>
+<blockquote>
+<p>How many based on hairlength?</p>
+</blockquote>
+<div class="sourceCode" id="cb253"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb253-1"><a href="day2.html#cb253-1" aria-hidden="true" tabindex="-1"></a>students <span class="sc">%&gt;%</span> <span class="fu">count</span>(row, hairlength)</span></code></pre></div>
+<pre><code>## # A tibble: 5 x 3
+##     row hairlength     n
+##   &lt;dbl&gt; &lt;chr&gt;      &lt;int&gt;
+## 1     0 s              1
+## 2     1 l              4
+## 3     1 s              1
+## 4     2 l              2
+## 5     2 s              2</code></pre>
+</div>
+<div id="summarise" class="section level3" number="2.5.8">
+<h3><span class="header-section-number">2.5.8</span> summarise</h3>
+<blockquote>
+<p>What is the mean name-length?</p>
+</blockquote>
+<p>In base-R, we would have operated on the column of
+the tibble extracted as a vector with he <code>$</code>-operator.</p>
+<div class="sourceCode" id="cb255"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb255-1"><a href="day2.html#cb255-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(students<span class="sc">$</span>nameLength)</span></code></pre></div>
+<pre><code>## [1] 5.5</code></pre>
+<p>But in the tidyverse, we can work directly with the tibble.</p>
+<div class="sourceCode" id="cb257"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb257-1"><a href="day2.html#cb257-1" aria-hidden="true" tabindex="-1"></a>students <span class="sc">%&gt;%</span> </span>
+<span id="cb257-2"><a href="day2.html#cb257-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">nameLength =</span> <span class="fu">mean</span>(nameLength))</span></code></pre></div>
+<pre><code>## # A tibble: 1 x 1
+##   nameLength
+##        &lt;dbl&gt;
+## 1        5.5</code></pre>
+</div>
+<div id="group_by-und-summarise" class="section level3" number="2.5.9">
+<h3><span class="header-section-number">2.5.9</span> group_by und summarise</h3>
+<blockquote>
+<p>Do participants in the first row have longer names?</p>
+</blockquote>
+<p><code>group_by</code> is an adverb because by itself, it doesn’t
+do anything to the data, but it changes the way the
+other <code>dplyr</code> verbs operate. Any function that
+summarizes a vector, like <code>mean</code>, <code>sum</code>, <code>max</code>,
+now operates on the groups.</p>
+<div class="sourceCode" id="cb259"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb259-1"><a href="day2.html#cb259-1" aria-hidden="true" tabindex="-1"></a>students <span class="sc">%&gt;%</span> </span>
+<span id="cb259-2"><a href="day2.html#cb259-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(row) <span class="sc">%&gt;%</span> </span>
+<span id="cb259-3"><a href="day2.html#cb259-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">nameLengh =</span> <span class="fu">mean</span>(nameLength))</span></code></pre></div>
+<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<pre><code>## # A tibble: 3 x 2
+##     row nameLengh
+##   &lt;dbl&gt;     &lt;dbl&gt;
+## 1     0       6  
+## 2     1       5.4
+## 3     2       5.5</code></pre>
+<div class="sourceCode" id="cb262"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb262-1"><a href="day2.html#cb262-1" aria-hidden="true" tabindex="-1"></a>students <span class="sc">%&gt;%</span> </span>
+<span id="cb262-2"><a href="day2.html#cb262-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(row, hairlength) <span class="sc">%&gt;%</span> </span>
+<span id="cb262-3"><a href="day2.html#cb262-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">nameLength =</span> <span class="fu">mean</span>(nameLength)) <span class="sc">%&gt;%</span> </span>
+<span id="cb262-4"><a href="day2.html#cb262-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(nameLength))</span></code></pre></div>
+<pre><code>## `summarise()` regrouping output by &#39;row&#39; (override with `.groups` argument)</code></pre>
+<pre><code>## # A tibble: 5 x 3
+##     row hairlength nameLength
+##   &lt;dbl&gt; &lt;chr&gt;           &lt;dbl&gt;
+## 1     2 l                7.5 
+## 2     0 s                6   
+## 3     1 s                6   
+## 4     1 l                5.25
+## 5     2 s                3.5</code></pre>
+<blockquote>
+<p>Do people with long hair tend to sit in the first row?</p>
+</blockquote>
+<div class="sourceCode" id="cb265"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb265-1"><a href="day2.html#cb265-1" aria-hidden="true" tabindex="-1"></a>students <span class="sc">%&gt;%</span> </span>
+<span id="cb265-2"><a href="day2.html#cb265-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(row <span class="sc">!=</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb265-3"><a href="day2.html#cb265-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(row, hairlength)</span></code></pre></div>
+<pre><code>## # A tibble: 4 x 3
+##     row hairlength     n
+##   &lt;dbl&gt; &lt;chr&gt;      &lt;int&gt;
+## 1     1 l              4
+## 2     1 s              1
+## 3     2 l              2
+## 4     2 s              2</code></pre>
+<div id="sidenotes" class="section level4" number="2.5.9.1">
+<h4><span class="header-section-number">2.5.9.1</span> Sidenotes</h4>
+<p><code>pull</code> pulls out a column of a tibble as a vector.</p>
+<div class="sourceCode" id="cb267"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb267-1"><a href="day2.html#cb267-1" aria-hidden="true" tabindex="-1"></a>students <span class="sc">%&gt;%</span> </span>
+<span id="cb267-2"><a href="day2.html#cb267-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(name)</span></code></pre></div>
+<pre><code>##  [1] &quot;jannik&quot;    &quot;ulrich&quot;    &quot;lea&quot;       &quot;melanie&quot;   &quot;judith&quot;    &quot;maria&quot;    
+##  [7] &quot;alex&quot;      &quot;christina&quot; &quot;jan&quot;       &quot;pamina&quot;</code></pre>
+</div>
+</div>
+<div id="moving-on-to-probability" class="section level3" number="2.5.10">
+<h3><span class="header-section-number">2.5.10</span> Moving on to Probability</h3>
+<p>The question we might ask now is:</p>
+<blockquote>
+<p>If every person were randomly seated,
+What would be the probability to find
+that many people (or more) with long hair
+in the first row?</p>
+</blockquote>
+</div>
+</div>
+<div id="but-what-is-probability" class="section level2" number="2.6">
+<h2><span class="header-section-number">2.6</span> But what is Probability?</h2>
+<p>There are two concepts of probability (<span class="math inline">\(P\)</span>):</p>
+<ul>
+<li>Probability inside your head: strength of belief;
+may vary among people</li>
+<li>Probability „out there“: long-term frequency of an event;
+can be empirically measured or predicted from a model <span class="citation">(<a href="#ref-motulsky2017" role="doc-biblioref"><strong>motulsky2017?</strong></a>)</span>.</li>
+</ul>
+<p>We will be concerned with the latter.</p>
+<div id="example" class="section level3" number="2.6.1">
+<h3><span class="header-section-number">2.6.1</span> Example:</h3>
+<p>Categorical / discrete data: <em>Drawing (blindly) from a hat.</em></p>
+<div class="sourceCode" id="cb269"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb269-1"><a href="day2.html#cb269-1" aria-hidden="true" tabindex="-1"></a>students <span class="sc">%&gt;%</span> </span>
+<span id="cb269-2"><a href="day2.html#cb269-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(row, hairlength)</span></code></pre></div>
+<pre><code>## # A tibble: 5 x 3
+##     row hairlength     n
+##   &lt;dbl&gt; &lt;chr&gt;      &lt;int&gt;
+## 1     0 s              1
+## 2     1 l              4
+## 3     1 s              1
+## 4     2 l              2
+## 5     2 s              2</code></pre>
+<div class="sourceCode" id="cb271"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb271-1"><a href="day2.html#cb271-1" aria-hidden="true" tabindex="-1"></a>students <span class="sc">%&gt;%</span></span>
+<span id="cb271-2"><a href="day2.html#cb271-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(row <span class="sc">!=</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb271-3"><a href="day2.html#cb271-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(hairlength)</span></code></pre></div>
+<pre><code>## # A tibble: 2 x 2
+##   hairlength     n
+##   &lt;chr&gt;      &lt;int&gt;
+## 1 l              6
+## 2 s              3</code></pre>
+<hr />
+<p><strong>Note</strong></p>
+<blockquote>
+<p>This example uses a lot of base-R functions and
+less tidyverse style. Try to dicern between the
+use of normal vectors like in the following code
+and tibbles as observed in the tidyverse.</p>
+</blockquote>
+<hr />
+<p>We create a “hat” of hairlengths with the numbers observed in our course.</p>
+<div class="sourceCode" id="cb273"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb273-1"><a href="day2.html#cb273-1" aria-hidden="true" tabindex="-1"></a>hat <span class="ot">&lt;-</span> <span class="fu">c</span>( <span class="fu">rep</span>(<span class="st">&quot;l&quot;</span>, <span class="dv">6</span>), <span class="fu">rep</span>(<span class="st">&quot;s&quot;</span>, <span class="dv">3</span>) ) <span class="co"># rep stands for repeat</span></span>
+<span id="cb273-2"><a href="day2.html#cb273-2" aria-hidden="true" tabindex="-1"></a>hat</span></code></pre></div>
+<pre><code>## [1] &quot;l&quot; &quot;l&quot; &quot;l&quot; &quot;l&quot; &quot;l&quot; &quot;l&quot; &quot;s&quot; &quot;s&quot; &quot;s&quot;</code></pre>
+<p>And sample / draw blindly from said hat</p>
+<div class="sourceCode" id="cb275"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb275-1"><a href="day2.html#cb275-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sample</span>(hat, <span class="dv">1</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;s&quot;</code></pre>
+<p>Now we sample the same number of hairlenghts
+from the hat as the number of people sitting
+in the first row:</p>
+<div class="sourceCode" id="cb277"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb277-1"><a href="day2.html#cb277-1" aria-hidden="true" tabindex="-1"></a>firstRow <span class="ot">&lt;-</span> <span class="fu">sample</span>(hat, <span class="dv">5</span>)</span></code></pre></div>
+<p>This is representative of people coming
+into the room and getting seated randomly.</p>
+<blockquote>
+<p>Note that the default for sample is <code>replace = FALSE</code>
+(see <code>?sample</code>), so the same person can only
+be seated once. It does not return to the hat to
+be drawn again.</p>
+</blockquote>
+<p>How many in this sample have long hair?</p>
+<div class="sourceCode" id="cb278"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb278-1"><a href="day2.html#cb278-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(firstRow <span class="sc">==</span> <span class="st">&quot;l&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] 4</code></pre>
+<p>What fraction?</p>
+<div class="sourceCode" id="cb280"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb280-1"><a href="day2.html#cb280-1" aria-hidden="true" tabindex="-1"></a><span class="co"># this works because `mean` converts TRUE to 1 and FALSE to 0</span></span>
+<span id="cb280-2"><a href="day2.html#cb280-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(firstRow <span class="sc">==</span> <span class="st">&quot;l&quot;</span>) </span></code></pre></div>
+<pre><code>## [1] 0.8</code></pre>
+<p>We can simulate this draw a bunch of times,
+as if people were coming into the room over and over
+again, each time getting seated randomly. For this,
+we use a <code>for</code> loop. This loop executes the
+code between the curly braces once for every
+element of the vector <code>1:5</code>. The current element
+of every iteration is called <code>i</code> in this case.</p>
+<div class="sourceCode" id="cb282"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb282-1"><a href="day2.html#cb282-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>) {</span>
+<span id="cb282-2"><a href="day2.html#cb282-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(i)</span>
+<span id="cb282-3"><a href="day2.html#cb282-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<pre><code>## [1] 1
+## [1] 2
+## [1] 3
+## [1] 4
+## [1] 5</code></pre>
+<p>We use this concept to simulate drawing 1000 times,
+each time calculating the number of people with
+long hair in the first row.</p>
+<div class="sourceCode" id="cb284"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb284-1"><a href="day2.html#cb284-1" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb284-2"><a href="day2.html#cb284-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb284-3"><a href="day2.html#cb284-3" aria-hidden="true" tabindex="-1"></a><span class="co"># create vector for the sum from each draw</span></span>
+<span id="cb284-4"><a href="day2.html#cb284-4" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>N</span>
+<span id="cb284-5"><a href="day2.html#cb284-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb284-6"><a href="day2.html#cb284-6" aria-hidden="true" tabindex="-1"></a><span class="co"># assign the results in a loop</span></span>
+<span id="cb284-7"><a href="day2.html#cb284-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>N) {</span>
+<span id="cb284-8"><a href="day2.html#cb284-8" aria-hidden="true" tabindex="-1"></a>  draw <span class="ot">&lt;-</span> <span class="fu">sample</span>(hat, <span class="dv">5</span>)</span>
+<span id="cb284-9"><a href="day2.html#cb284-9" aria-hidden="true" tabindex="-1"></a>  results[i] <span class="ot">&lt;-</span> <span class="fu">sum</span>(draw <span class="sc">==</span> <span class="st">&quot;l&quot;</span>)</span>
+<span id="cb284-10"><a href="day2.html#cb284-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>The histogram shows us, how often each number
+appears in our results.</p>
+<div class="sourceCode" id="cb285"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb285-1"><a href="day2.html#cb285-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(results, <span class="at">breaks =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">5</span>)</span></code></pre></div>
+<p><img src="02-day2_files/figure-html/unnamed-chunk-55-1.svg" width="672" /></p>
+<p>How surprised should we be, that in our real world
+data, we found this number of long haired people
+in the first row? Well, let us check how often
+we got that many or more in our simulated data.</p>
+<div class="sourceCode" id="cb286"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb286-1"><a href="day2.html#cb286-1" aria-hidden="true" tabindex="-1"></a><span class="co">#  -&gt; Calculate probability for random event</span></span>
+<span id="cb286-2"><a href="day2.html#cb286-2" aria-hidden="true" tabindex="-1"></a><span class="co"># sum greater than or equal to observed frequency / length</span></span>
+<span id="cb286-3"><a href="day2.html#cb286-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(results <span class="sc">&gt;=</span> <span class="dv">4</span>)</span></code></pre></div>
+<pre><code>## [1] 0.445</code></pre>
+<p>So in 44.5 % of cases in our simulation,
+we got 4 or more people with long hair in the first row.
+This means, that the observed result is quite likely to occur
+just by chance. We can <strong>not</strong> prove that it did indeed
+resulted just from chance alone, but we can show that if it is just
+random chance, we are not very surprised to see a result
+like this in our data.</p>
+</div>
+<div id="p-values" class="section level3" number="2.6.2">
+<h3><span class="header-section-number">2.6.2</span> P-Values</h3>
+<p>P-Values were introduced in the 1920s by Ronald Fisher:</p>
+<blockquote>
+<p><em>“The P value is defined as the probability, under the assumption of
+no effect or no difference (the null hypothesis),
+of obtaining a result equal to or more extreme
+than what was actually observed.”</em>
+<span class="math inline">\(-\)</span> (Original: <a href="https://en.wikipedia.org/wiki/Statistical_Methods_for_Research_Workers">Statistical Methods for Research Workers</a>) <span class="citation">(<a href="#ref-fisher1990" role="doc-biblioref"><strong>fisher1990?</strong></a>)</span></p>
+</blockquote>
+<p>By convention: p ≤ 0.05 is called “significant”.
+In other words, a p-Value is…</p>
+<blockquote>
+<p><em>“… a measure of how surprised you should be
+if there is no actual difference […],
+but you got data suggesting there is”</em>
+<span class="math inline">\(-\)</span> Alex Reinhart <span class="citation">(<a href="#ref-reinhart2015" role="doc-biblioref"><strong>reinhart2015?</strong></a>)</span></p>
+</blockquote>
+<p>We can calculate the exact p-value of our example
+with the hypergeometric distribution.</p>
+<div class="sourceCode" id="cb288"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb288-1"><a href="day2.html#cb288-1" aria-hidden="true" tabindex="-1"></a><span class="co"># note that it calculates cumulative probabilities!</span></span>
+<span id="cb288-2"><a href="day2.html#cb288-2" aria-hidden="true" tabindex="-1"></a><span class="co"># default: P(X &lt;= x)</span></span>
+<span id="cb288-3"><a href="day2.html#cb288-3" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">-</span> <span class="fu">phyper</span>(<span class="at">q =</span> <span class="dv">3</span>, <span class="at">m =</span> <span class="dv">6</span>, <span class="at">n =</span> <span class="dv">3</span>, <span class="at">k =</span> <span class="dv">5</span>)</span></code></pre></div>
+<pre><code>## [1] 0.4047619</code></pre>
+<p>It is quite close to our simulation! And had we used a higher <code>N</code>,
+like 1’000’000, it would of course be even closer.</p>
+<p>The hypergeometric distribution for for our example
+looks as follows</p>
+<div class="sourceCode" id="cb290"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb290-1"><a href="day2.html#cb290-1" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(<span class="fu">dhyper</span>(<span class="at">x =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">m =</span> <span class="dv">6</span>, <span class="at">n =</span> <span class="dv">3</span>, <span class="at">k =</span>  <span class="dv">5</span>), <span class="at">names.arg =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">5</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:dhyper-bar"></span>
+<img src="02-day2_files/figure-html/dhyper-bar-1.svg" alt="Hypergeometric distribution for people with long hair in the first row with random seating." width="672" />
+<p class="caption">
+Figure 2.3: Hypergeometric distribution for people with long hair in the first row with random seating.
+</p>
+</div>
+</div>
+</div>
+<div id="exercise-transfer-to-new-data" class="section level2" number="2.7">
+<h2><span class="header-section-number">2.7</span> Exercise: Transfer to new Data</h2>
+<p>Starwars, a dataset that comes with the tidyverse.</p>
+<div class="sourceCode" id="cb291"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb291-1"><a href="day2.html#cb291-1" aria-hidden="true" tabindex="-1"></a>?starwars</span></code></pre></div>
+<ul>
+<li>In a new Rmarkdown document:</li>
+<li>Preview the dataset</li>
+<li>Select the columns name, height, mass, gender</li>
+<li>Who is the heaviest?</li>
+<li>Convert height from cm to m</li>
+<li>Which gender is taller on average in starwars?
+<ul>
+<li><em>Hint:</em> use <code>group_by</code> and <code>summarise</code></li>
+<li>You will need the argument <code>na.rm = TRUE</code> in <code>mean()</code></li>
+</ul></li>
+<li>Simulate drawing 81 characters (or rather genders) from a hat.</li>
+<li>Repeat this 1000 times (with a for-loop).</li>
+<li>How often do you obtain 62 or more male characters?</li>
+<li>How surprised should we be about the data?</li>
+<li>Calculate an exact p-value for the observed frequency
+<ul>
+<li>note: use pbinom instead of phyper to sample WITH replacement</li>
+</ul></li>
+<li>Knit the document into a report</li>
+</ul>
+<div id="solutions" class="section level3" number="2.7.1">
+<h3><span class="header-section-number">2.7.1</span> Solutions</h3>
+<p><strong>Live on Friday</strong></p>
+<div id="first-we-load-packages-and-data" class="section level4" number="2.7.1.1">
+<h4><span class="header-section-number">2.7.1.1</span> First, we load packages and Data</h4>
+<div class="sourceCode" id="cb292"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb292-1"><a href="day2.html#cb292-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
+<div class="sourceCode" id="cb293"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb293-1"><a href="day2.html#cb293-1" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">%&gt;%</span> <span class="fu">select</span>(name, mass, height, gender) <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span></code></pre></div>
+<pre><code>## # A tibble: 6 x 4
+##   name            mass height gender   
+##   &lt;chr&gt;          &lt;dbl&gt;  &lt;int&gt; &lt;chr&gt;    
+## 1 Luke Skywalker    77    172 masculine
+## 2 C-3PO             75    167 masculine
+## 3 R2-D2             32     96 masculine
+## 4 Darth Vader      136    202 masculine
+## 5 Leia Organa       49    150 feminine 
+## 6 Owen Lars        120    178 masculine</code></pre>
+<p>Sidenote: to put a column in the front:</p>
+<div class="sourceCode" id="cb295"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb295-1"><a href="day2.html#cb295-1" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">%&gt;%</span> <span class="fu">select</span>(gender, <span class="fu">everything</span>() ) <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span></code></pre></div>
+<pre><code>## # A tibble: 6 x 14
+##   gender name  height  mass hair_color skin_color eye_color birth_year sex  
+##   &lt;chr&gt;  &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;
+## 1 mascu… Luke…    172    77 blond      fair       blue            19   male 
+## 2 mascu… C-3PO    167    75 &lt;NA&gt;       gold       yellow         112   none 
+## 3 mascu… R2-D2     96    32 &lt;NA&gt;       white, bl… red             33   none 
+## 4 mascu… Dart…    202   136 none       white      yellow          41.9 male 
+## 5 femin… Leia…    150    49 brown      light      brown           19   fema…
+## 6 mascu… Owen…    178   120 brown, gr… light      blue            52   male 
+## # … with 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
+## #   vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
+<p>Height is not in SI units! But we love SI units!
+So we convert height from cm to meter.</p>
+<div class="sourceCode" id="cb297"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb297-1"><a href="day2.html#cb297-1" aria-hidden="true" tabindex="-1"></a>starwars <span class="ot">&lt;-</span> starwars <span class="sc">%&gt;%</span> </span>
+<span id="cb297-2"><a href="day2.html#cb297-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">height =</span> height <span class="sc">/</span> <span class="dv">100</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb298"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb298-1"><a href="day2.html#cb298-1" aria-hidden="true" tabindex="-1"></a><span class="fu">View</span>(starwars)</span></code></pre></div>
+<div class="sourceCode" id="cb299"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb299-1"><a href="day2.html#cb299-1" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">%&gt;%</span> </span>
+<span id="cb299-2"><a href="day2.html#cb299-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(mass)) <span class="sc">%&gt;%</span></span>
+<span id="cb299-3"><a href="day2.html#cb299-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code></pre></div>
+<pre><code>## # A tibble: 6 x 14
+##   name  height  mass hair_color skin_color eye_color birth_year sex   gender
+##   &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
+## 1 Jabb…   1.75  1358 &lt;NA&gt;       green-tan… orange         600   herm… mascu…
+## 2 Grie…   2.16   159 none       brown, wh… green, y…       NA   male  mascu…
+## 3 IG-88   2      140 none       metal      red             15   none  mascu…
+## 4 Dart…   2.02   136 none       white      yellow          41.9 male  mascu…
+## 5 Tarf…   2.34   136 brown      brown      blue            NA   male  mascu…
+## 6 Owen…   1.78   120 brown, gr… light      blue            52   male  mascu…
+## # … with 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
+## #   vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
+<div class="sourceCode" id="cb301"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb301-1"><a href="day2.html#cb301-1" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">%&gt;%</span> </span>
+<span id="cb301-2"><a href="day2.html#cb301-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(mass <span class="sc">==</span> <span class="fu">max</span>(mass, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb301-3"><a href="day2.html#cb301-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code></pre></div>
+<pre><code>## # A tibble: 1 x 14
+##   name  height  mass hair_color skin_color eye_color birth_year sex   gender
+##   &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
+## 1 Jabb…   1.75  1358 &lt;NA&gt;       green-tan… orange           600 herm… mascu…
+## # … with 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
+## #   vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
+<div class="sourceCode" id="cb303"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb303-1"><a href="day2.html#cb303-1" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">%&gt;%</span> </span>
+<span id="cb303-2"><a href="day2.html#cb303-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(mass <span class="sc">==</span> <span class="fu">max</span>(mass, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb303-3"><a href="day2.html#cb303-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(name)</span></code></pre></div>
+<pre><code>## [1] &quot;Jabba Desilijic Tiure&quot;</code></pre>
+<ul>
+<li>Who is the heaviest?</li>
+<li>Convert height from cm to m</li>
+<li>Which gender is taller on average in starwars?
+<ul>
+<li><em>Hint:</em> use <code>group_by</code> and <code>summarise</code></li>
+<li>You will need the argument <code>na.rm = TRUE</code> in <code>mean()</code></li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb305"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb305-1"><a href="day2.html#cb305-1" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">%&gt;%</span> </span>
+<span id="cb305-2"><a href="day2.html#cb305-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(gender) <span class="sc">%&gt;%</span> </span>
+<span id="cb305-3"><a href="day2.html#cb305-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">height =</span> <span class="fu">mean</span>(height, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb305-4"><a href="day2.html#cb305-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">N =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb305-5"><a href="day2.html#cb305-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code></pre></div>
+<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<pre><code>## # A tibble: 3 x 3
+##   gender    height     N
+##   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;
+## 1 feminine    1.65    17
+## 2 masculine   1.77    66
+## 3 &lt;NA&gt;        1.81     4</code></pre>
+<ul>
+<li>Simulate drawing 81 characters (or rather genders) from a hat.</li>
+<li>Repeat this 1000 times (with a for-loop).</li>
+<li>How often do you obtain 62 or more male characters?</li>
+<li>How surprised should we be about the data?</li>
+<li>Calculate an exact p-value for the observed frequency
+<ul>
+<li>note: use <code>pbinom</code> instead of <code>phyper</code> to sample WITH replacement</li>
+</ul></li>
+<li>Knit the document into a report</li>
+</ul>
+<div class="sourceCode" id="cb308"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb308-1"><a href="day2.html#cb308-1" aria-hidden="true" tabindex="-1"></a>hat <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;male&quot;</span>, <span class="st">&quot;others&quot;</span>)</span>
+<span id="cb308-2"><a href="day2.html#cb308-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sample</span>(hat, <span class="dv">84</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">prob =</span> <span class="fu">c</span>(<span class="fl">0.49</span>, <span class="fl">0.51</span>))</span></code></pre></div>
+<pre><code>##  [1] &quot;male&quot;   &quot;male&quot;   &quot;male&quot;   &quot;others&quot; &quot;male&quot;   &quot;others&quot; &quot;others&quot; &quot;male&quot;  
+##  [9] &quot;others&quot; &quot;male&quot;   &quot;others&quot; &quot;male&quot;   &quot;others&quot; &quot;others&quot; &quot;others&quot; &quot;male&quot;  
+## [17] &quot;others&quot; &quot;male&quot;   &quot;male&quot;   &quot;male&quot;   &quot;others&quot; &quot;others&quot; &quot;others&quot; &quot;others&quot;
+## [25] &quot;others&quot; &quot;male&quot;   &quot;male&quot;   &quot;others&quot; &quot;others&quot; &quot;male&quot;   &quot;others&quot; &quot;others&quot;
+## [33] &quot;others&quot; &quot;male&quot;   &quot;others&quot; &quot;male&quot;   &quot;male&quot;   &quot;male&quot;   &quot;others&quot; &quot;others&quot;
+## [41] &quot;others&quot; &quot;male&quot;   &quot;others&quot; &quot;male&quot;   &quot;male&quot;   &quot;male&quot;   &quot;others&quot; &quot;male&quot;  
+## [49] &quot;male&quot;   &quot;others&quot; &quot;others&quot; &quot;male&quot;   &quot;others&quot; &quot;male&quot;   &quot;male&quot;   &quot;male&quot;  
+## [57] &quot;others&quot; &quot;others&quot; &quot;male&quot;   &quot;male&quot;   &quot;others&quot; &quot;others&quot; &quot;others&quot; &quot;others&quot;
+## [65] &quot;male&quot;   &quot;male&quot;   &quot;male&quot;   &quot;others&quot; &quot;others&quot; &quot;male&quot;   &quot;male&quot;   &quot;others&quot;
+## [73] &quot;male&quot;   &quot;male&quot;   &quot;male&quot;   &quot;others&quot; &quot;male&quot;   &quot;male&quot;   &quot;male&quot;   &quot;male&quot;  
+## [81] &quot;male&quot;   &quot;male&quot;   &quot;male&quot;   &quot;male&quot;</code></pre>
+<div class="sourceCode" id="cb310"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb310-1"><a href="day2.html#cb310-1" aria-hidden="true" tabindex="-1"></a>hat <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;male&quot;</span>, <span class="st">&quot;others&quot;</span>)</span>
+<span id="cb310-2"><a href="day2.html#cb310-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb310-3"><a href="day2.html#cb310-3" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span></span>
+<span id="cb310-4"><a href="day2.html#cb310-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>) {</span>
+<span id="cb310-5"><a href="day2.html#cb310-5" aria-hidden="true" tabindex="-1"></a>  draw <span class="ot">&lt;-</span> <span class="fu">sample</span>(hat, <span class="dv">84</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">prob =</span> <span class="fu">c</span>(<span class="fl">0.49</span>, <span class="fl">0.51</span>))</span>
+<span id="cb310-6"><a href="day2.html#cb310-6" aria-hidden="true" tabindex="-1"></a>  results[i] <span class="ot">&lt;-</span> <span class="fu">sum</span>(draw <span class="sc">==</span> <span class="st">&quot;male&quot;</span>)</span>
+<span id="cb310-7"><a href="day2.html#cb310-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb310-8"><a href="day2.html#cb310-8" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(results, <span class="at">breaks =</span> <span class="dv">40</span>)</span></code></pre></div>
+<p><img src="02-day2_files/figure-html/unnamed-chunk-69-1.svg" width="672" /></p>
+<div class="sourceCode" id="cb311"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb311-1"><a href="day2.html#cb311-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(results <span class="sc">&gt;=</span> <span class="dv">62</span>)</span></code></pre></div>
+<pre><code>## [1] 0</code></pre>
+<div class="sourceCode" id="cb313"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb313-1"><a href="day2.html#cb313-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(results <span class="sc">&gt;=</span> <span class="dv">62</span>)</span></code></pre></div>
+<pre><code>## [1] 0</code></pre>
+<div class="sourceCode" id="cb315"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb315-1"><a href="day2.html#cb315-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pbinom</span>(<span class="at">q =</span> <span class="dv">62</span> <span class="sc">-</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">84</span>, <span class="at">prob =</span> <span class="fl">0.49</span>, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<pre><code>## [1] 3.176077e-06</code></pre>
+<p><a href="https://seeing-theory.brown.edu/index.html">Seeing Theory</a></p>
+
+</div>
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="day1.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="day3.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

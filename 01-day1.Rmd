@@ -90,7 +90,7 @@ FALSE
 
 Special types that mix with any other type:
 
-```{r}
+```{r, eval=FALSE}
 # NULL for no value
 NULL
 
@@ -108,7 +108,6 @@ max(NA, 12, 1)
 
 Factors (factor) for categorical data.
 
-
 ```{r}
 # Factors can be ordered (like grade levels) or unordered (like gender)
 factor(c("m", "f", "f", "d", "m"))
@@ -123,7 +122,7 @@ directly or use the handy RStudio shortcut Alt+Minus to insert one into
 your code.
 
 ```{r}
-name <- "Harry Potter"
+name <- "Kvothe"
 x <- 12
 y <- 14
 ```
@@ -144,7 +143,6 @@ And you can do operations with those variables:
 ```{r}
 x + y
 ```
-
 
 ***
 
@@ -175,10 +173,10 @@ because it can lead to some confusing edge cases.]
 
 ```{r}
 # snake_case
-main_character_name <- "Harry"
+main_character_name <- "Kvothe"
 
 # or camelCase
-mainCharacterName <- "Also Harry"
+bookTitle <- "The Name of the Wind"
 
 # you can have numbers in the name
 x1 <- 12
@@ -193,9 +191,8 @@ Typing and executing the name of a variable will implicitly
 call the `print`  function on it, which displays its
 content in the console.
 
-```{r}
-mainCharacterName
-print(mainCharacterName)
+```{r, eval=FALSE}
+bookTitle # == print(mainCharacterName)
 ```
 
 ### Math Operators
@@ -203,7 +200,7 @@ print(mainCharacterName)
 An operator is a function that is called inline, so it stands
 between its arguments, like `+`. R can do standard math and much more.
 
-```{r, eval=TRUE}
+```{r, eval=FALSE}
 x1 + x2
 12 - 13
 13 * 12
@@ -229,17 +226,19 @@ There are mathematical functions, like `sin`, `cos` etc.
 sin(x = 0)
 ```
 
-The `sin` function takes just one argument `x` and returns its sine.
+The `sin` function takes just one **argument** `x` and returns its sine.
 
 Note, that the `=` inside the function parenthesis
 gives `x = 0` to the function and has nothing to do with
-any `x` defined outside of the function, it doesn't do any assignment
-and the parameter `x` used in the function is separate from
+any `x` defined outside of the function.
+The parameter `x` used in the function is separate from
 any `x` you might have defined outside of the function. E.g.
 
 ```{r}
 x <- 10
+# The sin function uses an x = 0
 sin(x = 0)
+# But the other x is still 10!
 x
 ```
 
@@ -250,9 +249,12 @@ name or press F1 with your mouse over the function.
 ?sin
 ```
 
+This is important {.note}
+
+We can pass arguments by name, or by order of appearance.
+This allows us to simplify the previous expression.
 
 ```{r}
-# pass arguments by name or by order of appearance
 sin(x = 12)
 sin(12)
 ```
@@ -301,7 +303,6 @@ This line performs vector addition:
 c(1,2,3) + c(4,5,6)
 ```
 
-
 The `:` operator and `seq` allow us to create vectors
 of numbers quite easily:
 
@@ -315,7 +316,7 @@ evenNumbers <- seq(from = 0, to = 10, by = 2)
 evenNumbers
 ```
 
-logical comparisons are vectorized as well return logical (boolean) vectors
+logical comparisons are vectorized as well return `logical` (`boolean`) vectors
 
 ```{r}
 12 < 13
@@ -326,7 +327,9 @@ answer
 Most things can be compared
 
 ```{r}
-main_character_name == mainCharacterName
+main_character_name == "Kvothe" # TRUE
+main_character_name ==  bookTitle # FALSE
+1 == 1 # TRUE
 ```
 
 `!` means **not**.
